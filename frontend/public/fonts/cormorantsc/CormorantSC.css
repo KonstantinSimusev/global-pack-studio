@@ -1,0 +1,8 @@
+@font-face {
+  font-family: "Cormorant SC";
+  src:  
+    url(./CormorantSC-Regular.woff2) format("woff2"),
+    url(./CormorantSC-Regular.ttf) format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}

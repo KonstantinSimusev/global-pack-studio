@@ -1,0 +1,22 @@
+/* Цвета */
+:root {
+  --main-font-color: #eaeaea;
+  --main-background-color: #222;
+}
+
+/* Шрифты */
+:root {
+  --main-font: 'Montserrat';
+  --logo-font: 'Cormorant SC';
+}
+
+/* Размеры шрифта */
+:root {
+  --main-font-size: 18px;
+}
+
+/* Размеры страницы */
+:root {
+  --min-page-width: 320px;
+  --max-page-width: 900px;
+}
