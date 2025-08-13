@@ -22,6 +22,8 @@ const App = () => {
       <p className={styles.title_m}>Global Pack Studio</p>
       <br />
       <p className={styles.title_c}>Global Pack Studio</p>
+      <br />
+      <p className={styles.title_b}>Global Pack Studio</p>
       {/* <Header />
       <Cover {...initialData} /> */}
     </div>

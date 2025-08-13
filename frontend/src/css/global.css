@@ -1,15 +1,5 @@
 /* Глобальные стили для проекта */
 
-body {
-  font-family: var(--main-font);
-  background-color: var(--main-background-color);
-  color: var(--main-font-color);
-  font-size: var(--main-font-size);
-  min-width: var(--min-page-width);
-  max-width: var(--max-page-width);
-  margin: 0 auto;
-}
-
 *,
 *::before,
 *::after {
