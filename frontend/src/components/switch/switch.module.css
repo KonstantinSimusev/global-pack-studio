@@ -1,0 +1,73 @@
+.container {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+
+.circle {
+  padding: 10px;
+  display: flex;
+  justify-content: end;
+  border-radius: 50%;
+  background: var(--month-circle-background);
+  transition: color 0.3s;
+}
+
+.monthIcon {
+  width: 20px;
+  height: 20px;
+  color: var(--icon-color);
+  transition: color 0.3s;
+}
+
+.title {
+  padding: 0 20px;
+  transition: color 0.3s;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 24px;
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  border: 0;
+  padding: 0;
+  clip: rect(0 0 0 0);
+  clip-path: inset(100%);
+  overflow: hidden;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  border-radius: 30px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--slider-background-color);
+  transition: all 0.4s;
+}
+
+.slider::before {
+  position: absolute;
+  content: '';
+  height: 22px;
+  width: 22px;
+  border-radius: 50%;
+  left: 1px;
+  bottom: 1px;
+  background-color: #f0f0f0;
+  transition: all 0.4s;
+}
+
+input:checked + .slider::before {
+  transform: translateX(15.4px);
+}

@@ -2,6 +2,7 @@
 @import './Montserrat.css';
 @import './variables.css';
 @import './global.css';
+@import './themes.css';
 
 body {
   font-family: var(--main-font);

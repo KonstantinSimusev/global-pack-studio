@@ -1,0 +1,22 @@
+/* В этом файле вы опишете значения переменных в разных цветовых схемах.
+Придерживайтесь такого именования классов:
+✦ theme-dark — класс тёмной темы
+✦ theme-light — класс светлой темы
+✦ не забудьте описать стили для изменения темы через медизапрос пользовательских предпочтений
+*/
+
+.theme-light {
+  --main-font-color: var(--black-color, #111);
+  --main-background-color: var(--white-color, #eaeaea);
+  --icon-color: var(--black-color, #111);
+  --month-circle-background: var(--grey-light-color, #dbdbdb);
+  --slider-background-color: var(--grey-color, #adadad);
+}
+
+.theme-dark {
+  --main-font-color: var(--white-color, #eaeaea);
+  --main-background-color: var(--black-color, #111);
+  --icon-color: var(--white-color, #eaeaea);
+  --month-circle-background: var(--black-light-color, #252525);
+  --slider-background-color: var(--green-color, #2e8b57);
+}

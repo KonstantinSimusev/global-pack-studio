@@ -1,22 +1,28 @@
-/* Цвета */
-:root {
-  --main-font-color: #eaeaea;
-  --main-background-color: #222;
-}
+/* В этом файле будут храниться все значения переменных в исходном состоянии */
 
-/* Шрифты */
 :root {
-  --main-font: 'Montserrat';
-  --logo-font: 'Montserrat';
-}
+  --white-color: #eaeaea;
+  --white-light-color: #d2d2d2;
 
-/* Размеры шрифта */
-:root {
-  --main-font-size: 18px;
-}
+  --green-color: #2e8b57;
 
-/* Размеры страницы */
-:root {
+  --grey-color: #adadad;
+  --grey-light-color: #dbdbdb;
+
+  --black-color: #111;
+  --black-light-color: #252525;
+ 
+  --main-font: 'Montserrat', arial, helvetica, sans-serif;
+  --logo-font: 'Montserrat'; /* дописать */
+
+  --main-font-color: var(--white-color, #eaeaea);
+  --main-background-color: var(--black-color, #111);
+
+  --icon-color: var(--white-color, #eaeaea);
+  --month-circle-background: var(--black-light-color, #252525);
+  --slider-background-color: var(--green-color, #2e8b57);
+
   --min-page-width: 320px;
   --max-page-width: 900px;
+  --main-font-size: 16px;
 }

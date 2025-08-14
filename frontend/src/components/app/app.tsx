@@ -1,11 +1,9 @@
-import styles from "./app.module.css";
-
-// import { Header } from '../header/header';
-// import { Cover } from '../cover/cover';
+import styles from './app.module.css';
 
 // import { useState } from 'react';
-// import reactLogo from './assets/react.svg';
-// import gpsLogo from '/icon.svg';
+
+import { Switch } from '../switch/switch';
+import { Header } from '../header/header';
 
 // const initialData = {
 //   date: '12 августа 2025 года',
@@ -14,18 +12,11 @@ import styles from "./app.module.css";
 // }
 
 const App = () => {
-  // const [count, setCount] = useState(0);
-
   return (
     <div className={styles.container}>
-      <br />
-      <p className={styles.title_m}>Global Pack Studio</p>
-      <br />
-      <p className={styles.title_c}>Global Pack Studio</p>
-      <br />
-      <p className={styles.title_b}>Global Pack Studio</p>
-      {/* <Header />
-      <Cover {...initialData} /> */}
+      <Header />
+      <Switch />
+      {/* <Cover {...initialData} /> */}
     </div>
   );
 };

@@ -1,11 +1,4 @@
 .container {
   display: grid;
-}
-
-.title_c {
-  font-weight: 200;
-}
-
-.title_b {
-  font-weight: 700;
+  margin: 20px;
 }
