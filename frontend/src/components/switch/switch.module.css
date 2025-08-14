@@ -1,7 +1,11 @@
-.container {
+.container,
+.wrapper {
   display: flex;
-  justify-content: end;
   align-items: center;
+}
+
+.container {
+  justify-content: end;
 }
 
 .circle {
@@ -21,7 +25,8 @@
 }
 
 .title {
-  padding: 0 20px;
+  padding-left: 10px;
+  padding-right: 60px;
   transition: color 0.3s;
 }
 

@@ -11,6 +11,7 @@
 
   --black-color: #111;
   --black-light-color: #252525;
+  --black-medium-color: #333;
  
   --main-font: 'Montserrat', arial, helvetica, sans-serif;
   --logo-font: 'Montserrat'; /* дописать */
@@ -21,6 +22,7 @@
   --icon-color: var(--white-color, #eaeaea);
   --month-circle-background: var(--black-light-color, #252525);
   --slider-background-color: var(--green-color, #2e8b57);
+  --user-background-color: var(--black-medium-color, #333);
 
   --min-page-width: 320px;
   --max-page-width: 900px;

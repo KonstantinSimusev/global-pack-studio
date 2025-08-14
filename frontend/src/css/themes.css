@@ -11,6 +11,7 @@
   --icon-color: var(--black-color, #111);
   --month-circle-background: var(--grey-light-color, #dbdbdb);
   --slider-background-color: var(--grey-color, #adadad);
+  --user-background-color: var(--grey-color, #adadad);
 }
 
 .theme-dark {
@@ -19,4 +20,5 @@
   --icon-color: var(--white-color, #eaeaea);
   --month-circle-background: var(--black-light-color, #252525);
   --slider-background-color: var(--green-color, #2e8b57);
+  --user-background-color: var(--black-medium-color, #333);
 }

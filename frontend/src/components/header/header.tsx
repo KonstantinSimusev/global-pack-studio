@@ -3,7 +3,7 @@ import styles from './header.module.css';
 export const Header = () => {
   return (
     <div className={styles.container}>
-      <div className={styles.logo}>
+      <a className={styles.logo} href="/">
         <svg className={styles.logoIcon} viewBox="0 0 512 512">
           <path
             fill="currentColor"
@@ -11,12 +11,18 @@ export const Header = () => {
           />
         </svg>
         <h1 className={styles.title}>Global Pack Studio</h1>
+      </a>
+      <div className={styles.wrapper}>
+        <a className={styles.circle} href="/">
+          <span className={styles.user}>CR</span>
+        </a>
+        <svg className={styles.burger} viewBox="0 0 28 28">
+          <path
+            fill="currentColor"
+            d="M3 7a1 1 0 0 1 1-1h20a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1ZM3 14a1 1 0 0 1 1-1h20a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1ZM4 20a1 1 0 1 0 0 2h20a1 1 0 1 0 0-2H4Z"
+          />
+        </svg>
       </div>
-      {/* <div className={styles.menu}>
-        <div className={styles.line}></div>
-        <div className={styles.line}></div>
-        <div className={styles.line}></div>
-      </div> */}
     </div>
   );
 };
