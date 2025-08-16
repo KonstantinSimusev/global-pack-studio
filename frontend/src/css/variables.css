@@ -7,15 +7,16 @@
 
   --grey: #adadad;
   --grey-tint-1: #dbdbdb;
+  --grey-tint-2: #7a7a7a;
 
   --black: #111;
   --black-tint-1: #252525;
   --black-tint-2: #333;
 
   --color-default: var(--white, #eaeaea);
-  --bg-color-default: var(--black, #111);
-
   --color-icon: var(--white, #eaeaea);
+  
+  --bg-color-default: var(--black, #111);
   --bg-color-theme: var(--black-tint-1, #252525);
   --bg-color-slider: var(--green, #2e8b57);
 }

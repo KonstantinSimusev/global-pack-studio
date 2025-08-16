@@ -1,17 +1,23 @@
-.container {
+.header {
   display: flex;
   position: relative;
   justify-content: space-between;
   align-items: center;
 }
 
-.logo {
+.header__logo {
   display: flex;
   align-items: center;
 }
 
-.title {
+.header__title {
   margin-left: 10px;
   font-size: 18px;
   font-weight: 400;
+  transition: color 0.4s;
+}
+
+.header__title:hover {
+  color: var(--grey-tint-2);
+  transition: color 0.4s;
 }

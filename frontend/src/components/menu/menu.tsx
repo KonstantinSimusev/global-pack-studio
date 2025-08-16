@@ -1,18 +1,17 @@
 import styles from './menu.module.css';
-import clsx from 'clsx';
 
 import { useState } from 'react';
 
 import { Switch } from '../switch/switch';
 import { CloseIcon } from '../icons/close/close';
 
-export const Menu = () => {
-  const [isMenuClosed, setIsMenuClosed] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+type TMenuProps = {
+  onClose: () => void;
+};
 
-  const closeMenu = () => {
-    setIsMenuClosed(!isMenuClosed);
-  };
+export const Menu = ({ onClose }: TMenuProps) => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  // Добавьте состояние для открытия/закрытия меню
 
   const signIn = () => {
     setIsAuthenticated(!isAuthenticated);
@@ -24,20 +23,14 @@ export const Menu = () => {
   };
 
   return (
-    <div
-      className={clsx(styles.container, styles.menuOpen, {
-        [styles.menuClosed]: isMenuClosed,
-      })}
-    >
-      <CloseIcon onClick={closeMenu} />
-      <nav className={styles.nav} onClick={handleMenuClick}>
-        <ul className={styles.list}>
-          <li className={styles.item}>Главная</li>
-          <li className={styles.item}>
-            {!isAuthenticated ? 'Личный кабинет' : ''}
-          </li>
-          <li className={styles.item} onClick={signIn}>
-            {!isAuthenticated ? 'Выйти из аккаунта' : 'Войти в аккаунт'}
+    <div className={styles.menu} onClick={handleMenuClick}>
+      <CloseIcon onClick={onClose} />
+      <nav className={styles.navigation}>
+        <ul className={styles.navigation__list}>
+          <li className={styles.navigation__item}>Главная</li>
+          <li className={styles.navigation__item}>Личный кабинет</li>
+          <li className={styles.navigation__item} onClick={signIn}>
+            {!isAuthenticated ? 'Выйти' : 'Войти'}
           </li>
         </ul>
       </nav>

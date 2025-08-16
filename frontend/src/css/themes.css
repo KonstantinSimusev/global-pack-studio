@@ -2,16 +2,18 @@
 
 .theme-light {
   --color-default: var(--black, #111);
-  --bg-color-default: var(--white, #eaeaea);
   --color-icon: var(--black, #111);
+
+  --bg-color-default: var(--white, #eaeaea);
   --bg-color-theme: var(--grey-tint-1, #dbdbdb);
   --bg-color-slider: var(--grey, #adadad);
 }
 
 .theme-dark {
   --color-default: var(--white, #eaeaea);
-  --bg-color-default: var(--black, #111);
   --color-icon: var(--white, #eaeaea);
+
+  --bg-color-default: var(--black, #111);
   --bg-color-theme: var(--black-tint-1, #252525);
   --bg-color-slider: var(--green, #2e8b57);
 }

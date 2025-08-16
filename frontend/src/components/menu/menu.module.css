@@ -1,33 +1,19 @@
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: end;
-  gap: 60px;
-  padding: 20px;
-  width: 300px;
+.menu {
+  position: fixed;
   height: 100vh;
   background-color: var(--bg-color-default);
-  border-left: 1px solid #ccc;
-  border-radius: 20px;
-}
-
-.menuOpen {
-  position: fixed;
-  z-index: 1;
+  padding: 20px;
   top: 0;
   right: 0;
+  display: grid;
+  min-width: 320px;
+  border-left: 1px solid #bebebe;
+  border-top-left-radius: 20px; /* верхний левый угол */
+  border-bottom-left-radius: 20px; /* нижний левый угол */
+  
 }
 
-.menuClosed {
-  display: none;
-}
-
-.list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.item:first-child {
-  margin-bottom: 30px;
+.navigation__list {
+  display: grid;
+  gap: 14px;
 }

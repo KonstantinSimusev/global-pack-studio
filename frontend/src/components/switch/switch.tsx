@@ -1,6 +1,7 @@
 import styles from './switch.module.css';
 
 import { useEffect, useState } from 'react';
+
 import { ThemeIcon } from '../icons/theme/theme';
 
 export const Switch = () => {
@@ -36,20 +37,16 @@ export const Switch = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.wrapper}>
-        <div className={styles.circle}>
-          <ThemeIcon />
-        </div>
-        <span className={styles.title}>Тёмная тема</span>
-      </div>
+      <ThemeIcon />
+      <span className={styles.text}>Тёмная тема</span>
       <label className={styles.switch}>
         <input
-          className={styles.visuallyHidden}
+          className={styles.switch__chekbox}
           type="checkbox"
           checked={checked}
           onChange={toggleTheme}
         />
-        <span className={styles.slider}></span>
+        <span className={styles.switch__slider}></span>
       </label>
     </div>
   );
