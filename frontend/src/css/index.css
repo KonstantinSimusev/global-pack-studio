@@ -5,11 +5,10 @@
 @import './themes.css';
 
 body {
-  font-family: var(--main-font);
-  background-color: var(--main-background-color);
-  color: var(--main-font-color);
-  font-size: var(--main-font-size);
-  min-width: var(--min-page-width);
-  max-width: var(--max-page-width);
+  font-family: 'Montserrat', arial, helvetica, sans-serif;
+  background-color: var(--bg-color-default);
+  color: var(--color-default);
+  min-width: 320px;
+  max-width: 900px;
   margin: 0 auto;
 }

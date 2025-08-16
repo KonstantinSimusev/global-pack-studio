@@ -2,9 +2,6 @@
 .wrapper {
   display: flex;
   align-items: center;
-}
-
-.container {
   justify-content: end;
 }
 
@@ -13,26 +10,17 @@
   display: flex;
   justify-content: end;
   border-radius: 50%;
-  background: var(--month-circle-background);
-  transition: color 0.3s;
-}
-
-.monthIcon {
-  width: 20px;
-  height: 20px;
-  color: var(--icon-color);
-  transition: color 0.3s;
+  background: var(--bg-color-theme);
 }
 
 .title {
-  padding-left: 10px;
-  padding-right: 60px;
-  transition: color 0.3s;
+  margin-left: 10px;
+  margin-right: 60px;
 }
 
 .switch {
   position: relative;
-  display: inline-block;
+  display: flex;
   width: 40px;
   height: 24px;
 }
@@ -53,12 +41,8 @@
   position: absolute;
   cursor: pointer;
   border-radius: 30px;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: var(--slider-background-color);
-  transition: all 0.4s;
+  inset: 0;
+  background-color: var(--bg-color-slider);
 }
 
 .slider::before {
@@ -70,7 +54,7 @@
   left: 1px;
   bottom: 1px;
   background-color: #f0f0f0;
-  transition: all 0.4s;
+  transition: transform 0.4s;
 }
 
 input:checked + .slider::before {

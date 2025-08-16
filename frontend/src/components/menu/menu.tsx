@@ -1,43 +1,47 @@
-import { useState } from 'react';
 import styles from './menu.module.css';
+import clsx from 'clsx';
+
+import { useState } from 'react';
+
+import { Switch } from '../switch/switch';
+import { CloseIcon } from '../icons/close/close';
 
 export const Menu = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isMenuClosed, setIsMenuClosed] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
+  const closeMenu = () => {
+    setIsMenuClosed(!isMenuClosed);
   };
 
-  // Формируем классы вручную
-  const menuClass = [styles.menu];
-  if (isOpen) menuClass.push(styles['menu--open']);
+  const signIn = () => {
+    setIsAuthenticated(!isAuthenticated);
+  };
 
-  const iconClass = [styles.icon];
-  if (isOpen) iconClass.push(styles['icon--cross']);
+  // Функция для предотвращения закрытия при клике на элементы меню
+  const handleMenuClick = (event: React.MouseEvent) => {
+    event.stopPropagation(); // Останавливаем распространение события
+  };
 
   return (
-    <div className={styles['burger-container']}>
-      <div className={iconClass.join(' ')} onClick={toggleMenu}>
-        {isOpen ? (
-          <div className={styles.cross}>
-            <div className={styles.line1}></div>
-            <div className={styles.line2}></div>
-          </div>
-        ) : (
-          <div className={styles.hamburger}>
-            <div className={styles.line}></div>
-            <div className={styles.line}></div>
-            <div className={styles.line}></div>
-          </div>
-        )}
-      </div>
-      <nav className={menuClass.join(' ')}>
-        <ul>
-          <li>Главная</li>
-          <li>О нас</li>
-          <li>Контакты</li>
+    <div
+      className={clsx(styles.container, styles.menuOpen, {
+        [styles.menuClosed]: isMenuClosed,
+      })}
+    >
+      <CloseIcon onClick={closeMenu} />
+      <nav className={styles.nav} onClick={handleMenuClick}>
+        <ul className={styles.list}>
+          <li className={styles.item}>Главная</li>
+          <li className={styles.item}>
+            {!isAuthenticated ? 'Личный кабинет' : ''}
+          </li>
+          <li className={styles.item} onClick={signIn}>
+            {!isAuthenticated ? 'Выйти из аккаунта' : 'Войти в аккаунт'}
+          </li>
         </ul>
       </nav>
+      <Switch />
     </div>
   );
 };
