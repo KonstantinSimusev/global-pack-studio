@@ -1,11 +1,10 @@
 import styles from './modal.module.css';
 
 type TModalProps = {
-  children: React.ReactNode;
   onClose?: () => void;
 };
 
-export const Modal = ({ onClose, children }: TModalProps) => {
+export const Modal = ({ onClose }: TModalProps) => {
   const handleClick = (event: React.MouseEvent) => {
     // Проверяем, был ли клик по самому оверлею
     if (event.target === event.currentTarget) {
@@ -13,9 +12,5 @@ export const Modal = ({ onClose, children }: TModalProps) => {
     }
   };
 
-  return (
-    <div className={styles.container} onClick={handleClick}>
-      {children}
-    </div>
-  );
+  return <div className={styles.container} onClick={handleClick}></div>;
 };

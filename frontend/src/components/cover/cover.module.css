@@ -1,0 +1,20 @@
+.container {
+  display: flex;
+  align-items: end;
+  padding: clamp(1.25rem, 0.8979rem + 1.7606vw, 2.5rem);
+  height: clamp(7.5rem, 0.8099rem + 33.4507vw, 31.25rem);
+  background: linear-gradient(rgba(0, 0, 0, 0.6)),
+    url('../../assets/technology.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: clamp(1.25rem, 0.8979rem + 1.7606vw, 2.5rem);
+  border: 1px solid var(--color-cover);
+}
+
+.title {
+  display: flex;
+  flex-direction: column;
+  font-size: clamp(1.875rem, 0.2905rem + 7.9225vw, 7.5rem);
+  color: var(--white);
+}

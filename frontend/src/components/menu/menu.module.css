@@ -1,17 +1,21 @@
 .menu {
+  display: grid;
   position: fixed;
-  height: 100vh;
-  background-color: var(--bg-color-default);
-  padding: 20px;
   top: 0;
   right: 0;
-  display: grid;
+  padding: 20px;
+  height: 100vh;
   min-width: 320px;
+  background-color: var(--bg-color-default);
   border-left: 1px solid #bebebe;
-  border-top-left-radius: 20px; /* верхний левый угол */
-  border-bottom-left-radius: 20px; /* нижний левый угол */
-  
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
 }
+
+.menu > :first-child {
+  justify-self: end;
+}
+
 
 .navigation__list {
   display: grid;

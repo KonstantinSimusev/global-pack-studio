@@ -31,14 +31,15 @@ export const Header = () => {
     <header className={styles.header}>
       <a className={styles.header__logo} href="/">
         <LogoIcon />
-        <h1 className={styles.header__title}>Global Pack Studio</h1>
       </a>
+      <h1 className={styles.header__title}>Global Pack Studio</h1>
       <BurgerIcon onClick={openMenu} />
 
       {isMenuOpen && (
-        <Overlay onClose={closeMenu}>
+        <>
+          <Overlay onClose={closeMenu} />
           <Menu onClose={closeMenu} />
-        </Overlay>
+        </>
       )}
     </header>
   );

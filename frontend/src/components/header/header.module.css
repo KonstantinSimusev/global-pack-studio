@@ -11,13 +11,10 @@
 }
 
 .header__title {
+  display: flex;
+  justify-content: start;
   margin-left: 10px;
+  margin-right: auto;
   font-size: 18px;
   font-weight: 400;
-  transition: color 0.4s;
-}
-
-.header__title:hover {
-  color: var(--grey-tint-2);
-  transition: color 0.4s;
 }
