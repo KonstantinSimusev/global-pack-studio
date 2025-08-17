@@ -1,0 +1,30 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(6.25rem, 4.181rem + 10.3448vw, 10rem);
+  color: #eaeaea;
+  font-size: clamp(0.625rem, 0.4181rem + 1.0345vw, 1rem);
+  border: 1px solid #eaeaea;
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: clamp(0.4375rem, 0.3341rem + 0.5172vw, 0.625rem);
+  padding: clamp(0.3125rem, 0.1401rem + 0.8621vw, 0.625rem);
+}
+
+.container:hover {
+  cursor: pointer;
+  background-color: rgba(255, 255, 255, 0.4);
+  transition: background-color 0.4s;
+}
+
+.input__hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  border: 0;
+  padding: 0;
+  clip: rect(0 0 0 0);
+  clip-path: inset(100%);
+  overflow: hidden;
+}

@@ -3,7 +3,6 @@ import clsx from 'clsx';
 
 import { useState } from 'react';
 
-import { Switch } from '../switch/switch';
 import { CloseIcon } from '../icons/close/close';
 
 type TMenuProps = {
@@ -55,7 +54,6 @@ export const Menu = ({ onClose }: TMenuProps) => {
           </div>
         </ul>
       </nav>
-      <Switch />
     </div>
   );
 };

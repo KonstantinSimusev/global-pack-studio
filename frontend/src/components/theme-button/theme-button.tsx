@@ -1,10 +1,8 @@
-import styles from './switch.module.css';
+import styles from './theme-button.module.css';
 
 import { useEffect, useState } from 'react';
 
-import { ThemeIcon } from '../icons/theme/theme';
-
-export const Switch = () => {
+export const ThemeButton = () => {
   const [checked, setChecked] = useState(() => {
     const savedTheme = localStorage.getItem('theme');
 
@@ -12,7 +10,7 @@ export const Switch = () => {
     if (savedTheme === null) {
       return true;
     }
-    
+
     if (savedTheme === 'true') {
       return true;
     }
@@ -46,16 +44,16 @@ export const Switch = () => {
 
   return (
     <div className={styles.container}>
-      <ThemeIcon />
-      <span className={styles.text}>Тёмная тема</span>
-      <label className={styles.switch}>
+      <label className={styles.wrapper__input}>
         <input
           className={styles.input__hidden}
           type="checkbox"
           checked={checked}
           onChange={toggleTheme}
         />
-        <span className={styles.switch__slider}></span>
+        <span className={styles.input__text}>
+          {checked ? 'Светлая тема' : 'Тёмная тема'}
+        </span>
       </label>
     </div>
   );
