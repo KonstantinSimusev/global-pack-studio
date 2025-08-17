@@ -9,4 +9,4 @@ export const Cover = () => {
       </h2>
     </div>
   );
-}
+};

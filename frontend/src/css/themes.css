@@ -4,7 +4,8 @@
   --color-default: var(--black, #111);
   --color-icon: var(--black, #111);
   --color-close: var(--grey-tint-2, #7b7b7b);
-  --color-cover: var(--grey, #adadad);
+  --color-cover: var(--white, #eaeaea);
+  --color-shadow: var(--black-tint-2, rgba(0, 0, 0, 0.4));
 
   --bg-color-default: var(--white, #eaeaea);
   --bg-color-theme: var(--grey-tint-1, #dbdbdb);
@@ -16,6 +17,7 @@
   --color-icon: var(--white, #eaeaea);
   --color-close: var(--grey, #adadad);
   --color-cover: var(--grey, #adadad);
+  --color-shadow: var(--grey-tint-3, rgba(255, 255, 255, 0.4));
 
   --bg-color-default: var(--black, #111);
   --bg-color-theme: var(--black-tint-1, #252525);

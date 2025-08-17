@@ -1,20 +1,71 @@
 .container {
   display: flex;
   align-items: end;
-  padding: clamp(1.25rem, 0.8979rem + 1.7606vw, 2.5rem);
-  height: clamp(7.5rem, 0.8099rem + 33.4507vw, 31.25rem);
-  background: linear-gradient(rgba(0, 0, 0, 0.6)),
+  padding: clamp(1.25rem, 0.5603rem + 3.4483vw, 2.5rem);
+  height: clamp(9.375rem, 2.4784rem + 34.4828vw, 21.875rem);
+  background-image: linear-gradient(
+      200deg,
+      rgba(0, 0, 0, 0),
+      rgba(0, 0, 0, 0.85)
+    ),
     url('../../assets/technology.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  border-radius: clamp(1.25rem, 0.8979rem + 1.7606vw, 2.5rem);
+  border-radius: clamp(1.25rem, 0.5603rem + 3.4483vw, 2.5rem);
   border: 1px solid var(--color-cover);
+  box-shadow: 0 2px 8px 1px var(--color-shadow);
 }
 
 .title {
   display: flex;
   flex-direction: column;
-  font-size: clamp(1.875rem, 0.2905rem + 7.9225vw, 7.5rem);
-  color: var(--white);
+  letter-spacing: clamp(0.0625rem, 0.028rem + 0.1724vw, 0.125rem);
+  gap: clamp(0.3125rem, 0.1401rem + 0.8621vw, 0.625rem);
+  font-size: clamp(1.25rem, -0.1293rem + 6.8966vw, 3.75rem);
+}
+
+.title span {
+  display: block;
+
+  background-image: linear-gradient(
+    to right,
+    #eaeaea 0%,
+    #333740 53%,
+    #333740 54%,
+    #eaeaea 100%
+  );
+
+  color: transparent;
+  background-size: 200% 100%;
+
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+.title span:nth-child(1) {
+  animation: text-move-up 4s linear infinite;
+}
+
+.title span:nth-child(2) {
+  animation: text-move-down 4s linear infinite;
+  animation-delay: 2s;
+}
+
+@keyframes text-move-up {
+  0% {
+    background-position: 0%;
+  }
+  100% {
+    background-position: -200%;
+  }
+}
+
+@keyframes text-move-down {
+  0% {
+    background-position: 0%;
+  }
+  100% {
+    background-position: -200%;
+  }
 }
