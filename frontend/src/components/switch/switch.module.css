@@ -47,6 +47,6 @@
   transition: transform 0.4s;
 }
 
-input:checked + .switch__slider::before {
+.switch__chekbox:checked + .switch__slider::before {
   transform: translateX(15.4px);
 }

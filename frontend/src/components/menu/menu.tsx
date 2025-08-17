@@ -1,4 +1,5 @@
 import styles from './menu.module.css';
+import clsx from 'clsx';
 
 import { useState } from 'react';
 
@@ -23,15 +24,35 @@ export const Menu = ({ onClose }: TMenuProps) => {
   };
 
   return (
-    <div className={styles.menu} onClick={handleMenuClick}>
+    <div
+      className={clsx(styles.menu, styles.openMenu)}
+      onClick={handleMenuClick}
+    >
       <CloseIcon onClick={onClose} />
       <nav className={styles.navigation}>
         <ul className={styles.navigation__list}>
-          <li className={styles.navigation__item}>Главная</li>
-          <li className={styles.navigation__item}>Личный кабинет</li>
-          <li className={styles.navigation__item} onClick={signIn}>
-            {!isAuthenticated ? 'Выйти' : 'Войти'}
-          </li>
+          <div className={styles.wrapper__item}>
+            <li className={styles.navigation__item}>
+              <a className={styles.link}>Главная</a>
+            </li>
+            <li className={styles.navigation__item}>
+              <a className={styles.link}>Тестирование</a>
+            </li>
+          </div>
+          <div className={styles.wrapper__item}>
+            <li className={styles.navigation__item}>
+              <a className={styles.link}>
+                {!isAuthenticated ? 'Личный кабинет' : ''}
+              </a>
+            </li>
+          </div>
+          <div className={styles.wrapper__item}>
+            <li className={styles.navigation__item}>
+              <a className={styles.link} onClick={signIn}>
+                {!isAuthenticated ? 'Выйти' : 'Войти'}
+              </a>
+            </li>
+          </div>
         </ul>
       </nav>
       <Switch />

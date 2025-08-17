@@ -4,8 +4,8 @@ export const Cover = () => {
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>
-        <span>Innovation</span>
-        <span>Technology</span>
+        <span className={styles.text__top}>Innovation</span>
+        <span className={styles.text__bottom}>Technology</span>
       </h2>
     </div>
   );
