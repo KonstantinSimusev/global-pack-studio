@@ -4,12 +4,14 @@ import clsx from 'clsx';
 import { useState } from 'react';
 
 import { CloseIcon } from '../icons/close/close';
+import { Switch } from '../switch/switch';
 
 type TMenuProps = {
   onClose: () => void;
+  isOpen: boolean; // Добавляем пропс для состояния открытия
 };
 
-export const Menu = ({ onClose }: TMenuProps) => {
+export const Menu = ({ onClose, isOpen }: TMenuProps) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   // Добавьте состояние для открытия/закрытия меню
 
@@ -24,36 +26,23 @@ export const Menu = ({ onClose }: TMenuProps) => {
 
   return (
     <div
-      className={clsx(styles.menu, styles.openMenu)}
+      className={clsx(styles.container, { [styles.menu__open]: isOpen })}
       onClick={handleMenuClick}
     >
       <CloseIcon onClick={onClose} />
       <nav className={styles.navigation}>
         <ul className={styles.navigation__list}>
-          <div className={styles.wrapper__item}>
-            <li className={styles.navigation__item}>
-              <a className={styles.link}>Главная</a>
-            </li>
-            <li className={styles.navigation__item}>
-              <a className={styles.link}>Тестирование</a>
-            </li>
-          </div>
-          <div className={styles.wrapper__item}>
-            <li className={styles.navigation__item}>
-              <a className={styles.link}>
-                {!isAuthenticated ? 'Личный кабинет' : ''}
-              </a>
-            </li>
-          </div>
-          <div className={styles.wrapper__item}>
-            <li className={styles.navigation__item}>
-              <a className={styles.link} onClick={signIn}>
-                {!isAuthenticated ? 'Выйти' : 'Войти'}
-              </a>
-            </li>
-          </div>
+          <li className={styles.link}>Главная</li>
+          <li className={styles.link}>Тестирование</li>
+          <li className={styles.link}>
+            {!isAuthenticated ? 'Личный кабинет' : ''}
+          </li>
+          <li className={styles.link} onClick={signIn}>
+            {!isAuthenticated ? 'Выйти' : 'Войти'}
+          </li>
         </ul>
       </nav>
+      <Switch />
     </div>
   );
 };

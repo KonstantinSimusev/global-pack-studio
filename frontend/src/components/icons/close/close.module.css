@@ -7,6 +7,6 @@
   stroke-width: 2.5;
 }
 
-.icon:hover {
-  scale: 1.1;
+.icon:active {
+  transform: scale(0.8);
 }

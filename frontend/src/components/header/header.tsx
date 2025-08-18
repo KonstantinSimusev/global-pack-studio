@@ -35,12 +35,8 @@ export const Header = () => {
       <h1 className={styles.header__title}>Global Pack Studio</h1>
       <BurgerIcon onClick={openMenu} />
 
-      {isMenuOpen && (
-        <>
-          <Overlay onClose={closeMenu} />
-          <Menu onClose={closeMenu} />
-        </>
-      )}
+      {isMenuOpen && <Overlay onClose={closeMenu} />}
+      <Menu onClose={closeMenu} isOpen={isMenuOpen} />
     </header>
   );
 };

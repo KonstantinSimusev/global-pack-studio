@@ -1,4 +1,4 @@
-.menu {
+.container {
   display: grid;
   grid-template-rows: 0.7fr 5fr 4fr;
   position: fixed;
@@ -12,48 +12,33 @@
   border-left: 1px solid #bebebe;
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
-/* 
-  transform: translateX(100%);
-  transition: transform 0.3s ease-in-out;
-  will-change: transform;
-  opacity: 0; */
+
+  transform: translateX(100%); /* изначально скрыто */
+  transition: transform 0.6s ease;
 }
 
-/* .menu__open {
-  transform: translateX(0);
-  opacity: 1;
-} */
+.menu__open {
+  transform: translateX(0); /* при открытии перемещается в начальное положение */
+}
 
-.menu > :first-child {
+/* крестик справа */
+.container > :first-child {
   justify-self: end;
-}
-
-.navigation {
-  display: grid;
 }
 
 .navigation__list {
   display: grid;
   grid-template-rows: 1fr 1fr 1fr;
   align-self: start;
-  gap: 60px;
-}
-
-.navigation__item {
-  padding-top: 20px;
-}
-
-.wrapper__item {
-  display: grid;
-  align-self: start;
-}
-
-.wrapper__item:not(:first-child) {
-  border-top: 0.5px solid var(--color-border);
+  gap: 10px;
 }
 
 .link:hover {
   cursor: pointer;
-  color: var(--grey-tint-2);
-  transition: color 0.4s ease;
+}
+
+.link:active {
+  transform: scale(1.03);
+  opacity: 0.6;
+  transition: transform 0.4s ease; 
 }

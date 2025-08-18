@@ -13,6 +13,8 @@
   --black-tint-1: #636363;
   --black-tint-2: rgba(0, 0, 0, 0.4);
   --black-tint-3: rgba(0, 0, 0, 0.6);
+  --black-tint-4: #222;
+  --black-tint-5: rgba(137, 137, 137, 0.2);
 
   /* Цвета в приложении */
   --color-default: var(--black, #111);
@@ -20,9 +22,11 @@
   --color-close: var(--grey, #adadad);
   --color-cover: var(--grey, #adadad);
   --color-shadow: var(--grey-tint-3, rgba(207, 207, 207, 0.4));
-  --color-border: var(--grey-tint-4, rgba(207, 207, 207, 0.3));
+  --color-button: var(--white, #eaeaea);
   
   --bg-color-default: var(--white, #eaeaea);
+  --bg-color-button: var(--black, #111);
+  
   --bg-color-theme: var(--black-tint-1, #252525);
   --bg-color-slider: var(--green, #2e8b57);
 }

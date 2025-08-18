@@ -10,13 +10,15 @@ export const Switch = () => {
 
     // Если в хранилище ничего нет
     if (savedTheme === null) {
+      console.log(1);
       return true;
     }
     
     if (savedTheme === 'true') {
+      console.log(2);
       return true;
     }
-
+    console.log(3);
     return false;
   });
 

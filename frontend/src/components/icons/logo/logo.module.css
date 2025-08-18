@@ -4,6 +4,6 @@
   fill: currentColor;
 }
 
-.icon:hover {
-  scale: 1.1;
+.icon:active {
+  transform: scale(0.8);
 }

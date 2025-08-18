@@ -17,13 +17,6 @@
   box-shadow: 0 2px 8px 1px var(--color-shadow);
 }
 
-.container > :nth-child(1) {
-  grid-row: 1;
-  grid-column: 1;
-  justify-self: end; /* выравниваем по правому краю */
-  align-self: start; /* выравниваем по верхнему краю */
-}
-
 .title {
   display: flex;
   flex-direction: column;
@@ -35,7 +28,6 @@
 .text__top,
 .text__bottom {
   display: block;
-
   background-image: linear-gradient(
     to right,
     #eaeaea 0%,
@@ -43,10 +35,8 @@
     #333740 54%,
     #eaeaea 100%
   );
-
   color: transparent;
   background-size: 200% 100%;
-
   background-clip: text;
   -webkit-background-clip: text;
 }
@@ -60,7 +50,7 @@
   animation-delay: 2s;
 }
 
-/* @keyframes text-move-top {
+@keyframes text-move-top {
   0% {
     background-position: 0%;
   }
@@ -76,4 +66,4 @@
   100% {
     background-position: -200%;
   }
-} */
+}

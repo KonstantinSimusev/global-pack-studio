@@ -1,7 +1,7 @@
 import styles from './app.module.css';
 import clsx from 'clsx';
 
-// import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 import { Header } from '../header/header';
 import { Cover } from '../cover/cover';
@@ -16,6 +16,12 @@ import { useTheme } from '../../hooks/useTheme';
 
 const App = () => {
   const theme = useTheme();
+
+  useEffect(() => {
+    console.log(localStorage);
+    // localStorage.clear();
+    // console.log(localStorage);
+  }, []);
 
   return (
     <>
