@@ -33,6 +33,7 @@
   border-radius: 30px;
   inset: 0;
   background-color: var(--bg-color-slider);
+  transition: background-color 0.4s ease;
 }
 
 .switch__slider::before {
@@ -44,7 +45,7 @@
   right: 1px;
   bottom: 1px;
   background-color: #f0f0f0;
-  transition: transform 0.4s;
+  transition: transform 0.4s ease;
 }
 
 .input__hidden:checked + .switch__slider::before {
