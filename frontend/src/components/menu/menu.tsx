@@ -1,17 +1,19 @@
 import styles from './menu.module.css';
 import clsx from 'clsx';
 
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 
 import { CloseIcon } from '../icons/close/close';
 import { Switch } from '../switch/switch';
+import { MenuContext } from '../../contexts/menuContext';
 
 type TMenuProps = {
   onClose: () => void;
-  isOpen: boolean; // Добавляем пропс для состояния открытия
+  // isOpen: boolean; // Добавляем пропс для состояния открытия
 };
 
-export const Menu = ({ onClose, isOpen }: TMenuProps) => {
+export const Menu = ({ onClose }: TMenuProps) => {
+  const { isOpen } = useContext(MenuContext);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   // Добавьте состояние для открытия/закрытия меню
 

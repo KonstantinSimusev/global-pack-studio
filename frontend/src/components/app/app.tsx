@@ -6,6 +6,8 @@ import { useEffect } from 'react';
 import { Header } from '../header/header';
 import { Cover } from '../cover/cover';
 
+import { MenuProvider } from '../../contexts/menuContext';
+
 import { useTheme } from '../../hooks/useTheme';
 
 // const initialData = {
@@ -24,7 +26,7 @@ const App = () => {
   }, []);
 
   return (
-    <>
+    <MenuProvider>
       <div className={clsx(styles.container, theme)}>
         <Header />
         <Cover />
@@ -70,7 +72,7 @@ const App = () => {
         </div>
         {/* <Cover {...initialData} /> */}
       </div>
-    </>
+    </MenuProvider>
   );
 };
 

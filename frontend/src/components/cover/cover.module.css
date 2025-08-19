@@ -52,7 +52,7 @@
   animation-delay: 2s;
 }
 
-@keyframes text-move-top {
+/* @keyframes text-move-top {
   0% {
     background-position: 0%;
   }
@@ -68,4 +68,4 @@
   100% {
     background-position: -200%;
   }
-}
+} */

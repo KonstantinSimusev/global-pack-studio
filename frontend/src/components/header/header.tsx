@@ -1,6 +1,6 @@
 import styles from './header.module.css';
 
-import { useState } from 'react';
+import { useContext } from 'react';
 
 import { useEscapeHandler } from '../../hooks/useEscapeHandler';
 
@@ -8,23 +8,24 @@ import { LogoIcon } from '../icons/logo/logo';
 import { BurgerIcon } from '../icons/burger/burger';
 import { Menu } from '../menu/menu';
 import { Overlay } from '../overlay/overlay';
+import { MenuContext } from '../../contexts/menuContext';
 
 export const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { isOpen, setIsOpen } = useContext(MenuContext);
 
   // Используем кастомный хук
   useEscapeHandler(() => {
-    if (isMenuOpen) {
+    if (isOpen) {
       closeMenu();
     }
   });
 
   const openMenu = () => {
-    setIsMenuOpen(true);
+    setIsOpen(true);
   };
 
   const closeMenu = () => {
-    setIsMenuOpen(false);
+    setIsOpen(false);
   };
 
   return (
@@ -35,8 +36,8 @@ export const Header = () => {
       <h1 className={styles.header__title}>Global Pack Studio</h1>
       <BurgerIcon onClick={openMenu} />
 
-      {isMenuOpen && <Overlay onClose={closeMenu} />}
-      <Menu onClose={closeMenu} isOpen={isMenuOpen} />
+      {isOpen && <Overlay onClose={closeMenu} />}
+      <Menu onClose={closeMenu} />
     </header>
   );
 };
