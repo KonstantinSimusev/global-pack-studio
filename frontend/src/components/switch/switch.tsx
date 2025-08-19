@@ -1,49 +1,17 @@
 import styles from './switch.module.css';
 
-import { useEffect, useState } from 'react';
+import { useContext } from 'react';
+
+import { ThemeContext } from '../../contexts/themeContext';
 
 import { ThemeIcon } from '../icons/theme/theme';
 
 export const Switch = () => {
-  const [checked, setChecked] = useState(() => {
-    const savedTheme = localStorage.getItem('theme');
-
-    // Если в хранилище ничего нет
-    if (savedTheme === null) {
-      console.log(1);
-      return true;
-    }
-    
-    if (savedTheme === 'true') {
-      console.log(2);
-      return true;
-    }
-    console.log(3);
-    return false;
-  });
-
-  useEffect(() => {
-    const root = document.documentElement;
-
-    // Сначала удаляем все темы
-    root.classList.remove('theme-light', 'theme-dark');
-
-    if (checked) {
-      root.classList.add('theme-light');
-    } else {
-      root.classList.add('theme-dark');
-    }
-
-    try {
-      localStorage.setItem('theme', String(checked));
-    } catch (error) {
-      console.error('Ошибка сохранения в localStorage', error);
-    }
-  }, [checked]);
-
+  const {isLightTheme, setIsLightTheme} = useContext(ThemeContext);
+ 
   const toggleTheme = (e: React.ChangeEvent<HTMLInputElement>) => {
     // Сохраняем новое состояние
-    setChecked(e.target.checked);
+    setIsLightTheme(e.target.checked);
   };
 
   return (
@@ -54,7 +22,7 @@ export const Switch = () => {
         <input
           className={styles.input__hidden}
           type="checkbox"
-          checked={checked}
+          checked={isLightTheme}
           onChange={toggleTheme}
         />
         <span className={styles.switch__slider}></span>
