@@ -18,20 +18,19 @@ export const ThemeProvider = ({ children }: TThemeProvider) => {
   const [isLightTheme, setIsLightTheme] = useState(() => {
     const savedTheme = localStorage.getItem('theme');
 
-    // Если в хранилище ничего нет
     if (savedTheme === null) {
-      console.log(1);
+      console.log('В хранилище нет данных');
       return true;
     }
 
     // Если в хранилище светлая тема
     if (savedTheme === 'true') {
-      console.log(2);
+      console.log('В хранилище `true` - светлая тема');
       return true;
     }
 
     // Если в хранилище светлая тема
-    console.log(3);
+    console.log('В хранилище `false` - тёмная тема');
     return false;
   });
 

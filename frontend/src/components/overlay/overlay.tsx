@@ -1,14 +1,15 @@
 import styles from './overlay.module.css';
 
-type TOverlayProps = {
-  onClose?: () => void;
-};
+import { useContext } from 'react';
+import { MenuContext } from '../../contexts/menuContext';
 
-export const Overlay = ({ onClose }: TOverlayProps) => {
+export const Overlay = () => {
+  const { isOpen, setIsOpen } = useContext(MenuContext);
+
   const handleClick = (event: React.MouseEvent) => {
     // Проверяем, был ли клик по самому оверлею
     if (event.target === event.currentTarget) {
-      onClose?.();
+      setIsOpen(!isOpen);
     }
   };
 

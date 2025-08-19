@@ -1,13 +1,12 @@
 import styles from './app.module.css';
 import clsx from 'clsx';
 
-import { useContext, useEffect } from 'react';
-
+import { useContext, useEffect, useState } from 'react';
 import { Header } from '../header/header';
-import { Cover } from '../cover/cover';
-
+import { Banner } from '../banner/banner';
 import { MenuProvider } from '../../contexts/menuContext';
 import { ThemeContext, ThemeProvider } from '../../contexts/themeContext';
+import { Loader } from '../loader/loader';
 
 // const initialData = {
 //   date: '12 августа 2025 года',
@@ -16,19 +15,31 @@ import { ThemeContext, ThemeProvider } from '../../contexts/themeContext';
 // }
 
 const App = () => {
-  const {isLightTheme} = useContext(ThemeContext);
+  const [isLoader, setIsloader] = useState(true);
+  const { isLightTheme } = useContext(ThemeContext);
 
   useEffect(() => {
     console.log(localStorage);
-  }, []);
+
+    const timer = setTimeout(() => {
+      setIsloader(false);
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, [isLoader]);
 
   return (
     <ThemeProvider>
       <MenuProvider>
-        <div className={clsx(styles.container, isLightTheme)}>
+        <div
+          className={clsx(
+            styles.container,
+            isLightTheme ? 'theme-light' : 'theme-dark',
+          )}
+        >
           <Header />
-          <Cover />
-          <div>
+          <Banner />
+          <div className={styles.content}>
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium
             odit doloribus inventore non aspernatur sapiente possimus est,
             placeat voluptatibus necessitatibus, ea aliquid in accusantium
@@ -42,7 +53,7 @@ const App = () => {
             sunt provident rerum quos non ut voluptatum, corrupti eum maiores
             quis beatae rem natus illo temporibus!
           </div>
-          <div>
+          <div className={styles.content}>
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium
             odit doloribus inventore non aspernatur sapiente possimus est,
             placeat voluptatibus necessitatibus, ea aliquid in accusantium
@@ -69,8 +80,8 @@ const App = () => {
             ratione. Magni illo quasi cum harum a natus itaque aliquam animi
             commodi aspernatur?
           </div>
-          {/* <Cover {...initialData} /> */}
         </div>
+        {isLoader ? <Loader /> : null}
       </MenuProvider>
     </ThemeProvider>
   );

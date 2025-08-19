@@ -1,14 +1,12 @@
 import styles from './switch.module.css';
 
 import { useContext } from 'react';
-
+import { ThemeIcon } from '../icons/theme/theme';
 import { ThemeContext } from '../../contexts/themeContext';
 
-import { ThemeIcon } from '../icons/theme/theme';
-
 export const Switch = () => {
-  const {isLightTheme, setIsLightTheme} = useContext(ThemeContext);
- 
+  const { isLightTheme, setIsLightTheme } = useContext(ThemeContext);
+
   const toggleTheme = (e: React.ChangeEvent<HTMLInputElement>) => {
     // Сохраняем новое состояние
     setIsLightTheme(e.target.checked);

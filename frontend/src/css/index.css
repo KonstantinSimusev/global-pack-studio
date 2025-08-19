@@ -9,7 +9,7 @@ body {
   background-color: var(--bg-color-default);
   color: var(--color-default);
   min-width: 320px;
-  max-width: 900px;
+  max-width: 1900px;
   margin: 0 auto;
   transition: background-color 0.5s ease, color 0.5s ease;
 }

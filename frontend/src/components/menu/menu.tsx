@@ -2,20 +2,16 @@ import styles from './menu.module.css';
 import clsx from 'clsx';
 
 import { useContext, useState } from 'react';
-
-import { CloseIcon } from '../icons/close/close';
 import { Switch } from '../switch/switch';
+import { CloseIcon } from '../icons/close/close';
 import { MenuContext } from '../../contexts/menuContext';
+import { ThemeContext } from '../../contexts/themeContext'
 
-type TMenuProps = {
-  onClose: () => void;
-  // isOpen: boolean; // Добавляем пропс для состояния открытия
-};
-
-export const Menu = ({ onClose }: TMenuProps) => {
-  const { isOpen } = useContext(MenuContext);
+export const Menu = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  // Добавьте состояние для открытия/закрытия меню
+
+  const { isOpen } = useContext(MenuContext);
+  const { isLightTheme } = useContext(ThemeContext);
 
   const signIn = () => {
     setIsAuthenticated(!isAuthenticated);
@@ -28,10 +24,14 @@ export const Menu = ({ onClose }: TMenuProps) => {
 
   return (
     <div
-      className={clsx(styles.container, { [styles.menu__open]: isOpen })}
+      className={clsx(
+        styles.container,
+        isOpen && styles.menu__open,
+        isLightTheme ? 'theme-light' : 'theme-dark',
+      )}
       onClick={handleMenuClick}
     >
-      <CloseIcon onClick={onClose} />
+      <CloseIcon />
       <nav className={styles.navigation}>
         <ul className={styles.navigation__list}>
           <li className={styles.link}>Главная</li>
