@@ -8,9 +8,12 @@ import { Loader } from '../loader/loader';
 import { Overlay } from '../overlay/overlay';
 import { Modal } from '../modal/modal';
 import { ThemeContext } from '../../contexts/themeContext';
+import { LayerContext } from '../../contexts/layerContext';
+import { LoginForm } from '../forms/login/login';
 
 const App = () => {
   const { isLightTheme } = useContext(ThemeContext);
+  const { isOpenOverlay } = useContext(LayerContext);
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
@@ -26,6 +29,7 @@ const App = () => {
       className={clsx(
         styles.container,
         isLightTheme ? 'theme-light' : 'theme-dark',
+        isOpenOverlay && styles.container__fixed,
       )}
     >
       <Header />
@@ -68,7 +72,9 @@ const App = () => {
         doloremque?
       </div>
       <Overlay />
-      <Modal />
+      <Modal>
+        <LoginForm />
+      </Modal>
       <Loader isVisible={isVisible} />
     </div>
   );

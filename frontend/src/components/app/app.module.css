@@ -6,6 +6,13 @@
   gap: 30px;
 }
 
+.container__fixed {
+  overflow: hidden; /* блокирует прокрутку */
+  position: fixed; /* фиксирует положение */
+  width: 100vw; /* сохраняет ширину */
+  height: 100vh; /* сохраняет высоту */
+}
+
 .content {
   margin: 0 clamp(1.25rem, 0.5603rem + 3.4483vw, 2.5rem);
 }

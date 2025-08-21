@@ -1,0 +1,46 @@
+.container {
+  justify-content: center;
+  display: grid;
+  gap: 50px;
+  overflow: auto;
+}
+
+.title {
+  text-align: center;
+  padding-top: 20px;
+  font-weight: 400;
+}
+
+.form__login {
+  display: grid;
+  gap: 20px;
+}
+
+.input__login,
+.input__password {
+  border-bottom: 0.1px solid #c7c7c7;
+  padding: 10px 10px;
+  width: 100%;
+}
+
+.input__login:focus,
+.input__password:focus {
+  outline: none;
+}
+
+.error {
+  font-size: 12px;
+  color: #da3838;
+}
+
+.button__login {
+  margin-top: 40px;
+  cursor: pointer;
+}
+
+.button__register {
+  text-align: center;
+  font-size: 16px;
+  opacity: 0.7;
+  cursor: pointer;
+}

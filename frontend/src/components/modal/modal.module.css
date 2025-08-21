@@ -1,18 +1,16 @@
 .container {
   display: flex;
   flex-direction: column;
-  place-items: center;
   position: fixed;
-  inset: 0;
-  max-height: 80vh;
-  max-width: 400px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 90vh;
+  width: 90%;
   background-color: var(--bg-color-default);
-  margin: auto 30px;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: end;
-  border-radius: 20px;
+  color: var(--color-default);
+  padding: 30px;
+  border-radius: 30px;
   border: 0.5px solid #bebebe;
 
   /* Начальная прозрачность */
@@ -23,6 +21,10 @@
 
   /* Добавляем анимацию */
   transition: opacity 0.2s ease 0.1s;
+}
+
+.container > :first-child {
+  margin-left: auto;
 }
 
 .modal__open {
