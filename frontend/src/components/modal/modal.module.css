@@ -1,12 +1,34 @@
 .container {
+  display: flex;
+  flex-direction: column;
+  place-items: center;
   position: fixed;
   inset: 0;
-  max-height: 94vh;
-  background-color: #cccccc;
-  margin: auto 20px;
+  max-height: 80vh;
+  max-width: 400px;
+  background-color: var(--bg-color-default);
+  margin: auto 30px;
   padding: 20px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: end;
   border-radius: 20px;
+  border: 0.5px solid #bebebe;
+
+  /* Начальная прозрачность */
+  opacity: 0;
+
+  /* Блокируем события */
+  pointer-events: none;
+
+  /* Добавляем анимацию */
+  transition: opacity 0.2s ease 0.1s;
+}
+
+.modal__open {
+  /* Полная видимость */
+  opacity: 1;
+
+  /* Разрешаем события */
+  pointer-events: auto;
 }

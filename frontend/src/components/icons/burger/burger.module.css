@@ -1,14 +1,7 @@
 .icon {
   width: 30px;
   height: 30px;
-  cursor: pointer;
   stroke: currentColor;
   fill: currentColor;
   stroke-width: 1;
-}
-
-.icon:active {
-  /* transform: scale(0.8); */
-  opacity: 0.6;
-  transition: opacity 0.4s ease;
 }

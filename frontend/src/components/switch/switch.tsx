@@ -14,7 +14,9 @@ export const Switch = () => {
 
   return (
     <div className={styles.container}>
-      <ThemeIcon />
+      <div className={styles.wrapper}>
+        <ThemeIcon />
+      </div>
       <span className={styles.text}>Тёмная тема</span>
       <label className={styles.switch}>
         <input

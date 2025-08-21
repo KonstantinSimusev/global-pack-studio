@@ -1,22 +1,39 @@
 .loader {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  z-index: 2;
+  gap: 30px;
+  background: rgba(0, 0, 0, 0.75);
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
 }
 
-.loader__spinner {
+.loader__visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.loader::before {
+  content: '';
   width: 80px;
   height: 80px;
-  border: 4px solid rgba(0, 0, 0, 0.2);
-  border-top-color: #dfdfdf;
+  border: 4px solid rgba(231, 231, 231, 0.3);
+  border-top-color: #eaeaea;
   border-radius: 50%;
   animation: spin 1s linear infinite;
+}
+
+.loader::after {
+  content: 'Загрузка...';
+  color: #eaeaea;
+  opacity: 1;
+  animation: fade 1.5s ease-in-out infinite;
+  margin-top: 10px;
 }
 
 @keyframes spin {
@@ -28,19 +45,14 @@
   }
 }
 
-.loader__text {
-  margin-left: 10px;
-  font-size: 18px;
-  color: #dfdfdf;
-  animation: fadeIn 1s ease-in-out infinite;
-}
-
-@keyframes fadeIn {
-  0%,
-  100% {
-    opacity: 0.4;
+@keyframes fade {
+  0% {
+    opacity: 1;
   }
   50% {
+    opacity: 0.3;
+  }
+  100% {
     opacity: 1;
   }
 }

@@ -1,20 +1,21 @@
 import styles from './menu.module.css';
 import clsx from 'clsx';
 
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { Switch } from '../switch/switch';
-import { CloseIcon } from '../icons/close/close';
-import { MenuContext } from '../../contexts/menuContext';
-import { ThemeContext } from '../../contexts/themeContext'
+import { LayerContext } from '../../contexts/layerContext';
+import { ThemeContext } from '../../contexts/themeContext';
+import { CloseButton } from '../buttons/close/close';
+// import { useEscapeHandler } from '../../hooks/useEscapeHandler';
+// import { Overlay } from '../overlay/overlay';
 
 export const Menu = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  const { isOpen } = useContext(MenuContext);
   const { isLightTheme } = useContext(ThemeContext);
+  const { isOpenMenu, setIsOpenMenu, setIsOpenModal } = useContext(LayerContext);
 
   const signIn = () => {
-    setIsAuthenticated(!isAuthenticated);
+    setIsOpenMenu(false);
+    setIsOpenModal(true);
   };
 
   // Функция для предотвращения закрытия при клике на элементы меню
@@ -26,21 +27,19 @@ export const Menu = () => {
     <div
       className={clsx(
         styles.container,
-        isOpen && styles.menu__open,
+        isOpenMenu && styles.menu__open,
         isLightTheme ? 'theme-light' : 'theme-dark',
       )}
       onClick={handleMenuClick}
     >
-      <CloseIcon />
+      <CloseButton />
       <nav className={styles.navigation}>
         <ul className={styles.navigation__list}>
-          <li className={styles.link}>Главная</li>
-          <li className={styles.link}>Тестирование</li>
           <li className={styles.link}>
-            {!isAuthenticated ? 'Личный кабинет' : ''}
+            {/* {!isAuthenticated ? 'Личный кабинет' : ''} */}
           </li>
           <li className={styles.link} onClick={signIn}>
-            {!isAuthenticated ? 'Выйти' : 'Войти'}
+            Вход в аккаунт
           </li>
         </ul>
       </nav>

@@ -1,15 +1,10 @@
+import clsx from 'clsx';
 import styles from './loader.module.css';
 
-import { Overlay } from '../overlay/overlay';
-
-export const Loader = () => {
+export const Loader = ({ isVisible = false }) => {
   return (
-    <>
-      <Overlay />
-      <div className={styles.loader}>
-        <span className={styles.loader__spinner}></span>
-        <span className={styles.loader__text}>Загрузка...</span>
-      </div>
-    </>
+    <span
+      className={clsx(styles.loader, isVisible && styles.loader__visible)}
+    ></span>
   );
 };

@@ -1,16 +1,21 @@
 import styles from './modal.module.css';
+import clsx from 'clsx';
 
-type TModalProps = {
-  onClose?: () => void;
-};
+import { useContext } from 'react';
+import { CloseButton } from '../buttons/close/close';
+import { LayerContext } from '../../contexts/layerContext';
 
-export const Modal = ({ onClose }: TModalProps) => {
-  const handleClick = (event: React.MouseEvent) => {
-    // Проверяем, был ли клик по самому оверлею
-    if (event.target === event.currentTarget) {
-      onClose?.();
-    }
-  };
+interface TModalProps {
+  children?: React.ReactNode;
+}
 
-  return <div className={styles.container} onClick={handleClick}></div>;
+export const Modal = ({ children }: TModalProps) => {
+  const { isOpenModal } = useContext(LayerContext);
+
+  return (
+    <div className={clsx(styles.container, isOpenModal && styles.modal__open)}>
+      <CloseButton />
+      {children}
+    </div>
+  );
 };

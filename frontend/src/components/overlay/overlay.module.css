@@ -1,8 +1,25 @@
 .overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.4);
   display: flex;
   justify-content: center;
   align-items: center;
+
+  /* Начальная прозрачность */
+  opacity: 0;
+
+  /* Блокируем события */
+  pointer-events: none;
+
+  /* Добавляем анимацию */
+  transition: opacity 0.2s ease;
+}
+
+.overlay__open {
+  /* Полная видимость */
+  opacity: 1;
+  
+  /* Разрешаем события */
+  pointer-events: auto;
 }

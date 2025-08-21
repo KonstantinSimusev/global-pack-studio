@@ -1,17 +1,47 @@
 import styles from './overlay.module.css';
+import clsx from 'clsx';
 
 import { useContext } from 'react';
-import { MenuContext } from '../../contexts/menuContext';
+import { LayerContext } from '../../contexts/layerContext';
+import { useEscapeHandler } from '../../hooks/useEscapeHandler';
 
 export const Overlay = () => {
-  const { isOpen, setIsOpen } = useContext(MenuContext);
+  const {
+    isOpenOverlay,
+    isOpenMenu,
+    isOpenModal,
+    setIsOpenOverlay,
+    setIsOpenMenu,
+    setIsOpenModal,
+  } = useContext(LayerContext);
+
+  useEscapeHandler(() => {
+    if (isOpenOverlay) {
+      setIsOpenOverlay(false);
+    }
+
+    if (isOpenMenu) {
+      setIsOpenMenu(false);
+    }
+
+    if (isOpenModal) {
+      setIsOpenModal(false);
+    }
+  });
 
   const handleClick = (event: React.MouseEvent) => {
     // Проверяем, был ли клик по самому оверлею
     if (event.target === event.currentTarget) {
-      setIsOpen(!isOpen);
+      setIsOpenOverlay(false);
+      setIsOpenMenu(false);
+      setIsOpenModal(false);
     }
   };
 
-  return <div className={styles.overlay} onClick={handleClick}></div>;
+  return (
+    <div
+      className={clsx(styles.overlay, isOpenOverlay && styles.overlay__open)}
+      onClick={handleClick}
+    ></div>
+  );
 };
