@@ -3,10 +3,14 @@ import { createContext, useState } from 'react';
 interface ILayerContextValue {
   isOpenOverlay: boolean;
   isOpenMenu: boolean;
-  isOpenModal: boolean;
+  isLoginModalOpen: boolean;
+  isRegisterModalOpen: boolean;
+  // isOpenModal: boolean;
   setIsOpenOverlay: (value: boolean) => void;
   setIsOpenMenu: (value: boolean) => void;
-  setIsOpenModal: (value: boolean) => void;
+  setIsLoginModalOpen: (value: boolean) => void;
+  setIsRegisterModalOpen: (value: boolean) => void;
+  // setIsOpenModal: (value: boolean) => void;
 }
 
 interface TLayerProviderProps {
@@ -16,26 +20,36 @@ interface TLayerProviderProps {
 export const LayerContext = createContext<ILayerContextValue>({
   isOpenOverlay: false,
   isOpenMenu: false,
-  isOpenModal: false,
+  isLoginModalOpen: false,
+  isRegisterModalOpen: false,
+  // isOpenModal: false,
   setIsOpenOverlay: () => {},
   setIsOpenMenu: () => {},
-  setIsOpenModal: () => {},
+  setIsLoginModalOpen: () => {},
+  setIsRegisterModalOpen: () => {},
+  // setIsOpenModal: () => {},
 });
 
 export const LayerProvider = ({ children }: TLayerProviderProps) => {
   const [isOpenOverlay, setIsOpenOverlay] = useState(false);
   const [isOpenMenu, setIsOpenMenu] = useState(false);
-  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+  // const [isOpenModal, setIsOpenModal] = useState(false);
 
   return (
     <LayerContext.Provider
       value={{
         isOpenOverlay,
         isOpenMenu,
-        isOpenModal,
+        isLoginModalOpen,
+        isRegisterModalOpen,
+        // isOpenModal,
         setIsOpenOverlay,
         setIsOpenMenu,
-        setIsOpenModal,
+        setIsLoginModalOpen,
+        setIsRegisterModalOpen,
+        // setIsOpenModal,
       }}
     >
       {children}

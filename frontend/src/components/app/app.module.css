@@ -1,18 +1,15 @@
 .container {
-  display: grid;
-  justify-content: center;
-  align-content: center;
-  margin: 30px 0;
+  display: flex;
+  flex-direction: column;
+  position: relative;
   gap: 30px;
 }
 
 .container__fixed {
-  overflow: hidden; /* блокирует прокрутку */
-  position: fixed; /* фиксирует положение */
-  width: 100vw; /* сохраняет ширину */
-  height: 100vh; /* сохраняет высоту */
+  overflow: hidden;
+  position: fixed;
 }
 
 .content {
-  margin: 0 clamp(1.25rem, 0.5603rem + 3.4483vw, 2.5rem);
+  margin: 0 20px;
 }

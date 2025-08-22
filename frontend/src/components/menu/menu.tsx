@@ -11,11 +11,15 @@ import { CloseButton } from '../buttons/close/close';
 
 export const Menu = () => {
   const { isLightTheme } = useContext(ThemeContext);
-  const { isOpenMenu, setIsOpenMenu, setIsOpenModal } = useContext(LayerContext);
+  const {
+    isOpenMenu,
+    setIsOpenMenu,
+    setIsLoginModalOpen
+  } = useContext(LayerContext);
 
   const signIn = () => {
     setIsOpenMenu(false);
-    setIsOpenModal(true);
+    setIsLoginModalOpen(true);
   };
 
   // Функция для предотвращения закрытия при клике на элементы меню

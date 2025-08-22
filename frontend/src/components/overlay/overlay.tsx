@@ -9,10 +9,12 @@ export const Overlay = () => {
   const {
     isOpenOverlay,
     isOpenMenu,
-    isOpenModal,
+    isLoginModalOpen,
+    isRegisterModalOpen,
     setIsOpenOverlay,
     setIsOpenMenu,
-    setIsOpenModal,
+    setIsLoginModalOpen,
+    setIsRegisterModalOpen,
   } = useContext(LayerContext);
 
   useEscapeHandler(() => {
@@ -24,8 +26,12 @@ export const Overlay = () => {
       setIsOpenMenu(false);
     }
 
-    if (isOpenModal) {
-      setIsOpenModal(false);
+    if (isLoginModalOpen) {
+      setIsLoginModalOpen(false);
+    }
+
+    if (isRegisterModalOpen) {
+      setIsRegisterModalOpen(false);
     }
   });
 
@@ -34,7 +40,8 @@ export const Overlay = () => {
     if (event.target === event.currentTarget) {
       setIsOpenOverlay(false);
       setIsOpenMenu(false);
-      setIsOpenModal(false);
+      setIsLoginModalOpen(false);
+      setIsRegisterModalOpen(false);
     }
   };
 

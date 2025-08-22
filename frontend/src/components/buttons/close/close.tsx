@@ -5,13 +5,18 @@ import { CloseIcon } from '../../icons/close/close';
 import { LayerContext } from '../../../contexts/layerContext';
 
 export const CloseButton = () => {
-  const { setIsOpenMenu, setIsOpenOverlay, setIsOpenModal } =
-    useContext(LayerContext);
+  const {
+    setIsOpenMenu,
+    setIsOpenOverlay,
+    setIsLoginModalOpen,
+    setIsRegisterModalOpen,
+  } = useContext(LayerContext);
 
   const handleClick = () => {
     setIsOpenMenu(false);
     setIsOpenOverlay(false);
-    setIsOpenModal(false);
+    setIsLoginModalOpen(false);
+    setIsRegisterModalOpen(false);
   };
 
   return (

@@ -6,14 +6,16 @@ import { Header } from '../header/header';
 import { Banner } from '../banner/banner';
 import { Loader } from '../loader/loader';
 import { Overlay } from '../overlay/overlay';
-import { Modal } from '../modal/modal';
 import { ThemeContext } from '../../contexts/themeContext';
 import { LayerContext } from '../../contexts/layerContext';
 import { LoginForm } from '../forms/login/login';
+import { Modal } from '../modal/modal';
+import { RegisterForm } from '../forms/register/register';
 
 const App = () => {
   const { isLightTheme } = useContext(ThemeContext);
-  const { isOpenOverlay } = useContext(LayerContext);
+  const { isOpenOverlay, isLoginModalOpen, isRegisterModalOpen } =
+    useContext(LayerContext);
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
@@ -72,9 +74,16 @@ const App = () => {
         doloremque?
       </div>
       <Overlay />
+      {isLoginModalOpen && (
       <Modal>
         <LoginForm />
       </Modal>
+      )}
+      {isRegisterModalOpen && (
+        <Modal>
+          <RegisterForm />
+        </Modal>
+      )}
       <Loader isVisible={isVisible} />
     </div>
   );

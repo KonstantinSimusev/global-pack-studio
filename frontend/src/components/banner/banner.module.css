@@ -2,7 +2,7 @@
   display: grid;
   align-items: end;
   padding: clamp(1.25rem, 0.5603rem + 3.4483vw, 2.5rem);
-  height: clamp(9.375rem, 0.7543rem + 43.1034vw, 25rem);
+  /* height: clamp(9.375rem, 0.7543rem + 43.1034vw, 25rem); */
   background-image: linear-gradient(
       to left,
       #eaeaea,

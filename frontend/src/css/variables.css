@@ -3,6 +3,7 @@
 :root {
   /* Цвета */
   --white: #eaeaea;
+  --white-tint-1: rgba(255, 255, 255, 0.2);
   --green: #2e8b57;
   --grey: #adadad;
   --grey-tint-1: #dbdbdb;
@@ -15,6 +16,7 @@
   --black-tint-3: rgba(0, 0, 0, 0.6);
   --black-tint-4: #222;
   --black-tint-5: rgba(137, 137, 137, 0.2);
+  --black-tint-6: rgba(0, 0, 0, 0.2);
 
   /* Цвета в приложении */
   --color-default: var(--black, #111);
@@ -23,6 +25,7 @@
   --color-cover: var(--grey, #adadad);
   --color-shadow: var(--grey-tint-3, rgba(207, 207, 207, 0.4));
   --color-button: var(--white, #eaeaea);
+  --color-border: var(--black-tint-6, rgba(0, 0, 0));
   
   --bg-color-default: var(--white, #eaeaea);
   --bg-color-button: var(--black, #111);

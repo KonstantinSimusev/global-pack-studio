@@ -7,6 +7,7 @@
   --color-cover: var(--white, #eaeaea);
   --color-shadow: var(--black-tint-2, rgba(0, 0, 0, 0.4));
   --color-button: var(--white, #eaeaea);
+  --color-border: var(--black-tint-6, rgba(0, 0, 0, 0.2));
 
   --bg-color-default: var(--white, #eaeaea);
   --bg-color-button: var(--black, #111);
@@ -23,6 +24,7 @@
   --color-cover: var(--grey, #adadad);
   --color-shadow: var(--grey-tint-3, rgba(255, 255, 255, 0.4));
   --color-button: var(--black-tint-4, #222);
+  --color-border: var(--white-tint-1, rgba(255, 255, 255, 0.2));
 
   --bg-color-default: var(--black, #111);
   --bg-color-button: var(--white, #eaeaea);

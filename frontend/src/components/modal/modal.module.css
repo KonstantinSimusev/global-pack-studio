@@ -5,8 +5,10 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  height: 90vh;
-  width: 90%;
+  width: 80%;
+  min-height: auto;
+  max-height: 90vh;
+  overflow: auto;
   background-color: var(--bg-color-default);
   color: var(--color-default);
   padding: 30px;
@@ -14,23 +16,23 @@
   border: 0.5px solid #bebebe;
 
   /* Начальная прозрачность */
-  opacity: 0;
+  /* opacity: 0; */
 
   /* Блокируем события */
-  pointer-events: none;
+  /* pointer-events: none; */
 
   /* Добавляем анимацию */
-  transition: opacity 0.2s ease 0.1s;
+  /* transition: opacity 0.2s ease 0.1s; */
 }
 
 .container > :first-child {
   margin-left: auto;
 }
 
-.modal__open {
+/* .modal__open { */
   /* Полная видимость */
-  opacity: 1;
+  /* opacity: 1; */
 
   /* Разрешаем события */
-  pointer-events: auto;
-}
+  /* pointer-events: auto; */
+/* } */

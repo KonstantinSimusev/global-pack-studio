@@ -1,19 +1,14 @@
 import styles from './modal.module.css';
-import clsx from 'clsx';
 
-import { useContext } from 'react';
 import { CloseButton } from '../buttons/close/close';
-import { LayerContext } from '../../contexts/layerContext';
 
-interface TModalProps {
+interface IModalProps {
   children?: React.ReactNode;
 }
 
-export const Modal = ({ children }: TModalProps) => {
-  const { isOpenModal } = useContext(LayerContext);
-
+export const Modal = ({ children }: IModalProps) => {
   return (
-    <div className={clsx(styles.container, isOpenModal && styles.modal__open)}>
+    <div className={styles.container}>
       <CloseButton />
       {children}
     </div>
