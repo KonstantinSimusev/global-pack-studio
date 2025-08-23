@@ -4,8 +4,9 @@ import { useContext } from 'react';
 import { LayerContext } from '../../../contexts/layer/layerContext';
 
 export const RegisterForm = () => {
-  const { setIsLoginModalOpen, setIsRegisterModalOpen } =
+  const { setIsLoginModalOpen, setIsRegisterModalOpen, setIsSuccessModalOpen } =
     useContext(LayerContext);
+
   const handleClick = () => {
     setIsLoginModalOpen(true);
     setIsRegisterModalOpen(false);
@@ -13,7 +14,8 @@ export const RegisterForm = () => {
 
   const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('hello');
+    setIsRegisterModalOpen(false);
+    setIsSuccessModalOpen(true);
   };
 
   return (
@@ -48,9 +50,13 @@ export const RegisterForm = () => {
           Создать
         </button>
       </form>
-      <span className={styles.button__login} onClick={handleClick}>
+      <button
+        className={styles.button__login}
+        type="button"
+        onClick={handleClick}
+      >
         Авторизоваться?
-      </span>
+      </button>
     </div>
   );
 };

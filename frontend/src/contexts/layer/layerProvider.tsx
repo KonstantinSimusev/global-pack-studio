@@ -11,6 +11,7 @@ export const LayerProvider = ({ children }: TLayerProviderProps) => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
 
   return (
     <LayerContext.Provider
@@ -20,11 +21,13 @@ export const LayerProvider = ({ children }: TLayerProviderProps) => {
         isOpenModal,
         isLoginModalOpen,
         isRegisterModalOpen,
+        isSuccessModalOpen,
         setIsOpenOverlay,
         setIsOpenMenu,
         setIsOpenModal,
         setIsLoginModalOpen,
         setIsRegisterModalOpen,
+        setIsSuccessModalOpen,
       }}
     >
       {children}

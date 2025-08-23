@@ -12,7 +12,7 @@
   --bg-color-button: #111;
   --bg-color-icon-theme: #dbdbdb;
   --bg-color-slider: #adadad;
-  --bg-color-overlay: rgba(0 0 0 / 0.4);
+  --bg-color-overlay: rgba(0 0 0 / 0.7);
   --bg-color-loader: rgba(0 0 0 / 0.7);
 }
 
@@ -28,6 +28,6 @@
   --bg-color-button: #eaeaea;
   --bg-color-icon-theme: #252525;
   --bg-color-slider: #2e8b57;
-  --bg-color-overlay: rgba(115 115 115 / 0.2);
-  --bg-color-loader: rgba(149 149 149 / 0.2);
+  --bg-color-overlay: rgba(80 80 80 / 0.7);
+  --bg-color-loader: rgba(80 80 80 / 0.7);
 }

@@ -11,11 +11,16 @@ import { LayerContext } from '../../contexts/layer/layerContext';
 import { LoginForm } from '../forms/login/login';
 import { Modal } from '../modal/modal';
 import { RegisterForm } from '../forms/register/register';
+import { Success } from '../success/success';
 
 const App = () => {
   const { isLightTheme } = useContext(ThemeContext);
-  const { isOpenOverlay, isLoginModalOpen, isRegisterModalOpen } =
-    useContext(LayerContext);
+  const {
+    isOpenOverlay,
+    isLoginModalOpen,
+    isRegisterModalOpen,
+    isSuccessModalOpen,
+  } = useContext(LayerContext);
   const [isLoaderVisible, setIsLoaderVisible] = useState(true);
 
   useEffect(() => {
@@ -86,6 +91,12 @@ const App = () => {
       {isRegisterModalOpen && (
         <Modal>
           <RegisterForm />
+        </Modal>
+      )}
+
+      {isSuccessModalOpen && (
+        <Modal>
+          <Success />
         </Modal>
       )}
     </div>

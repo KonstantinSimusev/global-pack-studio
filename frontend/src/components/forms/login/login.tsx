@@ -40,9 +40,13 @@ export const LoginForm = () => {
           Войти
         </button>
       </form>
-      <span className={styles.button__register} onClick={handleClick}>
+      <button
+        className={styles.button__register}
+        type="button"
+        onClick={handleClick}
+      >
         Зарегистрироваться?
-      </span>
+      </button>
     </div>
   );
 };
