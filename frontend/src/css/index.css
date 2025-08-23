@@ -1,15 +1,15 @@
-@import './normalize.css';
-@import './Montserrat.css';
-@import './variables.css';
-@import './global.css';
-@import './themes.css';
+@import url('./normalize.css');
+@import url('./Montserrat.css');
+@import url('./variables.css');
+@import url('./global.css');
+@import url('./themes.css');
 
 body {
-  font-family: 'Montserrat', arial, helvetica, sans-serif;
-  background-color: var(--bg-color-default);
-  color: var(--color-default);
   min-width: 320px;
   max-width: 1900px;
-  font-size: 18px;
   margin: 0 auto;
+  color: var(--color-default);
+  font-family: Montserrat, arial, helvetica, sans-serif;
+  font-size: 18px;
+  background-color: var(--bg-color-default);
 }

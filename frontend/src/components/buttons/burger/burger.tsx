@@ -2,7 +2,7 @@ import styles from './burger.module.css';
 
 import { useContext } from 'react';
 import { BurgerIcon } from '../../icons/burger/burger';
-import { LayerContext } from '../../../contexts/layerContext';
+import { LayerContext } from '../../../contexts/layer/layerContext';
 
 export const BurgerButton = () => {
   const { setIsOpenMenu, setIsOpenOverlay } = useContext(LayerContext);

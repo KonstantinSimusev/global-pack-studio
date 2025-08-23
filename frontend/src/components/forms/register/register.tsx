@@ -1,7 +1,7 @@
 import styles from './register.module.css';
 
 import { useContext } from 'react';
-import { LayerContext } from '../../../contexts/layerContext';
+import { LayerContext } from '../../../contexts/layer/layerContext';
 
 export const RegisterForm = () => {
   const { setIsLoginModalOpen, setIsRegisterModalOpen } =

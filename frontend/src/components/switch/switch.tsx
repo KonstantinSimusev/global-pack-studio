@@ -2,7 +2,7 @@ import styles from './switch.module.css';
 
 import { useContext } from 'react';
 import { ThemeIcon } from '../icons/theme/theme';
-import { ThemeContext } from '../../contexts/themeContext';
+import { ThemeContext } from '../../contexts/theme/themeContext';
 
 export const Switch = () => {
   const { isLightTheme, setIsLightTheme } = useContext(ThemeContext);

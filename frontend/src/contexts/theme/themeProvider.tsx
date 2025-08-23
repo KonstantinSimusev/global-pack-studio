@@ -1,18 +1,9 @@
-import { createContext, useEffect, useState } from 'react';
-
-interface TThemeContextProps {
-  isLightTheme: boolean;
-  setIsLightTheme: (value: boolean) => void;
-}
+import { useEffect, useState } from 'react';
+import { ThemeContext } from './themeContext';
 
 interface TThemeProvider {
   children: React.ReactNode;
 }
-
-export const ThemeContext = createContext<TThemeContextProps>({
-  isLightTheme: true,
-  setIsLightTheme: () => {},
-});
 
 export const ThemeProvider = ({ children }: TThemeProvider) => {
   const [isLightTheme, setIsLightTheme] = useState(() => {

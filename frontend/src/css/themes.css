@@ -5,17 +5,15 @@
   --color-icon: #111;
   --color-close: #333;
   --color-button: #eaeaea;
-  --color-border: rgba(51, 51, 51, 0.6);
+  --color-border: rgba(51 51 51 / 0.6);
   --color-modal-border: transparent;
   --color-loader: #ccc;
-  
   --bg-color-default: #eaeaea;
   --bg-color-button: #111;
-  
   --bg-color-icon-theme: #dbdbdb;
   --bg-color-slider: #adadad;
-  --bg-color-overlay: rgba(0, 0, 0, 0.4);
-  --bg-color-loader: rgba(0, 0, 0, 0.7);
+  --bg-color-overlay: rgba(0 0 0 / 0.4);
+  --bg-color-loader: rgba(0 0 0 / 0.7);
 }
 
 .theme-dark {
@@ -23,15 +21,13 @@
   --color-icon: #eaeaea;
   --color-close: #eaeaea;
   --color-button: #222;
-  --color-border: rgba(234, 234, 234, 0.6);
+  --color-border: rgba(234 234 234 / 0.6);
   --color-modal-border: #eaeaea;
   --color-loader: #fff;
-  
   --bg-color-default: #111;
   --bg-color-button: #eaeaea;
-  
   --bg-color-icon-theme: #252525;
   --bg-color-slider: #2e8b57;
-  --bg-color-overlay: rgba(115, 115, 115, 0.2);
-  --bg-color-loader: rgba(149, 149, 149, 0.2);
+  --bg-color-overlay: rgba(115 115 115 / 0.2);
+  --bg-color-loader: rgba(149 149 149 / 0.2);
 }

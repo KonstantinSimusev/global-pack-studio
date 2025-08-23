@@ -2,7 +2,7 @@ import styles from './close.module.css';
 
 import { useContext } from 'react';
 import { CloseIcon } from '../../icons/close/close';
-import { LayerContext } from '../../../contexts/layerContext';
+import { LayerContext } from '../../../contexts/layer/layerContext';
 
 export const CloseButton = () => {
   const {

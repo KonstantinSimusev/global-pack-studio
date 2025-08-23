@@ -1,8 +1,8 @@
 /* Значения переменных в исходном состоянии */
 
 /* :root { */
-  /* Цвета */
-  /* --white: #eaeaea;
+/* Цвета */
+/* --white: #eaeaea;
   --white-tint-1: rgba(255, 255, 255, 0.2);
 
   --green: #2e8b57;
@@ -23,20 +23,20 @@
   --black-tint-7: rgba(0, 0, 0, 0.7);
   --black-tint-8: rgba(41, 41, 41, 0.3); */
 
-  /* Цвета в приложении */
-  /* --color-default: var(--black, #111);
+/* Цвета в приложении */
+/* --color-default: var(--black, #111);
   --color-icon: var(--white, #eaeaea);
   --color-close: var(--grey, #adadad);
   --color-cover: var(--grey, #adadad);
   --color-shadow: var(--grey-tint-3, rgba(207, 207, 207, 0.4));
   --color-button: var(--white, #eaeaea); */
-  /* --color-border: var(--black-tint-6, rgba(0, 0, 0)); */
-  
-  /* --bg-color-default: var(--white, #eaeaea); */
-  /* --bg-color-button: var(--black, #111); */
-  
-  /* --bg-color-theme: var(--black-tint-1, #252525);
+/* --color-border: var(--black-tint-6, rgba(0, 0, 0)); */
+
+/* --bg-color-default: var(--white, #eaeaea); */
+/* --bg-color-button: var(--black, #111); */
+
+/* --bg-color-theme: var(--black-tint-1, #252525);
   --bg-color-slider: var(--green, #2e8b57); */
 
-  /* --bg-color-overlay: var(--black-tint-7, rgba(0, 0, 0, 0.7)); */
+/* --bg-color-overlay: var(--black-tint-7, rgba(0, 0, 0, 0.7)); */
 /* } */

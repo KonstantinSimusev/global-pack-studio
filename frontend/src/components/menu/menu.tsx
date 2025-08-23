@@ -3,8 +3,8 @@ import clsx from 'clsx';
 
 import { useContext } from 'react';
 import { Switch } from '../switch/switch';
-import { LayerContext } from '../../contexts/layerContext';
-import { ThemeContext } from '../../contexts/themeContext';
+import { LayerContext } from '../../contexts/layer/layerContext';
+import { ThemeContext } from '../../contexts/theme/themeContext';
 import { CloseButton } from '../buttons/close/close';
 // import { useEscapeHandler } from '../../hooks/useEscapeHandler';
 // import { Overlay } from '../overlay/overlay';

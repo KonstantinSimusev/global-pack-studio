@@ -1,13 +1,13 @@
 .container {
+  position: relative;
   display: flex;
   flex-direction: column;
-  position: relative;
   gap: 30px;
 }
 
 .container__fixed {
-  overflow: hidden;
   position: fixed;
+  overflow: hidden;
 }
 
 .content {
