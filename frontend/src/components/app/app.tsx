@@ -1,17 +1,19 @@
 import styles from './app.module.css';
 import clsx from 'clsx';
 
-import { useContext, useEffect, useState } from 'react';
-import { Header } from '../header/header';
-import { Banner } from '../banner/banner';
-import { Loader } from '../loader/loader';
-import { Overlay } from '../overlay/overlay';
+import { useContext } from 'react';
+
 import { ThemeContext } from '../../contexts/theme/themeContext';
 import { LayerContext } from '../../contexts/layer/layerContext';
+
+import { Header } from '../header/header';
+import { Banner } from '../banner/banner';
+import { Overlay } from '../overlay/overlay';
 import { LoginForm } from '../forms/login/login';
 import { Modal } from '../modal/modal';
 import { RegisterForm } from '../forms/register/register';
 import { Success } from '../success/success';
+import { Error } from '../error/error';
 
 const App = () => {
   const { isLightTheme } = useContext(ThemeContext);
@@ -20,16 +22,8 @@ const App = () => {
     isLoginModalOpen,
     isRegisterModalOpen,
     isSuccessModalOpen,
+    isErrorModalOpen,
   } = useContext(LayerContext);
-  const [isLoaderVisible, setIsLoaderVisible] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoaderVisible(false);
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, [isLoaderVisible]);
 
   return (
     <div
@@ -79,7 +73,6 @@ const App = () => {
         doloremque?
       </div>
 
-      {isLoaderVisible && <Loader />}
       {isOpenOverlay && <Overlay />}
 
       {isLoginModalOpen && (
@@ -97,6 +90,12 @@ const App = () => {
       {isSuccessModalOpen && (
         <Modal>
           <Success />
+        </Modal>
+      )}
+
+      {isErrorModalOpen && (
+        <Modal>
+          <Error />
         </Modal>
       )}
     </div>

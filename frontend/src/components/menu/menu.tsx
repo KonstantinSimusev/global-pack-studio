@@ -6,16 +6,11 @@ import { Switch } from '../switch/switch';
 import { LayerContext } from '../../contexts/layer/layerContext';
 import { ThemeContext } from '../../contexts/theme/themeContext';
 import { CloseButton } from '../buttons/close/close';
-// import { useEscapeHandler } from '../../hooks/useEscapeHandler';
-// import { Overlay } from '../overlay/overlay';
 
 export const Menu = () => {
   const { isLightTheme } = useContext(ThemeContext);
-  const {
-    isOpenMenu,
-    setIsOpenMenu,
-    setIsLoginModalOpen
-  } = useContext(LayerContext);
+  const { isOpenMenu, setIsOpenMenu, setIsLoginModalOpen } =
+    useContext(LayerContext);
 
   const signIn = () => {
     setIsOpenMenu(false);
@@ -24,7 +19,8 @@ export const Menu = () => {
 
   // Функция для предотвращения закрытия при клике на элементы меню
   const handleMenuClick = (event: React.MouseEvent) => {
-    event.stopPropagation(); // Останавливаем распространение события
+    // Останавливаем распространение события
+    event.stopPropagation();
   };
 
   return (
@@ -39,11 +35,8 @@ export const Menu = () => {
       <CloseButton />
       <nav className={styles.navigation}>
         <ul className={styles.navigation__list}>
-          <li className={styles.link}>
-            {/* {!isAuthenticated ? 'Личный кабинет' : ''} */}
-          </li>
           <li className={styles.link} onClick={signIn}>
-            Вход в аккаунт
+            Войти
           </li>
         </ul>
       </nav>

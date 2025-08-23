@@ -1,11 +1,20 @@
 import styles from './register.module.css';
 
 import { useContext } from 'react';
+import { Spinner } from '../../spinner/spinner';
 import { LayerContext } from '../../../contexts/layer/layerContext';
+import { getRandomBoolean } from '../../../utils/functions';
 
 export const RegisterForm = () => {
-  const { setIsLoginModalOpen, setIsRegisterModalOpen, setIsSuccessModalOpen } =
-    useContext(LayerContext);
+  const {
+    isLoader,
+    setIsLoginModalOpen,
+    setIsRegisterModalOpen,
+    setIsSuccessModalOpen,
+    setIsErrorModalOpen,
+    setIsAuth,
+    setIsLoader,
+  } = useContext(LayerContext);
 
   const handleClick = () => {
     setIsLoginModalOpen(true);
@@ -14,8 +23,21 @@ export const RegisterForm = () => {
 
   const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsRegisterModalOpen(false);
-    setIsSuccessModalOpen(true);
+
+    setIsLoader(true);
+
+    setTimeout(() => {
+
+      if (getRandomBoolean()) {
+        setIsSuccessModalOpen(true);
+      } else {
+        setIsErrorModalOpen(true);
+      }
+
+      setIsRegisterModalOpen(false);
+      setIsAuth(false);
+      setIsLoader(false);
+    }, 2000);
   };
 
   return (
@@ -46,6 +68,9 @@ export const RegisterForm = () => {
         <span className={styles.error} role="alert">
           Ошибка входа
         </span>
+        <div className={styles.spinner}>
+          <Spinner isVisible={isLoader} />
+        </div>
         <button className={styles.button__register} type="submit">
           Создать
         </button>

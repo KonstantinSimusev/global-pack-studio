@@ -11,11 +11,13 @@ export const Overlay = () => {
     isLoginModalOpen,
     isRegisterModalOpen,
     isSuccessModalOpen,
+    isErrorModalOpen,
     setIsOpenOverlay,
     setIsOpenMenu,
     setIsLoginModalOpen,
     setIsRegisterModalOpen,
     setIsSuccessModalOpen,
+    setIsErrorModalOpen,
   } = useContext(LayerContext);
 
   useEscapeHandler(() => {
@@ -38,6 +40,10 @@ export const Overlay = () => {
     if (isSuccessModalOpen) {
       setIsSuccessModalOpen(false);
     }
+
+    if (isErrorModalOpen) {
+      setIsErrorModalOpen(false);
+    }
   });
 
   const handleClick = (event: React.MouseEvent) => {
@@ -48,6 +54,7 @@ export const Overlay = () => {
       setIsLoginModalOpen(false);
       setIsRegisterModalOpen(false);
       setIsSuccessModalOpen(false);
+      setIsErrorModalOpen(false);
     }
   };
 

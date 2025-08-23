@@ -7,12 +7,18 @@ interface ILayerContextValue {
   isLoginModalOpen: boolean;
   isRegisterModalOpen: boolean;
   isSuccessModalOpen: boolean;
+  isErrorModalOpen: boolean;
+  isAuth: boolean;
+  isLoader: boolean;
   setIsOpenOverlay: (value: boolean) => void;
   setIsOpenMenu: (value: boolean) => void;
   setIsOpenModal: (value: boolean) => void;
   setIsLoginModalOpen: (value: boolean) => void;
   setIsRegisterModalOpen: (value: boolean) => void;
   setIsSuccessModalOpen: (value: boolean) => void;
+  setIsErrorModalOpen: (value: boolean) => void;
+  setIsAuth: (value: boolean) => void;
+  setIsLoader: (value: boolean) => void;
 }
 
 export const LayerContext = createContext<ILayerContextValue>({
@@ -22,10 +28,16 @@ export const LayerContext = createContext<ILayerContextValue>({
   isLoginModalOpen: false,
   isRegisterModalOpen: false,
   isSuccessModalOpen: false,
+  isErrorModalOpen: false,
+  isAuth: false,
+  isLoader: false,
   setIsOpenOverlay: () => {},
   setIsOpenMenu: () => {},
   setIsOpenModal: () => {},
   setIsLoginModalOpen: () => {},
   setIsRegisterModalOpen: () => {},
   setIsSuccessModalOpen: () => {},
+  setIsAuth: () => {},
+  setIsLoader: () => {},
+  setIsErrorModalOpen: () => {},
 });

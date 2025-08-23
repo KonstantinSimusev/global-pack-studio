@@ -18,7 +18,7 @@ export const Success = () => {
       <div className={styles.wrapper}>
         <SuccessIcon />
       </div>
-      <span className={styles.text}>Вы успешно зарегистрировались!</span>
+      <span className={styles.text}>Вы&nbsp;успешно зарегистрировались!</span>
       <button
         className={styles.button__login}
         type="button"
