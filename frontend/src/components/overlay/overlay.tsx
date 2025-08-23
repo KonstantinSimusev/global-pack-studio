@@ -1,5 +1,4 @@
 import styles from './overlay.module.css';
-import clsx from 'clsx';
 
 import { useContext } from 'react';
 import { LayerContext } from '../../contexts/layerContext';
@@ -45,10 +44,5 @@ export const Overlay = () => {
     }
   };
 
-  return (
-    <div
-      className={clsx(styles.overlay, isOpenOverlay && styles.overlay__open)}
-      onClick={handleClick}
-    ></div>
-  );
+  return <div className={styles.overlay} onClick={handleClick}></div>;
 };

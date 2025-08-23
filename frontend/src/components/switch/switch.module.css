@@ -17,7 +17,7 @@
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  background-color: var(--bg-color-theme);
+  background-color: var(--bg-color-icon-theme);
   z-index: -1;
 }
 
@@ -63,7 +63,7 @@
   right: 1px;
   bottom: 1px;
   background-color: #f0f0f0;
-  transition: transform 0.4s ease;
+  transition: transform 0.2s ease;
 }
 
 .input__hidden:checked + .switch__slider::before {

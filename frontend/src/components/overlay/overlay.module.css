@@ -1,25 +1,25 @@
 .overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: var(--bg-color-overlay);
   display: flex;
   justify-content: center;
   align-items: center;
 
   /* Начальная прозрачность */
-  opacity: 0;
+  /* opacity: 0; */
 
   /* Блокируем события */
-  pointer-events: none;
+  /* pointer-events: none; */
 
   /* Добавляем анимацию */
-  transition: opacity 0.2s ease;
+  /* transition: opacity 0.2s ease; */
 }
 
-.overlay__open {
+/* .overlay__open { */
   /* Полная видимость */
-  opacity: 1;
+  /* opacity: 1; */
   
   /* Разрешаем события */
-  pointer-events: auto;
-}
+  /* pointer-events: auto; */
+/* } */

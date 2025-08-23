@@ -45,7 +45,7 @@ export const RegisterForm = () => {
           Ошибка входа
         </span>
         <button className={styles.button__register} type="submit">
-          Зарегистрироваться
+          Создать
         </button>
       </form>
       <span className={styles.button__login} onClick={handleClick}>

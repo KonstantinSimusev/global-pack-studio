@@ -1,6 +1,7 @@
 .container {
   display: grid;
   grid-template-rows: 0.7fr 5fr 4fr;
+  align-self: start;
   position: fixed;
   top: 0;
   right: 0;
@@ -9,7 +10,7 @@
   height: 100vh;
   min-width: 320px;
   background-color: var(--bg-color-default);
-  border-left: 0.5px solid #bebebe;
+  border-left: 1px solid #bebebe;
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
 
@@ -25,7 +26,9 @@
 
 /* крестик справа */
 .container > :first-child {
-  justify-self: end;
+  display: flex;
+  align-items: start;
+  justify-content: end;
 }
 
 .navigation__list {

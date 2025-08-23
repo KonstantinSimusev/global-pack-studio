@@ -16,15 +16,15 @@ const App = () => {
   const { isLightTheme } = useContext(ThemeContext);
   const { isOpenOverlay, isLoginModalOpen, isRegisterModalOpen } =
     useContext(LayerContext);
-  const [isVisible, setIsVisible] = useState(true);
+  const [isLoaderVisible, setIsLoaderVisible] = useState(true);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setIsVisible(false);
+      setIsLoaderVisible(false);
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, [isVisible]);
+  }, [isLoaderVisible]);
 
   return (
     <div
@@ -73,18 +73,21 @@ const App = () => {
         quibusdam ducimus quasi, ex qui earum repellendus dolorum porro
         doloremque?
       </div>
-      <Overlay />
+
+      {isLoaderVisible && <Loader />}
+      {isOpenOverlay && <Overlay />}
+
       {isLoginModalOpen && (
-      <Modal>
-        <LoginForm />
-      </Modal>
+        <Modal>
+          <LoginForm />
+        </Modal>
       )}
+
       {isRegisterModalOpen && (
         <Modal>
           <RegisterForm />
         </Modal>
       )}
-      <Loader isVisible={isVisible} />
     </div>
   );
 };
