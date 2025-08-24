@@ -41,10 +41,13 @@
   font-size: 16px;
 }
 
+.errors {
+  height: 24px;
+}
+
 .error {
   padding: 5px 10px;
-  /* color: #da3838; */
-  color: transparent;
+  color: #da3838;
   font-size: 12px;
 }
 

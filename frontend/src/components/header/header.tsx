@@ -1,6 +1,6 @@
 import styles from './header.module.css';
 
-import { Menu } from '../menu/menu';
+import { Sidebar } from '../sidebar/sidebar';
 import { LogoIcon } from '../icons/logo/logo';
 import { BurgerButton } from '../buttons/burger/burger';
 
@@ -10,9 +10,9 @@ export const Header = () => {
       <a className={styles.logo} href="/">
         <LogoIcon />
       </a>
-      <h1 className={styles.title}>Global Pack Studio</h1>
+      <h1 className={styles.title}>Art & Pack Hub</h1>
       <BurgerButton />
-      <Menu />
+      <Sidebar />
     </header>
   );
 };

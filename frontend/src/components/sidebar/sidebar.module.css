@@ -4,7 +4,7 @@
   right: 0;
   z-index: 2;
   display: grid;
-  grid-template-rows: 1fr 6fr 4fr;
+  /* grid-template-rows: 1fr auto auto; */
   align-self: start;
   min-width: 320px;
   height: 100vh;
@@ -33,7 +33,7 @@
 .navigation__list {
   display: flex;
   flex-direction: column;
-  padding: 10px;
+  gap: 20px;
 }
 
 .link:hover {

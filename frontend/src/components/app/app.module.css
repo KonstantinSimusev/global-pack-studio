@@ -2,14 +2,12 @@
   position: relative;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  min-height: 100vh;
   gap: 30px;
 }
 
 .container__fixed {
   position: fixed;
   overflow: hidden;
-}
-
-.content {
-  margin: 0 20px;
 }
