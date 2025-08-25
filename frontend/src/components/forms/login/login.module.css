@@ -6,13 +6,28 @@
 
 .title {
   margin-top: 20px;
-  margin-bottom: 60px;
+  margin-bottom: 40px;
   font-weight: 400;
   text-align: center;
 }
 
 .form__login {
   display: grid;
+  /* padding: 0 10px; */
+}
+
+.input__name {
+  font-size: 14px;
+  position: relative;
+  padding: 0 10px 10px;
+}
+
+.input__name::after {
+  content: '*';
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0.6;
 }
 
 .input__login,
@@ -24,21 +39,24 @@
   outline: none;
 }
 
+.input__login:focus,
+.input__password:focus {
+  outline: none;
+}
+
 .input__login::placeholder,
 .input__password::placeholder {
   font-size: 16px;
 }
 
 .errors {
-  height: 48px;
-  line-height: 0.9;
-  padding: 0 10px;
+  height: 40px;
 }
 
 .error {
-  padding: 5px 0;
   color: #da3838;
   font-size: 12px;
+  padding-left: 5px;
 }
 
 .spinner {
@@ -49,7 +67,7 @@
 }
 
 .button__login {
-  margin: 24px 0 60px;
+  margin: 24px 0 40px;
   border-radius: 10px;
   padding: 12px 0;
   color: var(--color-button);
@@ -60,12 +78,12 @@
 
 .button__register {
   margin-bottom: 40px;
-  opacity: 0.8;
-  font-size: 16px;
+  font-size: 14px;
+  opacity: 0.9;
+  color: rgba(0 0 255);
   text-align: center;
   text-decoration: underline;
-  text-decoration-color: var(--color-default);
-  text-decoration-thickness: 0.8px;
+  text-decoration-thickness: 0.7px;
   text-underline-offset: 4px;
   cursor: pointer;
 }

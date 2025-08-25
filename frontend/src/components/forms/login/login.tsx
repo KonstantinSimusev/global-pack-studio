@@ -1,19 +1,18 @@
 import styles from './login.module.css';
 
-import { useContext, useLayoutEffect, useRef, useState } from 'react';
+import { useContext, useState } from 'react';
 import { LayerContext } from '../../../contexts/layer/layerContext';
 import { Spinner } from '../../spinner/spinner';
-import { validateField } from '../../../utils/validation';
-import { getRandomBoolean } from '../../../utils/functions';
+import {
+  validateField,
+  validateForm,
+  validationRules,
+} from '../../../utils/validation';
+import { getRandomBoolean } from '../../../utils/utils';
 
 interface IFormData {
   login: string;
   password: string;
-}
-
-// Тип для ошибок валидации
-interface IValidateFormData {
-  [key: string]: string | null; // ключ - имя поля, значение - сообщение об ошибке или null
 }
 
 // Определяем тип для полей формы
@@ -29,18 +28,11 @@ export const LoginForm = () => {
     setIsLoader,
   } = useContext(LayerContext);
 
-  const inputRef = useRef<HTMLInputElement | null>(null);
-  const [errors, setErrors] = useState<IValidateFormData>({});
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [formData, setFormData] = useState<IFormData>({
     login: '',
     password: '',
   });
-
-  useLayoutEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, []);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target as HTMLInputElement;
@@ -57,7 +49,7 @@ export const LoginForm = () => {
     delete currentErrors[fieldName];
 
     // Валидируем текущее поле
-    const errorMessage = validateField(value, fieldName);
+    const errorMessage = validateField(value, fieldName, validationRules);
     if (errorMessage) {
       currentErrors[fieldName] = errorMessage;
     }
@@ -66,29 +58,30 @@ export const LoginForm = () => {
     setErrors(currentErrors);
   };
 
-  const handleLoginSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoader(true);
 
-    // Очищаем текущие ошибки
-    let validationErrors: IValidateFormData = {};
+    // Преобразуем formData в Record<string, string>
+    const formDataForValidation: Record<string, string> = {
+      login: formData.login,
+      password: formData.password,
+    };
 
-    // Валидируем все поля
-    const fieldsToValidate: FormField[] = ['login', 'password'];
-
-    fieldsToValidate.forEach((field) => {
-      const errorMessage = validateField(formData[field], field);
-      if (errorMessage) {
-        validationErrors[field] = errorMessage;
-      }
-    });
+    // Валидируем всю форму
+    const formValidationErrors = validateForm(
+      formDataForValidation,
+      validationRules,
+    );
 
     // Если есть ошибки - показываем их и останавливаем отправку
-    if (Object.keys(validationErrors).length > 0) {
+    if (Object.keys(formValidationErrors).length > 0) {
       setIsLoader(false);
-      setErrors(validationErrors);
+      setErrors(formValidationErrors);
       return;
     }
+
+    // логика отправки...
 
     setTimeout(() => {
       if (getRandomBoolean()) {
@@ -111,7 +104,7 @@ export const LoginForm = () => {
     }, 2000);
   };
 
-  const handleRegisterClick = () => {
+  const handleClick = () => {
     setIsLoginModalOpen(false);
     setIsRegisterModalOpen(true);
   };
@@ -121,14 +114,14 @@ export const LoginForm = () => {
       <h3 className={styles.title}>Авторизация</h3>
       <form
         className={styles.form__login}
-        onSubmit={handleLoginSubmit}
+        onSubmit={handleSubmit}
         autoComplete="off"
       >
+        <label className={styles.input__name}>Логин</label>
         <input
           className={styles.input__login}
-          ref={inputRef}
           type="text"
-          placeholder="Логин"
+          // placeholder="Введите логин..."
           name="login"
           value={formData.login}
           onChange={handleChange}
@@ -136,10 +129,11 @@ export const LoginForm = () => {
         <div className={styles.errors}>
           {errors.login && <span className={styles.error}>{errors.login}</span>}
         </div>
+        <label className={styles.input__name}>Пароль</label>
         <input
           className={styles.input__password}
           type="password"
-          placeholder="Пароль"
+          // placeholder="Введите пароль..."
           name="password"
           value={formData.password}
           onChange={handleChange}
@@ -159,7 +153,7 @@ export const LoginForm = () => {
       <button
         className={styles.button__register}
         type="button"
-        onClick={handleRegisterClick}
+        onClick={handleClick}
       >
         Зарегистрироваться?
       </button>

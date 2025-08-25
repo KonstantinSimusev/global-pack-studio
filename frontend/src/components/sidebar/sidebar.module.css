@@ -4,13 +4,12 @@
   right: 0;
   z-index: 2;
   display: grid;
-  /* grid-template-rows: 1fr auto auto; */
   align-self: start;
   min-width: 320px;
   height: 100vh;
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
-  border-left: 1px solid #bebebe;
+  border-left: 1px solid rgba(234 234 234 / 0.4);
   padding: 30px;
   overflow-y: auto;
   background-color: var(--bg-color-default);

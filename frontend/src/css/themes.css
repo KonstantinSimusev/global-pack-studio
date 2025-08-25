@@ -5,7 +5,7 @@
   --color-icon: #111;
   --color-close: #333;
   --color-button: #eaeaea;
-  --color-border: rgba(51 51 51 / 0.6);
+  --color-border: rgba(51 51 51 / 0.3);
   --color-modal-border: transparent;
   --color-loader: #ccc;
   --color-spinner: #333;
@@ -22,8 +22,8 @@
   --color-icon: #eaeaea;
   --color-close: #eaeaea;
   --color-button: #222;
-  --color-border: rgba(234 234 234 / 0.6);
-  --color-modal-border: #eaeaea;
+  --color-border: rgba(234 234 234 / 0.3);
+  --color-modal-border: rgba(234 234 234 / 0.3);
   --color-loader: #fff;
   --color-spinner: #cfcfcf;
   --bg-color-default: #111;
