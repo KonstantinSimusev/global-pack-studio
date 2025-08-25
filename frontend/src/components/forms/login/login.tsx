@@ -1,8 +1,9 @@
 import styles from './login.module.css';
 
-import { useContext, useState } from 'react';
+import { useContext, useLayoutEffect, useRef, useState } from 'react';
 import { LayerContext } from '../../../contexts/layer/layerContext';
 import { Spinner } from '../../spinner/spinner';
+import { validateField } from '../../../utils/validation';
 import { getRandomBoolean } from '../../../utils/functions';
 
 interface IFormData {
@@ -10,9 +11,9 @@ interface IFormData {
   password: string;
 }
 
+// Тип для ошибок валидации
 interface IValidateFormData {
-  login?: string;
-  password?: string;
+  [key: string]: string | null; // ключ - имя поля, значение - сообщение об ошибке или null
 }
 
 // Определяем тип для полей формы
@@ -28,41 +29,18 @@ export const LoginForm = () => {
     setIsLoader,
   } = useContext(LayerContext);
 
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const [errors, setErrors] = useState<IValidateFormData>({});
   const [formData, setFormData] = useState<IFormData>({
     login: '',
     password: '',
   });
 
-  const [errors, setErrors] = useState<IValidateFormData>({});
-
-  const validateLogin = (login: string) => /^[a-zA-Z0-9_]{3,20}$/.test(login);
-
-  const validatePassword = (password: string) =>
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(password);
-
-  const validateField = (fieldName: FormField) => {
-    let errorMessage = '';
-
-    switch (fieldName) {
-      case 'login':
-        if (!formData.login) {
-          errorMessage = 'Логин обязателен';
-        } else if (!validateLogin(formData.login)) {
-          errorMessage = 'Не менее 3 символов';
-        }
-        break;
-
-      case 'password':
-        if (!formData.password) {
-          errorMessage = 'Пароль обязателен';
-        } else if (!validatePassword(formData.password)) {
-          errorMessage = 'Не менее 8 символов';
-        }
-        break;
+  useLayoutEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
     }
-
-    return errorMessage;
-  };
+  }, []);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target as HTMLInputElement;
@@ -79,7 +57,7 @@ export const LoginForm = () => {
     delete currentErrors[fieldName];
 
     // Валидируем текущее поле
-    const errorMessage = validateField(fieldName);
+    const errorMessage = validateField(value, fieldName);
     if (errorMessage) {
       currentErrors[fieldName] = errorMessage;
     }
@@ -99,7 +77,7 @@ export const LoginForm = () => {
     const fieldsToValidate: FormField[] = ['login', 'password'];
 
     fieldsToValidate.forEach((field) => {
-      const errorMessage = validateField(field);
+      const errorMessage = validateField(formData[field], field);
       if (errorMessage) {
         validationErrors[field] = errorMessage;
       }
@@ -141,15 +119,19 @@ export const LoginForm = () => {
   return (
     <div className={styles.container}>
       <h3 className={styles.title}>Авторизация</h3>
-      <form className={styles.form__login} onSubmit={handleLoginSubmit}>
+      <form
+        className={styles.form__login}
+        onSubmit={handleLoginSubmit}
+        autoComplete="off"
+      >
         <input
           className={styles.input__login}
+          ref={inputRef}
           type="text"
           placeholder="Логин"
           name="login"
           value={formData.login}
           onChange={handleChange}
-          autoCapitalize="off"
         />
         <div className={styles.errors}>
           {errors.login && <span className={styles.error}>{errors.login}</span>}
@@ -161,7 +143,6 @@ export const LoginForm = () => {
           name="password"
           value={formData.password}
           onChange={handleChange}
-          autoCapitalize="off"
         />
         <div className={styles.errors}>
           {errors.password && (

@@ -49,7 +49,7 @@ export const Sidebar = () => {
       <nav className={styles.navigation}>
         <ul className={styles.navigation__list}>
           <li className={styles.link} onClick={goHome}>
-            {isAuth ? 'Главная страница' : ''}
+            {isAuth ? 'Главная' : ''}
           </li>
           <li className={styles.link} onClick={logIn}>
             {isAuth ? 'Личный кабинет' : 'Войти'}

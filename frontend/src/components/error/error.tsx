@@ -18,7 +18,7 @@ export const Error = () => {
       <div className={styles.wrapper}>
         <ErrorIcon />
       </div>
-      <span className={styles.text}>Для регистрации требуется&nbsp;доступ!</span>
+      <span className={styles.text}>Нет доступа к&nbsp;регистрации!</span>
       {/* <button
         className={styles.button__register}
         type="button"

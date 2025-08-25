@@ -1,8 +1,7 @@
 @import url('./normalize.css');
 @import url('./Montserrat.css');
-@import url('./variables.css');
-@import url('./global.css');
 @import url('./themes.css');
+@import url('./global.css');
 
 body {
   min-width: 320px;
