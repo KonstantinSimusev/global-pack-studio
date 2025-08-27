@@ -1,10 +1,5 @@
 .icon {
   width: 30px;
   height: 30px;
-  fill: currentcolor;
-}
-
-.icon:active {
-  opacity: 0.6;
-  transition: opacity 0.4s ease;
+  fill: var(--color-icon);
 }

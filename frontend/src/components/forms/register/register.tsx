@@ -1,6 +1,185 @@
 import styles from './register.module.css';
 
 import { useContext, useState } from 'react';
+import { LayerContext } from '../../../contexts/layer/layerContext';
+import { Spinner } from '../../spinner/spinner';
+import {
+  validateField,
+  validateForm,
+  validationRules,
+} from '../../../utils/validation';
+import { getRandomBoolean } from '../../../utils/utils';
+
+export const RegisterForm = () => {
+  const {
+    isLoader,
+    setIsLoginModalOpen,
+    setIsRegisterModalOpen,
+    setIsSuccessModalOpen,
+    setIsErrorModalOpen,
+    setIsAuth,
+    setIsLoader,
+  } = useContext(LayerContext);
+
+  // Состояние для хранения значений полей формы
+  const [formData, setFormData] = useState<{ [key: string]: string }>({
+    email: '',
+    login: '',
+    password: '',
+  });
+
+  // Состояние для хранения ошибок валидации
+  const [errors, setErrors] = useState<{ [key: string]: string }>({
+    email: '',
+    login: '',
+    password: '',
+  });
+
+  // Обработчик изменения поля ввода
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    // Обновляем данные формы
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+
+    // Сбрасываем ошибку при начале ввода
+    setErrors({
+      ...errors,
+      [name]: '',
+    });
+  };
+
+  // Обработчик потери фокуса для валидации
+  const handleBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    // Получаем ошибку валидации для поля
+    const validationError = validateField(name, value, validationRules);
+
+    // Обновляем состояние ошибок
+    setErrors({
+      ...errors,
+      [name]: validationError || '',
+    });
+  };
+
+  const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    // Валидируем всю форму
+    const formErrors = validateForm(formData, validationRules);
+
+    // Сохраняем все ошибки в состояние
+    setErrors(formErrors);
+
+    // Если форма валидна, можно отправить данные на сервер
+    if (Object.keys(formErrors).length === 0) {
+      setIsLoader(true);
+      console.log(formData);
+
+      // логика отправки...
+
+      setTimeout(() => {
+        if (getRandomBoolean()) {
+          setIsSuccessModalOpen(true);
+        } else {
+          setIsErrorModalOpen(true);
+        }
+
+        // Очистка формы
+        setFormData({
+          email: '',
+          login: '',
+          password: '',
+        });
+
+        // Очистка ошибок
+        setErrors({ email: '', login: '', password: '' });
+
+        setIsRegisterModalOpen(false);
+        setIsAuth(false);
+        setIsLoader(false);
+
+        setIsLoader(false);
+      }, 2000);
+    }
+  };
+
+  const handleClick = () => {
+    setIsLoginModalOpen(true);
+    setIsRegisterModalOpen(false);
+  };
+
+  return (
+    <div className={styles.container}>
+      <h3 className={styles.title}>Регистрация</h3>
+      <form className={styles.form__register} onSubmit={handleSubmit}>
+        <label className={styles.input__name}>Email</label>
+        <input
+          className={styles.input__email}
+          type="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+          onBlur={handleBlur}
+        />
+        <div className={styles.errors}>
+          {errors.email && <span className={styles.error}>{errors.email}</span>}
+        </div>
+
+        <label className={styles.input__name}>Логин</label>
+        <input
+          className={styles.input__login}
+          type="text"
+          name="login"
+          value={formData.login}
+          onChange={handleChange}
+          onBlur={handleBlur}
+        />
+        <div className={styles.errors}>
+          {errors.login && <span className={styles.error}>{errors.login}</span>}
+        </div>
+
+        <label className={styles.input__name}>Пароль</label>
+        <input
+          className={styles.input__password}
+          type="password"
+          name="password"
+          value={formData.password}
+          onChange={handleChange}
+          onBlur={handleBlur}
+        />
+        <div className={styles.errors}>
+          {errors.password && (
+            <span className={styles.error}>{errors.password}</span>
+          )}
+        </div>
+
+        <div className={styles.spinner}>
+          <Spinner isVisible={isLoader} />
+        </div>
+        <button className={styles.button__register} type="submit">
+          Создать
+        </button>
+      </form>
+      <button
+        className={styles.button__login}
+        type="button"
+        onClick={handleClick}
+      >
+        Авторизоваться?
+      </button>
+    </div>
+  );
+};
+
+/*
+import styles from './register.module.css';
+
+import { useContext, useState } from 'react';
 import { Spinner } from '../../spinner/spinner';
 import { LayerContext } from '../../../contexts/layer/layerContext';
 import {
@@ -37,8 +216,8 @@ export const RegisterForm = () => {
     password: '',
   });
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target as HTMLInputElement;
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target as HTMLInputElement;
     const fieldName = name as FormField;
 
     // Обновляем данные формы
@@ -129,7 +308,6 @@ export const RegisterForm = () => {
         <input
           className={styles.input__email}
           type="email"
-          // placeholder="Введите адрес почты..."
           name="email"
           value={formData.email}
           onChange={handleChange}
@@ -137,11 +315,11 @@ export const RegisterForm = () => {
         <div className={styles.errors}>
           {errors.email && <span className={styles.error}>{errors.email}</span>}
         </div>
+
         <label className={styles.input__name}>Логин</label>
         <input
           className={styles.input__login}
           type="text"
-          // placeholder="Введите логин..."
           name="login"
           value={formData.login}
           onChange={handleChange}
@@ -149,11 +327,11 @@ export const RegisterForm = () => {
         <div className={styles.errors}>
           {errors.login && <span className={styles.error}>{errors.login}</span>}
         </div>
+
         <label className={styles.input__name}>Пароль</label>
         <input
           className={styles.input__password}
           type="password"
-          // placeholder="Введите пароль..."
           name="password"
           value={formData.password}
           onChange={handleChange}
@@ -180,3 +358,4 @@ export const RegisterForm = () => {
     </div>
   );
 };
+*/

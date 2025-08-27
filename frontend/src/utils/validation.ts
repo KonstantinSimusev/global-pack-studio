@@ -110,64 +110,43 @@ export const validationRules: IValidationRules = {
   },
 };
 
-// Тип для ошибок валидации
-interface ValidationErrors {
-  [key: string]: string;
-}
-
-// Функция валидации поля
+// Функция для валидации одного поля
 export const validateField = (
-  value: string,
-  fieldName: string,
-  rules: IValidationRules,
-): string | null => {
+  fieldName: string, // Имя поля, которое валидируем
+  value: string, // Значение поля для проверки
+  rules: IValidationRules, // Объект с правилами валидации
+): string => {
+  // Получаем правила валидации для конкретного поля
   const fieldRules = rules[fieldName];
 
-  // Проходим по всем правилам валидации для данного поля
-  for (const rule of fieldRules.validators) {
-    // Проверяем, соответствует ли значение текущему правилу валидации
-    // rule.pattern - это регулярное выражение для проверки
-    // Если значение НЕ соответствует шаблону, возвращаем сообщение об ошибке
-    if (!rule.pattern.test(value)) {
-      return rule.message; // Возвращаем сообщение об ошибке из правила
+  // Проходим по всем валидаторам поля
+  for (const validator of fieldRules.validators) {
+    // Если значение не соответствует регулярному выражению
+    if (!validator.pattern.test(value)) {
+      return validator.message; // Возвращаем сообщение об ошибке
     }
   }
 
-  // Если все правила пройдены успешно, возвращаем null
-  // Это означает, что значение валидно
-  return null;
+  // Если все проверки пройдены, возвращаем пустую строку
+  return '';
 };
 
-// Функция валидации формы с подробными комментариями
-export const validateForm: (
-  formData: Record<string, string>,
-  rules: IValidationRules,
-) => ValidationErrors = (formData, rules) => {
-  // 1. Создаем пустой объект для хранения ошибок валидации
-  const validationErrors: ValidationErrors = {};
+// Функция для валидации всей формы
+export const validateForm = (
+  formData: Record<string, string>, // Объект с данными формы
+  rules: IValidationRules, // Объект с правилами валидации
+): Record<string, string> => {
+  const errors: Record<string, string> = {}; // Объект для хранения ошибок
 
-  // 2. Получаем все поля, которые нужно валидировать
-  //    Используем Object.keys() для получения массива ключей из объекта правил
-  const fieldsToValidate = Object.keys(rules);
-
-  // 3. Проходим по каждому полю из списка валидации
-  fieldsToValidate.forEach((fieldName) => {
-    // 3.1 Получаем значение поля из формы
-    //     Используем || '' для обработки случая, когда поле может быть undefined
-    const fieldValue = formData[fieldName] || '';
-
-    // 3.2 Валидируем поле с помощью функции validateField
-    //     Передаем значение поля, его имя и правила валидации
-    const errorMessage = validateField(fieldValue, fieldName, rules);
-
-    // 3.3 Если обнаружена ошибка валидации
-    if (errorMessage) {
-      // Сохраняем сообщение об ошибке в объект ошибок
-      validationErrors[fieldName] = errorMessage;
+  // Проходим по всем полям формы
+  for (const fieldName in formData) {
+    // Валидируем поле
+    const error = validateField(fieldName, formData[fieldName], rules);
+    // Если есть ошибка, сохраняем её
+    if (error) {
+      errors[fieldName] = error;
     }
-  });
+  }
 
-  // 4. Возвращаем объект с ошибками валидации
-  //    Если ошибок нет, объект будет пустым
-  return validationErrors;
+  return errors; // Возвращаем объект с ошибками
 };

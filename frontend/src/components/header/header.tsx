@@ -10,7 +10,7 @@ export const Header = () => {
       <a className={styles.logo} href="/">
         <LogoIcon />
       </a>
-      <h1 className={styles.title}>Art & Pack Hub</h1>
+      <h1 className={styles.title}>Global Pack Studio</h1>
       <BurgerButton />
       <Sidebar />
     </header>

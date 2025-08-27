@@ -4,7 +4,7 @@ export const Footer = () => {
   return (
     <footer className={styles.container}>
       <a className={styles.copyright} href="#">
-        © Art & Pack Hub
+        © Global Pack Studio
       </a>
     </footer>
   );

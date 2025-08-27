@@ -5,8 +5,3 @@
 .container:focus {
   outline: none;
 }
-
-.container:active {
-  opacity: 0.6;
-  transition: opacity 0.4s ease;
-}

@@ -10,14 +10,6 @@ import {
 } from '../../../utils/validation';
 import { getRandomBoolean } from '../../../utils/utils';
 
-interface IFormData {
-  login: string;
-  password: string;
-}
-
-// Определяем тип для полей формы
-type FormField = keyof IFormData;
-
 export const LoginForm = () => {
   const {
     isLoader,
@@ -28,80 +20,85 @@ export const LoginForm = () => {
     setIsLoader,
   } = useContext(LayerContext);
 
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const [formData, setFormData] = useState<IFormData>({
+  // Состояние для хранения значений полей формы
+  const [formData, setFormData] = useState<{ [key: string]: string }>({
     login: '',
     password: '',
   });
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target as HTMLInputElement;
-    const fieldName = name as FormField;
+  // Состояние для хранения ошибок валидации
+  const [errors, setErrors] = useState<{ [key: string]: string }>({
+    login: '',
+    password: '',
+  });
+
+  // Обработчик изменения поля ввода
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
 
     // Обновляем данные формы
     setFormData({
       ...formData,
-      [fieldName]: value,
+      [name]: value,
     });
 
-    // Очищаем ошибки для текущего поля
-    const currentErrors = { ...errors };
-    delete currentErrors[fieldName];
+    // Сбрасываем ошибку при начале ввода
+    setErrors({
+      ...errors,
+      [name]: '',
+    });
+  };
 
-    // Валидируем текущее поле
-    const errorMessage = validateField(value, fieldName, validationRules);
-    if (errorMessage) {
-      currentErrors[fieldName] = errorMessage;
-    }
+  // Обработчик потери фокуса для валидации
+  const handleBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    // Получаем ошибку валидации для поля
+    const validationError = validateField(name, value, validationRules);
 
     // Обновляем состояние ошибок
-    setErrors(currentErrors);
+    setErrors({
+      ...errors,
+      [name]: validationError || '',
+    });
   };
 
   const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsLoader(true);
-
-    // Преобразуем formData в Record<string, string>
-    const formDataForValidation: Record<string, string> = {
-      login: formData.login,
-      password: formData.password,
-    };
 
     // Валидируем всю форму
-    const formValidationErrors = validateForm(
-      formDataForValidation,
-      validationRules,
-    );
+    const formErrors = validateForm(formData, validationRules);
 
-    // Если есть ошибки - показываем их и останавливаем отправку
-    if (Object.keys(formValidationErrors).length > 0) {
-      setIsLoader(false);
-      setErrors(formValidationErrors);
-      return;
+    // Сохраняем все ошибки в состояние
+    setErrors(formErrors);
+
+    // Если форма валидна, можно отправить данные на сервер
+    if (Object.keys(formErrors).length === 0) {
+      setIsLoader(true);
+      console.log(formData);
+
+      // логика отправки...
+
+      setTimeout(() => {
+        if (getRandomBoolean()) {
+          setIsLoginModalOpen(false);
+          setIsOpenOverlay(false);
+          setIsAuth(true);
+        } else {
+        }
+
+        // Очистка формы
+        setFormData({
+          login: '',
+          password: '',
+        });
+
+        // Очистка ошибок
+        setErrors({ login: '', password: '' });
+
+        setIsLoader(false);
+      }, 2000);
     }
-
-    // логика отправки...
-
-    setTimeout(() => {
-      if (getRandomBoolean()) {
-        setIsLoginModalOpen(false);
-        setIsOpenOverlay(false);
-        setIsAuth(true);
-      } else {
-      }
-
-      // Очистка формы
-      setFormData({
-        login: '',
-        password: '',
-      });
-
-      // Очистка ошибок
-      setErrors({});
-
-      setIsLoader(false);
-    }, 2000);
   };
 
   const handleClick = () => {
@@ -112,37 +109,35 @@ export const LoginForm = () => {
   return (
     <div className={styles.container}>
       <h3 className={styles.title}>Авторизация</h3>
-      <form
-        className={styles.form__login}
-        onSubmit={handleSubmit}
-        autoComplete="off"
-      >
+      <form className={styles.form__login} onSubmit={handleSubmit}>
         <label className={styles.input__name}>Логин</label>
         <input
           className={styles.input__login}
           type="text"
-          // placeholder="Введите логин..."
           name="login"
           value={formData.login}
           onChange={handleChange}
+          onBlur={handleBlur}
         />
         <div className={styles.errors}>
           {errors.login && <span className={styles.error}>{errors.login}</span>}
         </div>
+
         <label className={styles.input__name}>Пароль</label>
         <input
           className={styles.input__password}
           type="password"
-          // placeholder="Введите пароль..."
           name="password"
           value={formData.password}
           onChange={handleChange}
+          onBlur={handleBlur}
         />
         <div className={styles.errors}>
           {errors.password && (
             <span className={styles.error}>{errors.password}</span>
           )}
         </div>
+
         <div className={styles.spinner}>
           <Spinner isVisible={isLoader} />
         </div>

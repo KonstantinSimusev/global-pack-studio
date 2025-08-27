@@ -32,12 +32,17 @@
 
 .button__login {
   margin-bottom: 40px;
-  opacity: 0.5;
-  font-size: 14px;
+  /* opacity: 0.7; */
+  font-size: 16px;
+  color: var(--color-link);
   text-align: center;
   text-decoration: underline;
-  text-decoration-color: var(--color-default);
-  text-decoration-thickness: 0.8px;
+  text-decoration-thickness: 0.9px;
   text-underline-offset: 4px;
   cursor: pointer;
+}
+
+.button__login:active {
+  transition: transform 0.2s ease;
+  transform: scale(0.97);
 }
