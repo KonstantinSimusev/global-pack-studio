@@ -78,13 +78,18 @@ export const validationRules: IValidationRules = {
       },
       {
         type: 'length',
-        pattern: /^.{6,}$/,
-        message: 'Минимум 6 символов',
+        pattern: /^.{8,30}$/,
+        message: 'Введите 8-30 символов',
       },
       {
         type: 'noSpaces',
         pattern: /^\S+$/,
         message: 'Введите корректный логин',
+      },
+      {
+        type: 'uppercase',
+        pattern: /[A-Z]/,
+        message: 'Введите корректный логин', // Должна быть хотя бы одна заглавная буква
       },
     ],
   },
@@ -98,13 +103,18 @@ export const validationRules: IValidationRules = {
       },
       {
         type: 'length',
-        pattern: /^.{6,}$/,
-        message: 'Минимум 6 символов',
+        pattern: /^.{8,30}$/,
+        message: 'Введите 8-30 символов',
       },
       {
         type: 'noSpaces',
         pattern: /^\S+$/,
         message: 'Введите корректный пароль',
+      },
+      {
+        type: 'uppercase',
+        pattern: /[A-Z]/, // Проверяет наличие хотя бы одной заглавной буквы
+        message: 'Введите корректный пароль', // Должна быть хотя бы одна заглавная буква
       },
     ],
   },

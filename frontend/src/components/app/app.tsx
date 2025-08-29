@@ -9,25 +9,14 @@ import { LayerContext } from '../../contexts/layer/layerContext';
 import { Header } from '../header/header';
 import { Banner } from '../banner/banner';
 import { Home } from '../pages/home/home';
-import { Foreman } from '../pages/foreman/foreman';
 import { Footer } from '../footer/footer';
 import { Overlay } from '../overlay/overlay';
 import { LoginForm } from '../forms/login/login';
 import { Modal } from '../modal/modal';
-import { RegisterForm } from '../forms/register/register';
-import { Success } from '../success/success';
-import { Error } from '../error/error';
 
 const App = () => {
   const { isLightTheme } = useContext(ThemeContext);
-  const {
-    isOpenOverlay,
-    isLoginModalOpen,
-    isRegisterModalOpen,
-    isSuccessModalOpen,
-    isErrorModalOpen,
-    isAuth,
-  } = useContext(LayerContext);
+  const { isOpenOverlay, isLoginModalOpen } = useContext(LayerContext);
 
   return (
     <div
@@ -39,8 +28,7 @@ const App = () => {
     >
       <Header />
       <Banner />
-      {!isAuth && <Home />}
-      {isAuth && <Foreman />}
+      <Home />
       <Footer />
 
       {isOpenOverlay && <Overlay />}
@@ -48,24 +36,6 @@ const App = () => {
       {isLoginModalOpen && (
         <Modal>
           <LoginForm />
-        </Modal>
-      )}
-
-      {isRegisterModalOpen && (
-        <Modal>
-          <RegisterForm />
-        </Modal>
-      )}
-
-      {isSuccessModalOpen && (
-        <Modal>
-          <Success />
-        </Modal>
-      )}
-
-      {isErrorModalOpen && (
-        <Modal>
-          <Error />
         </Modal>
       )}
     </div>

@@ -8,17 +8,9 @@ import {
   validateForm,
   validationRules,
 } from '../../../utils/validation';
-import { getRandomBoolean } from '../../../utils/utils';
 
 export const LoginForm = () => {
-  const {
-    isLoader,
-    setIsOpenOverlay,
-    setIsLoginModalOpen,
-    setIsRegisterModalOpen,
-    setIsAuth,
-    setIsLoader,
-  } = useContext(LayerContext);
+  const { setIsOpenOverlay, setIsLoginModalOpen } = useContext(LayerContext);
 
   // Состояние для хранения значений полей формы
   const [formData, setFormData] = useState<{ [key: string]: string }>({
@@ -74,36 +66,22 @@ export const LoginForm = () => {
 
     // Если форма валидна, можно отправить данные на сервер
     if (Object.keys(formErrors).length === 0) {
-      setIsLoader(true);
       console.log(formData);
 
       // логика отправки...
 
-      setTimeout(() => {
-        if (getRandomBoolean()) {
-          setIsLoginModalOpen(false);
-          setIsOpenOverlay(false);
-          setIsAuth(true);
-        } else {
-        }
+      setIsLoginModalOpen(false);
+      setIsOpenOverlay(false);
 
-        // Очистка формы
-        setFormData({
-          login: '',
-          password: '',
-        });
+      // Очистка формы
+      setFormData({
+        login: '',
+        password: '',
+      });
 
-        // Очистка ошибок
-        setErrors({ login: '', password: '' });
-
-        setIsLoader(false);
-      }, 2000);
+      // Очистка ошибок
+      setErrors({ login: '', password: '' });
     }
-  };
-
-  const handleClick = () => {
-    setIsLoginModalOpen(false);
-    setIsRegisterModalOpen(true);
   };
 
   return (
@@ -139,19 +117,12 @@ export const LoginForm = () => {
         </div>
 
         <div className={styles.spinner}>
-          <Spinner isVisible={isLoader} />
+          <Spinner />
         </div>
         <button className={styles.button__login} type="submit">
           Войти
         </button>
       </form>
-      <button
-        className={styles.button__register}
-        type="button"
-        onClick={handleClick}
-      >
-        Зарегистрироваться?
-      </button>
     </div>
   );
 };
