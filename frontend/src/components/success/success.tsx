@@ -5,12 +5,12 @@ import { LayerContext } from '../../contexts/layer/layerContext';
 import { SuccessIcon } from '../icons/success/success';
 
 export const Success = () => {
-  const { setIsLoginModalOpen, setIsSuccessModalOpen } =
+  const { setIsLoginModalOpen } =
     useContext(LayerContext);
 
   const handleClick = () => {
     setIsLoginModalOpen(true);
-    setIsSuccessModalOpen(false);
+    // setIsSuccessModalOpen(false);
   };
 
   return (

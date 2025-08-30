@@ -9,12 +9,14 @@ export const CloseButton = () => {
     setIsOpenMenu,
     setIsOpenOverlay,
     setIsLoginModalOpen,
+    setIsLogoutOpenModal,
   } = useContext(LayerContext);
 
   const handleClick = () => {
     setIsOpenMenu(false);
     setIsOpenOverlay(false);
     setIsLoginModalOpen(false);
+    setIsLogoutOpenModal(false);
   };
 
   return (

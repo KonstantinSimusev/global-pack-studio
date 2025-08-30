@@ -3,10 +3,11 @@ import {
   useDispatch as dispatchHook,
   useSelector as selectorHook,
 } from 'react-redux';
-// import { usersSlice } from './slices/user/slice';
+import { authSlice } from './slices/auth/slice';
+
 
 export const rootReducer = combineSlices(
-  // usersSlice
+  authSlice
 );
 
 export const store = configureStore({

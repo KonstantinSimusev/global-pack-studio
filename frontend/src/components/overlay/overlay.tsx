@@ -9,9 +9,11 @@ export const Overlay = () => {
     isOpenOverlay,
     isOpenMenu,
     isLoginModalOpen,
+    isLogoutOpenModal,
     setIsOpenOverlay,
     setIsOpenMenu,
     setIsLoginModalOpen,
+    setIsLogoutOpenModal,
   } = useContext(LayerContext);
 
   useEscapeHandler(() => {
@@ -26,6 +28,10 @@ export const Overlay = () => {
     if (isLoginModalOpen) {
       setIsLoginModalOpen(false);
     }
+
+    if (isLogoutOpenModal) {
+      setIsLogoutOpenModal(false);
+    }
   });
 
   const handleClick = (event: React.MouseEvent) => {
@@ -34,6 +40,7 @@ export const Overlay = () => {
       setIsOpenOverlay(false);
       setIsOpenMenu(false);
       setIsLoginModalOpen(false);
+      setIsLogoutOpenModal(false);
     }
   };
 

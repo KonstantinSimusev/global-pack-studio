@@ -6,29 +6,35 @@ import { Switch } from '../switch/switch';
 import { LayerContext } from '../../contexts/layer/layerContext';
 import { ThemeContext } from '../../contexts/theme/themeContext';
 import { CloseButton } from '../buttons/close/close';
+import { useSelector } from '../../services/store';
+import { selectIsAuthenticated } from '../../services/slices/auth/slice';
 
 export const Sidebar = () => {
   const { isLightTheme } = useContext(ThemeContext);
-  const { isOpenMenu, isAuth, setIsOpenOverlay, setIsOpenMenu, setIsLoginModalOpen, setIsAuth } =
-    useContext(LayerContext);
+  const {
+    isOpenMenu,
+    setIsOpenOverlay,
+    setIsOpenMenu,
+    setIsLoginModalOpen,
+    setIsLogoutOpenModal,
+  } = useContext(LayerContext);
+
+  const isAuthenticated = useSelector(selectIsAuthenticated);
 
   const goHome = () => {
-    setIsAuth(false);
     setIsOpenOverlay(false);
     setIsOpenMenu(false);
-  }
+  };
 
-  const logIn = () => {
+  const login = () => {
     setIsOpenMenu(false);
     setIsLoginModalOpen(true);
   };
 
-  const logOut = () => {
-    setIsAuth(false);
-    setIsOpenOverlay(false);
+  const logout = () => {
     setIsOpenMenu(false);
-    
-  }
+    setIsLogoutOpenModal(true);
+  };
 
   // Функция для предотвращения закрытия при клике на элементы меню
   const handleMenuClick = (event: React.MouseEvent) => {
@@ -49,13 +55,19 @@ export const Sidebar = () => {
       <nav className={styles.navigation}>
         <ul className={styles.navigation__list}>
           <li className={styles.link} onClick={goHome}>
-            {isAuth ? 'Главная' : ''}
+            {!isAuthenticated ? 'Главная' : ''}
           </li>
-          <li className={styles.link} onClick={logIn}>
-            {isAuth ? 'Личный кабинет' : 'Войти'}
+          <li className={styles.link} onClick={logout}>
+            {!isAuthenticated ? 'Табель' : ''}
           </li>
-          <li className={styles.link} onClick={logOut}>
-            {isAuth ? 'Выйти' : ''}
+          <li className={styles.link} onClick={logout}>
+            {!isAuthenticated ? 'Производство' : ''}
+          </li>
+          <li className={styles.link} onClick={logout}>
+            {!isAuthenticated ? 'Выйти' : ''}
+          </li>
+          <li className={styles.link} onClick={login}>
+            {!isAuthenticated ? 'Войти' : ''}
           </li>
         </ul>
       </nav>
