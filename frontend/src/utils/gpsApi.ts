@@ -6,8 +6,8 @@ interface IRefreshTokenResponse {
 }
 
 export const checkRefreshTokenApi = async (
-  refreshToken: string | null,
-): Promise<IRefreshTokenResponse | null> => {
+  refreshToken: string,
+): Promise<IRefreshTokenResponse> => {
   try {
     // Здесь происходит запрос к серверу
     const response = await fetch(`${URL}/auth/token`, {
@@ -32,11 +32,9 @@ export const checkRefreshTokenApi = async (
     return data;
   } catch (error) {
     // Сюда попадаем при любом throw new Error
-    // 1. Очищаем localStorage
+    // Очищаем localStorage
     localStorage.removeItem('refreshToken');
-
-    // 2. Возвращаем null
-    return null;
+    throw error;
   }
 };
 

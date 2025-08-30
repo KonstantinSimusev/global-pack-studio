@@ -57,10 +57,10 @@ export const Sidebar = () => {
           <li className={styles.link} onClick={goHome}>
             {!isAuthenticated ? 'Главная' : ''}
           </li>
-          <li className={styles.link} onClick={logout}>
+          <li className={styles.link} onClick={goHome}>
             {!isAuthenticated ? 'Табель' : ''}
           </li>
-          <li className={styles.link} onClick={logout}>
+          <li className={styles.link} onClick={goHome}>
             {!isAuthenticated ? 'Производство' : ''}
           </li>
           <li className={styles.link} onClick={logout}>

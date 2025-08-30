@@ -20,7 +20,7 @@ export const Logout = () => {
 
   return (
     <div className={styles.container}>
-      <span className={styles.text}>Хотите выйти?</span>
+      <span className={styles.text}>Хотите выйти из&nbsp;аккаунта?</span>
       <div className={styles.spinner}>
         <Spinner />
       </div>
@@ -37,7 +37,7 @@ export const Logout = () => {
           type="button"
           onClick={handleClickReturn}
         >
-          Нет
+          Отмена
         </button>
       </div>
     </div>

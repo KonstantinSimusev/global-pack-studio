@@ -25,10 +25,8 @@
 }
 
 /* крестик справа */
-.container > :first-child {
-  display: flex;
-  justify-content: end;
-  align-items: start;
+.container > :nth-child(1) {
+  margin-left: auto;
 }
 
 .navigation__list {
