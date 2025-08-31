@@ -2,10 +2,14 @@ import styles from './sidebar.module.css';
 import clsx from 'clsx';
 
 import { useContext } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+
+import { CloseButton } from '../buttons/close/close';
 import { Switch } from '../switch/switch';
+
 import { LayerContext } from '../../contexts/layer/layerContext';
 import { ThemeContext } from '../../contexts/theme/themeContext';
-import { CloseButton } from '../buttons/close/close';
+
 import { useSelector } from '../../services/store';
 import { selectIsAuthenticated } from '../../services/slices/auth/slice';
 
@@ -20,18 +24,19 @@ export const Sidebar = () => {
   } = useContext(LayerContext);
 
   const isAuthenticated = useSelector(selectIsAuthenticated);
+  const location = useLocation(); // Добавляем хук для получения текущего пути
 
-  const goHome = () => {
+  const hanldeClick = () => {
     setIsOpenOverlay(false);
     setIsOpenMenu(false);
   };
 
-  const login = () => {
+  const hanldeClickLogin = () => {
     setIsOpenMenu(false);
     setIsLoginModalOpen(true);
   };
 
-  const logout = () => {
+  const hanldeClickLogout = () => {
     setIsOpenMenu(false);
     setIsLogoutOpenModal(true);
   };
@@ -54,21 +59,43 @@ export const Sidebar = () => {
       <CloseButton />
       <nav className={styles.navigation}>
         <ul className={styles.navigation__list}>
-          <li className={styles.link} onClick={goHome}>
-            {!isAuthenticated ? 'Главная' : ''}
+          <li
+            className={clsx(
+              styles.link,
+              location.pathname === '/' && styles.link__active,
+            )}
+            onClick={hanldeClick}
+          >
+            <Link to="/">Главная</Link>
           </li>
-          <li className={styles.link} onClick={goHome}>
-            {!isAuthenticated ? 'Табель' : ''}
-          </li>
-          <li className={styles.link} onClick={goHome}>
-            {!isAuthenticated ? 'Производство' : ''}
-          </li>
-          <li className={styles.link} onClick={logout}>
-            {!isAuthenticated ? 'Выйти' : ''}
-          </li>
-          <li className={styles.link} onClick={login}>
-            {!isAuthenticated ? 'Войти' : ''}
-          </li>
+          {isAuthenticated && (
+            <li className={styles.link} onClick={hanldeClickLogin}>
+              <Link to="/timesheet">Войти</Link>
+            </li>
+          )}
+
+          {!isAuthenticated && (
+            <>
+              <li
+                className={clsx(
+                  styles.link,
+                  location.pathname === '/timesheet' && styles.link__active,
+                )}
+                onClick={hanldeClick}
+              >
+                <Link to="/timesheet">Табель</Link>
+              </li>
+              <li className={clsx(
+                  styles.link,
+                  location.pathname === '/production' && styles.link__active,
+                )} onClick={hanldeClick}>
+                <Link to="/production">Производство</Link>
+              </li>
+              <li className={styles.link} onClick={hanldeClickLogout}>
+                Выйти
+              </li>
+            </>
+          )}
         </ul>
       </nav>
       <Switch />

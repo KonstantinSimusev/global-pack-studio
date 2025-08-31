@@ -3,6 +3,7 @@ import styles from './logout.module.css';
 import { useContext } from 'react';
 import { LayerContext } from '../../contexts/layer/layerContext';
 import { Spinner } from '../spinner/spinner';
+import { Link } from 'react-router-dom';
 
 export const Logout = () => {
   const { setIsOpenMenu, setIsOpenOverlay, setIsLogoutOpenModal } =
@@ -30,7 +31,7 @@ export const Logout = () => {
           type="button"
           onClick={handleClickLogout}
         >
-          Да
+          <Link to="/">Да</Link>
         </button>
         <button
           className={styles.button__return}

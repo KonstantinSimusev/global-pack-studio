@@ -1,0 +1,9 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0 20px;
+  flex-grow: 1;
+  text-align: center;
+  color: var(--color-not-found);
+}

@@ -35,6 +35,13 @@
   gap: 20px;
 }
 
+.link__active {
+  text-decoration: underline;
+  text-decoration: underline;
+  text-decoration-thickness: 0.7px;
+  text-underline-offset: 4px;
+}
+
 .link:hover {
   cursor: pointer;
 }
