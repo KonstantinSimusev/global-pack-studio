@@ -10,8 +10,8 @@ import { Switch } from '../switch/switch';
 import { LayerContext } from '../../contexts/layer/layerContext';
 import { ThemeContext } from '../../contexts/theme/themeContext';
 
-import { useSelector } from '../../services/store';
-import { selectIsAuthenticated } from '../../services/slices/auth/slice';
+// import { useSelector } from '../../services/store';
+// import { selectIsAuthenticated } from '../../services/slices/auth/slice';
 
 export const Sidebar = () => {
   const { isLightTheme } = useContext(ThemeContext);
@@ -23,7 +23,7 @@ export const Sidebar = () => {
     setIsLogoutOpenModal,
   } = useContext(LayerContext);
 
-  const isAuthenticated = useSelector(selectIsAuthenticated);
+  // const isAuthenticated = useSelector(selectIsAuthenticated);
   const location = useLocation(); // Добавляем хук для получения текущего пути
 
   const hanldeClick = () => {
@@ -70,13 +70,7 @@ export const Sidebar = () => {
             <Link to="/">Главная</Link>
           </li>
 
-          {!isAuthenticated && (
-            <li className={styles.link} onClick={hanldeClickLogin}>
-              Войти
-            </li>
-          )}
-
-          {isAuthenticated && (
+          {/* {isAuthenticated && ( */}
             <>
               <li
                 className={clsx(
@@ -102,7 +96,13 @@ export const Sidebar = () => {
                 Выйти
               </li>
             </>
-          )}
+          {/* )} */}
+
+          {/* {!isAuthenticated && ( */}
+            <li className={styles.link} onClick={hanldeClickLogin}>
+              Войти
+            </li>
+          {/* )} */}
         </ul>
       </nav>
 

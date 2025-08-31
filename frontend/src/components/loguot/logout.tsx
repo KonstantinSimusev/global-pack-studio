@@ -1,17 +1,21 @@
 import styles from './logout.module.css';
 
 import { useContext } from 'react';
-import { LayerContext } from '../../contexts/layer/layerContext';
+import { useNavigate } from 'react-router-dom';
+
 import { Spinner } from '../spinner/spinner';
-import { Link } from 'react-router-dom';
+
+import { LayerContext } from '../../contexts/layer/layerContext';
 
 export const Logout = () => {
+  const navigate = useNavigate();
   const { setIsOpenMenu, setIsOpenOverlay, setIsLogoutOpenModal } =
     useContext(LayerContext);
 
   const handleClickLogout = () => {
     setIsOpenOverlay(false);
     setIsLogoutOpenModal(false);
+    navigate('/');
   };
 
   const handleClickReturn = () => {
@@ -31,7 +35,7 @@ export const Logout = () => {
           type="button"
           onClick={handleClickLogout}
         >
-          <Link to="/">Да</Link>
+          Да
         </button>
         <button
           className={styles.button__return}

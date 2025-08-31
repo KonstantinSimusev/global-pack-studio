@@ -1,7 +1,7 @@
 import styles from './login.module.css';
 
 import { useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Spinner } from '../../spinner/spinner';
 
@@ -14,6 +14,7 @@ import {
 } from '../../../utils/validation';
 
 export const LoginForm = () => {
+  const navigate = useNavigate();
   const { setIsOpenOverlay, setIsLoginModalOpen } = useContext(LayerContext);
 
   // Состояние для хранения значений полей формы
@@ -74,6 +75,7 @@ export const LoginForm = () => {
 
       // логика отправки...
 
+      navigate('/timesheet');
       setIsLoginModalOpen(false);
       setIsOpenOverlay(false);
 
@@ -123,9 +125,7 @@ export const LoginForm = () => {
         <div className={styles.spinner}>
           <Spinner />
         </div>
-        <button className={styles.button__login} type="submit">
-          <Link to="/timesheet">Войти</Link>
-        </button>
+        <button className={styles.button__login}>Войти</button>
       </form>
     </div>
   );

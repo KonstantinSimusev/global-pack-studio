@@ -18,11 +18,11 @@ import { Overlay } from '../overlay/overlay';
 import { Modal } from '../modal/modal';
 import { LoginForm } from '../forms/login/login';
 import { Logout } from '../loguot/logout';
+// import { ProtectedRoute } from '../protected-route/protected-route';
 
 import { useDispatch } from '../../services/store';
 // import { selectIsAuthenticated } from '../../services/slices/auth/slice';
 import { checkRefreshToken } from '../../services/slices/auth/actions';
-import { ProtectedRoute } from '../protected-route/protected-route';
 
 const App = () => {
   const { isLightTheme } = useContext(ThemeContext);
@@ -49,10 +49,10 @@ const App = () => {
       <Banner />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route element={<ProtectedRoute />}>
-          <Route path="/timesheet" element={<Timesheet />} />
-          <Route path="/production" element={<Production />} />
-        </Route>
+        {/* <Route element={<ProtectedRoute />}> */}
+        <Route path="/timesheet" element={<Timesheet />} />
+        <Route path="/production" element={<Production />} />
+        {/* </Route> */}
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
