@@ -57,6 +57,7 @@ export const Sidebar = () => {
       onClick={handleMenuClick}
     >
       <CloseButton />
+
       <nav className={styles.navigation}>
         <ul className={styles.navigation__list}>
           <li
@@ -68,9 +69,10 @@ export const Sidebar = () => {
           >
             <Link to="/">Главная</Link>
           </li>
+
           {isAuthenticated && (
             <li className={styles.link} onClick={hanldeClickLogin}>
-              <Link to="/timesheet">Войти</Link>
+              Войти
             </li>
           )}
 
@@ -85,12 +87,17 @@ export const Sidebar = () => {
               >
                 <Link to="/timesheet">Табель</Link>
               </li>
-              <li className={clsx(
+
+              <li
+                className={clsx(
                   styles.link,
                   location.pathname === '/production' && styles.link__active,
-                )} onClick={hanldeClick}>
+                )}
+                onClick={hanldeClick}
+              >
                 <Link to="/production">Производство</Link>
               </li>
+
               <li className={styles.link} onClick={hanldeClickLogout}>
                 Выйти
               </li>
@@ -98,6 +105,7 @@ export const Sidebar = () => {
           )}
         </ul>
       </nav>
+
       <Switch />
     </div>
   );

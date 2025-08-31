@@ -1,8 +1,12 @@
 import styles from './login.module.css';
 
 import { useContext, useState } from 'react';
-import { LayerContext } from '../../../contexts/layer/layerContext';
+import { Link } from 'react-router-dom';
+
 import { Spinner } from '../../spinner/spinner';
+
+import { LayerContext } from '../../../contexts/layer/layerContext';
+
 import {
   validateField,
   validateForm,
@@ -120,7 +124,7 @@ export const LoginForm = () => {
           <Spinner />
         </div>
         <button className={styles.button__login} type="submit">
-          Войти
+          <Link to="/timesheet">Войти</Link>
         </button>
       </form>
     </div>

@@ -35,6 +35,10 @@
   gap: 20px;
 }
 
+.link {
+  width: fit-content;
+}
+
 .link__active {
   text-decoration: underline;
   text-decoration: underline;
