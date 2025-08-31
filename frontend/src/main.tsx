@@ -14,7 +14,11 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <Provider store={store}>
       <ThemeProvider>
-        <BrowserRouter>
+        <BrowserRouter
+          basename={
+            process.env.NODE_ENV === 'production' ? '/global-pack-studio' : '/'
+          }
+        >
           <LayerProvider>
             <App />
           </LayerProvider>

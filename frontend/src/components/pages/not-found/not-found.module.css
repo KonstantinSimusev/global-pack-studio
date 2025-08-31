@@ -6,4 +6,5 @@
   flex-grow: 1;
   text-align: center;
   color: var(--color-not-found);
+  font-size: 16px;
 }

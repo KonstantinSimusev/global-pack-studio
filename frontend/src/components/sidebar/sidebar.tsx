@@ -70,13 +70,13 @@ export const Sidebar = () => {
             <Link to="/">Главная</Link>
           </li>
 
-          {isAuthenticated && (
+          {!isAuthenticated && (
             <li className={styles.link} onClick={hanldeClickLogin}>
               Войти
             </li>
           )}
 
-          {!isAuthenticated && (
+          {isAuthenticated && (
             <>
               <li
                 className={clsx(
