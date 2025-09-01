@@ -1,0 +1,9 @@
+import { Controller, Post } from "@nestjs/common";
+
+@Controller('auth')
+export class AuthController {
+  // constructor(private readonly authService: Authservise) {}
+
+  // @Post('login')
+  // async 
+}

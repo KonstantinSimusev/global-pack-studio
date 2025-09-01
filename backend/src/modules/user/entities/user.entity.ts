@@ -39,4 +39,11 @@ export class User {
     nullable: true, // разрешаем NULL значения
   })
   refreshToken: string | null; // указываем, что может быть null
+
+  @Column({
+    name: 'refresh_token_created_at',
+    type: 'timestamp',
+    nullable: true,
+  })
+  refreshTockenCreatedAt: Date | null;
 }

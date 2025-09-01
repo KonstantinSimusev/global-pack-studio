@@ -6,7 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 
 import { DatabaseModule } from './database/database.module';
 import { AppController } from './app.controller';
-import { UsersModule } from './modules/user/users.module';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [
@@ -17,7 +17,7 @@ import { UsersModule } from './modules/user/users.module';
     ServeStaticModule.forRoot({
       rootPath: path.join(process.cwd(), 'public'),
     }),
-    UsersModule
+    UserModule
   ],
   controllers: [AppController],
   providers: [],

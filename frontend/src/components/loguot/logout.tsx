@@ -25,7 +25,7 @@ export const Logout = () => {
 
   return (
     <div className={styles.container}>
-      <span className={styles.text}>Хотите выйти из&nbsp;аккаунта?</span>
+      <span className={styles.text}>Хотите&nbsp;выйти из&nbsp;аккаунта?</span>
       <div className={styles.spinner}>
         <Spinner />
       </div>

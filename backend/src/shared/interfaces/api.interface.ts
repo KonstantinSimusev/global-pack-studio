@@ -3,7 +3,15 @@ export interface ApiListResponse<T> {
   items: T[];
 }
 
-export interface IUser {
+export interface IUserSafeResponse {
   id: string;
   login: string;
+  refreshToken: string | null;
+  refreshTokenCreatedAt: Date | null;
+}
+
+export interface ISuccessResponse {
+  success: boolean;
+  message: string;
+  id: string;
 }
