@@ -1,6 +1,7 @@
 import styles from './protected-route.module.css';
 
-import { Navigate, Outlet } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 import { Spinner } from '../spinner/spinner';
 
@@ -13,17 +14,32 @@ import {
 export const ProtectedRoute = () => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const isLoading = useSelector(selectIsLoading);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const [currentPath, setCurrentPath] = useState('');
+
+  useEffect(() => {
+    // Сохраняем текущий путь при загрузке
+    setCurrentPath(location.pathname);
+
+    // Обновляем состояние истории браузера
+    if (!window.history.state?.path) {
+      window.history.replaceState(
+        { path: location.pathname },
+        '',
+        location.pathname,
+      );
+    }
+    navigate(currentPath, { replace: true });
+  }, [isAuthenticated, currentPath, location.pathname, navigate]);
 
   if (isLoading) {
-    return (
-      <div className={styles.spinner}>
-        <Spinner />
-      </div>
-    );
+    return <div className={styles.spinner}>{isLoading && <Spinner />}</div>;
   }
 
   if (!isAuthenticated) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/" state={{ from: location }} replace />;
   }
 
   return <Outlet />; // Используем Outlet для отображения вложенных маршрутов

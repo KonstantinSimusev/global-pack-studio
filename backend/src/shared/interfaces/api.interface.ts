@@ -3,7 +3,7 @@ export interface ApiListResponse<T> {
   items: T[];
 }
 
-export interface IUserSafeResponse {
+export interface IUserResponse {
   id: string;
   login: string;
   refreshToken: string | null;

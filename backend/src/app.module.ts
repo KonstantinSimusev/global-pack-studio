@@ -5,8 +5,8 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { ConfigModule } from '@nestjs/config';
 
 import { DatabaseModule } from './database/database.module';
-import { AppController } from './app.controller';
 import { UserModule } from './modules/user/user.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -17,9 +17,10 @@ import { UserModule } from './modules/user/user.module';
     ServeStaticModule.forRoot({
       rootPath: path.join(process.cwd(), 'public'),
     }),
-    UserModule
+    UserModule,
+    AuthModule,
   ],
-  controllers: [AppController],
+  controllers: [],
   providers: [],
 })
 export class AppModule {}

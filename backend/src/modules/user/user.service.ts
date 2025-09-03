@@ -13,7 +13,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import {
   ApiListResponse,
   ISuccessResponse,
-  IUserSafeResponse,
+  IUserResponse,
 } from '../../shared/interfaces/api.interface';
 import { User } from './entities/user.entity';
 
@@ -21,7 +21,7 @@ import { User } from './entities/user.entity';
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
-  async findAll(): Promise<ApiListResponse<IUserSafeResponse>> {
+  async findAll(): Promise<ApiListResponse<IUserResponse>> {
     try {
       const users = await this.userRepository.findAll();
 
@@ -29,7 +29,7 @@ export class UserService {
         id: user.id,
         login: user.login,
         refreshToken: user.refreshToken,
-        refreshTokenCreatedAt: user.refreshTockenCreatedAt,
+        refreshTokenCreatedAt: user.refreshTokenCreatedAt,
       }));
 
       return {
@@ -43,21 +43,21 @@ export class UserService {
     }
   }
 
-  async findOne(id: string): Promise<IUserSafeResponse> {
+  async findOne(id: string): Promise<IUserResponse> {
     try {
       const user = await this.userRepository.findOne(id);
       return {
         id: user.id,
         login: user.login,
         refreshToken: user.refreshToken,
-        refreshTokenCreatedAt: user.refreshTockenCreatedAt,
+        refreshTokenCreatedAt: user.refreshTokenCreatedAt,
       };
     } catch (error) {
       throw new NotFoundException('Пользователь не найден');
     }
   }
 
-  async create(dto: CreateUserDto): Promise<IUserSafeResponse> {
+  async create(dto: CreateUserDto): Promise<IUserResponse> {
     try {
       // Генерируем соль и хешируем пароль
       const salt = await bcrypt.genSalt(10);
@@ -67,7 +67,6 @@ export class UserService {
       const user = new User();
 
       user.login = dto.login;
-      user.salt = salt;
       user.hashedPassword = hashedPassword;
 
       const createdUser = await this.userRepository.create(user);
@@ -76,7 +75,7 @@ export class UserService {
         id: createdUser.id,
         login: createdUser.login,
         refreshToken: createdUser.refreshToken,
-        refreshTokenCreatedAt: createdUser.refreshTockenCreatedAt,
+        refreshTokenCreatedAt: createdUser.refreshTokenCreatedAt,
       };
     } catch (error) {
       if (error.code === '23505') {
@@ -118,27 +117,6 @@ export class UserService {
 
       throw new InternalServerErrorException(
         'Произошла ошибка при обновлении пользователя',
-      );
-    }
-  }
-
-  async updateTokens(
-    userId: string,
-    tokens: {
-      refreshToken: string;
-      refreshTokenCreatedAt: Date;
-    },
-  ): Promise<ISuccessResponse> {
-    try {
-      const updatedUser = await this.userRepository.patch(userId, tokens);
-      return {
-        success: true,
-        message: 'Токены успешно обновлены',
-        id: updatedUser.id,
-      };
-    } catch (error) {
-      throw new InternalServerErrorException(
-        'Произошла ошибка при обновлении токенов',
       );
     }
   }

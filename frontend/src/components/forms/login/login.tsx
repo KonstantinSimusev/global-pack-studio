@@ -5,7 +5,13 @@ import { useNavigate } from 'react-router-dom';
 
 import { Spinner } from '../../spinner/spinner';
 
+import { useDispatch, useSelector } from '../../../services/store';
+import {
+  selectError,
+  selectIsLoading,
+} from '../../../services/slices/auth/slice';
 import { LayerContext } from '../../../contexts/layer/layerContext';
+import { loginUser } from '../../../services/slices/auth/actions';
 
 import {
   validateField,
@@ -13,12 +19,23 @@ import {
   validationRules,
 } from '../../../utils/validation';
 
+// Изменим тип ILoginData на Record<string, string>
+interface ILoginData extends Record<string, string> {
+  login: string;
+  password: string;
+}
+
 export const LoginForm = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const isLoading = useSelector(selectIsLoading);
+  const error = useSelector(selectError);
+  // const location = useLocation();
+  // const { from } = location.state || { from: { pathname: '/timesheet' } };
   const { setIsOpenOverlay, setIsLoginModalOpen } = useContext(LayerContext);
 
   // Состояние для хранения значений полей формы
-  const [formData, setFormData] = useState<{ [key: string]: string }>({
+  const [formData, setFormData] = useState<ILoginData>({
     login: '',
     password: '',
   });
@@ -44,6 +61,7 @@ export const LoginForm = () => {
       ...errors,
       [name]: '',
     });
+
   };
 
   // Обработчик потери фокуса для валидации
@@ -60,7 +78,7 @@ export const LoginForm = () => {
     });
   };
 
-  const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     // Валидируем всю форму
@@ -71,22 +89,38 @@ export const LoginForm = () => {
 
     // Если форма валидна, можно отправить данные на сервер
     if (Object.keys(formErrors).length === 0) {
-      console.log(formData);
+      try {
+        // Перенаправляем на сохраненную страницу или на /timesheet
+        // navigate(from.pathname);
 
-      // логика отправки...
+        // Отправляем запрос и ждем ответа
+        const response = await dispatch(loginUser(formData));
 
-      navigate('/timesheet');
-      setIsLoginModalOpen(false);
-      setIsOpenOverlay(false);
+        // Проверяем, что авторизация прошла успешно
+        if (response.payload) {
+          navigate('/timesheet');
+          setIsLoginModalOpen(false);
+          setIsOpenOverlay(false);
 
-      // Очистка формы
-      setFormData({
-        login: '',
-        password: '',
-      });
+          // Очистка формы
+          setFormData({
+            login: '',
+            password: '',
+          });
 
-      // Очистка ошибок
-      setErrors({ login: '', password: '' });
+          // Очистка ошибок
+          setErrors({ login: '', password: '' });
+        } else {
+          // Очистка формы
+          setFormData({
+            login: '',
+            password: '',
+          });
+          throw new Error();
+        }
+      } catch (error) {
+        throw new Error();
+      }
     }
   };
 
@@ -122,9 +156,10 @@ export const LoginForm = () => {
           )}
         </div>
 
-        <div className={styles.spinner}>
-          <Spinner />
-        </div>
+        <div className={styles.spinner}>{isLoading && <Spinner />}</div>
+
+        {<div className={styles.errors__server}>{error}</div>}
+
         <button className={styles.button__login}>Войти</button>
       </form>
     </div>

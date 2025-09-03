@@ -1,5 +1,39 @@
 const URL = import.meta.env.VITE_API_URL;
 
+interface ILoginData {
+  login: string;
+  password: string;
+}
+
+interface ILoginResponse {
+  id: string;
+  login: string;
+  refreshToken: string;
+  refreshTokenCreatedAt: string;
+}
+
+export const loginUserApi = async (
+  data: ILoginData,
+): Promise<ILoginResponse> => {
+  try {
+    const response = await fetch(`${URL}/auth/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      throw new Error();
+    }
+
+    return response.json();
+  } catch (error) {
+    throw new Error();
+  }
+};
+
 // Интерфейс ответа от сервера
 interface IRefreshTokenResponse {
   refreshToken: string;
@@ -15,9 +49,9 @@ export const checkRefreshTokenApi = async (
       headers: {
         'Content-Type': 'application/json;charset=utf-8',
       },
-      credentials: 'include', // Важно для работы с cookie
+      // credentials: 'include', // Важно для работы с cookie
       body: JSON.stringify({
-        token: refreshToken,
+        refreshToken: refreshToken,
       }),
     });
 
@@ -38,63 +72,33 @@ export const checkRefreshTokenApi = async (
   }
 };
 
-interface ILoginData {
-  login: string;
-  password: string;
+interface ILogoutResponse {
+  success: boolean;
+  message: string;
+  id: string;
 }
 
-interface ILoginResponse {
-  accessToken: string;
-  refreshToken: string;
-}
-
-export const loginUserApi = async (
-  data: ILoginData,
-): Promise<ILoginResponse> => {
+export const logoutUserApi = async (
+  userId: string,
+): Promise<ILogoutResponse> => {
   try {
-    const response = await fetch(`${URL}/login`, {
+    const response = await fetch(`${URL}/auth/logout`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify({
+        userId: userId,
+      }),
     });
 
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      throw new Error('Ошибка при выходе из системы');
     }
 
-    return response.json();
+    const data: ILogoutResponse = await response.json();
+    return data;
   } catch (error) {
     throw error;
   }
 };
-
-// interface IUser {
-//   id: string;
-//   login: string;
-// }
-
-// interface IUsersResponse {
-//   users: IUser[];
-//   total: number;
-// }
-
-// export const getUsersApi = async (): Promise<IUsersResponse> => {
-//   try {
-//     const response = await fetch(`${URL}/users`, {
-//       method: 'GET',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//     });
-
-//     if (!response.ok) {
-//       throw new Error('Ошибка при получении списка пользователей');
-//     }
-
-//     return await response.json();
-//   } catch (error) {
-//     throw error;
-//   }
-// };

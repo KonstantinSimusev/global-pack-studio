@@ -18,7 +18,7 @@ import { Overlay } from '../overlay/overlay';
 import { Modal } from '../modal/modal';
 import { LoginForm } from '../forms/login/login';
 import { Logout } from '../loguot/logout';
-// import { ProtectedRoute } from '../protected-route/protected-route';
+import { ProtectedRoute } from '../protected-route/protected-route';
 
 import { useDispatch } from '../../services/store';
 // import { selectIsAuthenticated } from '../../services/slices/auth/slice';
@@ -28,14 +28,20 @@ const App = () => {
   const { isLightTheme } = useContext(ThemeContext);
   const { isOpenOverlay, isLoginModalOpen, isLogoutOpenModal } =
     useContext(LayerContext);
-  // const isAuthenticated  = useSelector(selectIsAuthenticated);
+  // const isAuthenticated = useSelector(selectIsAuthenticated);
   // const location = useLocation();
-
+  // const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(checkRefreshToken());
+    // Проверяем токен при загрузке приложения
+    const storedToken = localStorage.getItem('refreshToken');
+    if (storedToken) {
+      dispatch(checkRefreshToken());
+    }
   }, []);
+
+  console.log(localStorage);
 
   return (
     <div
@@ -49,10 +55,10 @@ const App = () => {
       <Banner />
       <Routes>
         <Route path="/" element={<Home />} />
-        {/* <Route element={<ProtectedRoute />}> */}
-        <Route path="/timesheet" element={<Timesheet />} />
-        <Route path="/production" element={<Production />} />
-        {/* </Route> */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/timesheet" element={<Timesheet />} />
+          <Route path="/production" element={<Production />} />
+        </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />

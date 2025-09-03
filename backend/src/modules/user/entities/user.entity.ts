@@ -17,13 +17,6 @@ export class User {
   login: string;
 
   @Column({
-    type: 'varchar',
-    length: 32, // типичная длина соли
-    nullable: false,
-  })
-  salt: string;
-
-  @Column({
     name: 'hashed_password',
     type: 'varchar',
     length: 256, // типичная длина хэша
@@ -45,5 +38,5 @@ export class User {
     type: 'timestamp',
     nullable: true,
   })
-  refreshTockenCreatedAt: Date | null;
+  refreshTokenCreatedAt: Date | null;
 }

@@ -54,6 +54,29 @@ export class UserRepository {
     }
   }
 
+  async findOneByLogin(login: string): Promise<User | null> {
+    try {
+      // Ищем пользователя по логину
+      const user = await this.userRepository.findOne({
+        where: { login },
+        // select: ['id', 'login', 'hashedPassword', 'refreshToken'],
+      });
+
+      // Если пользователь не найден, возвращаем null
+      if (!user) {
+        return null;
+      }
+
+      return user;
+    } catch (error) {
+      // Обрабатываем ошибки
+      console.error('Ошибка при поиске пользователя по логину:', error);
+      throw new InternalServerErrorException(
+        'Произошла ошибка при поиске пользователя по логину',
+      );
+    }
+  }
+
   async create(user: User): Promise<User> {
     try {
       // Проверка обязательных полей
