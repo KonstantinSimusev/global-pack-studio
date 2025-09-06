@@ -71,12 +71,12 @@
 .spinner {
   position: relative;
   justify-self: center;
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
 }
 
 .button__login {
-  margin: 24px 0 40px;
+  margin: 24px 0 60px;
   border-radius: 10px;
   padding: 12px 0;
   color: var(--color-button);
@@ -85,20 +85,7 @@
   cursor: pointer;
 }
 
-.button__register {
-  margin-bottom: 40px;
-  font-size: 16px;
-  opacity: 0.9;
-  color: var(--color-link);
-  text-align: center;
-  text-decoration: underline;
-  text-decoration-thickness: 0.7px;
-  text-underline-offset: 4px;
-  cursor: pointer;
-}
-
-.button__login:active,
-.button__register:active {
+.button__login:active {
   transition: transform 0.2s ease;
   transform: scale(0.97);
 }

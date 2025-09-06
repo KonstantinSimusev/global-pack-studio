@@ -1,6 +1,9 @@
 .spinner {
   position: relative;
-  justify-self: center;
-  width: 30px;
-  height: 30px;
+  display: flex;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  margin: auto;
+  flex-grow: 1;
 }

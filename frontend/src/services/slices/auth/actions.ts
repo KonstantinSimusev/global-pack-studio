@@ -1,65 +1,51 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
-  checkRefreshTokenApi,
+  checkAccessTokenApi,
   loginUserApi,
   logoutUserApi,
 } from '../../../utils/gpsApi';
-
-interface ILoginData {
-  login: string;
-  password: string;
-}
-
-interface ILoginResponse {
-  id: string;
-  login: string;
-  refreshToken: string;
-  refreshTokenCreatedAt: string;
-}
+import { delay } from '../../../utils/delay';
+import type { ILoginData, IUser } from '../../../utils/api.interface';
 
 export const loginUser = createAsyncThunk(
   'auth/login',
-  async (data: ILoginData): Promise<ILoginResponse> => {
+  async (data: ILoginData): Promise<IUser> => {
     try {
       // Вызываем API функцию
       const response = await loginUserApi(data);
 
-      // Сохраняем токен в localStorage (опционально)
-      localStorage.setItem('refreshToken', response.refreshToken);
+      // Добавляем задержку кода
+      await delay();
 
       return response;
     } catch (error) {
-      // Очищаем токены при ошибке
-      localStorage.removeItem('refreshToken');
+      // Добавляем задержку кода
+      await delay();
 
       throw new Error('Неверный логин или пароль');
     }
   },
 );
 
-export const checkRefreshToken = createAsyncThunk(
+export const checkAccessToken = createAsyncThunk(
   'auth/refreshToken',
   async () => {
-    const storedToken = localStorage.getItem('refreshToken');
-
-    if (!storedToken) {
-      // Пойдет в checkRefreshToken.rejected в authSlice
-      throw new Error('No refresh token found');
-    }
-
     try {
-      const response = await checkRefreshTokenApi(storedToken);
+      const response = await checkAccessTokenApi();
+
+      // Добавляем задержку кода
+      await delay();
 
       if (!response) {
-        throw new Error('Failed to refresh token');
+        throw new Error();
       }
 
-      localStorage.setItem('refreshToken', response.refreshToken);
       return response;
     } catch (error) {
-      localStorage.removeItem('refreshToken');
+      // Добавляем задержку кода
+      await delay();
 
-      // Пойдет в checkRefreshToken.rejected в authSlice
+      // Пойдет в checkAccessToken.rejected в authSlice
       throw error;
     }
   },
@@ -67,25 +53,20 @@ export const checkRefreshToken = createAsyncThunk(
 
 export const logoutUser = createAsyncThunk('auth/logout', async () => {
   try {
-    const userId = localStorage.getItem('userId');
+    const response = await logoutUserApi();
 
-    if (!userId) {
+    // Добавляем задержку кода
+    await delay();
+
+    if (!response) {
       throw new Error();
     }
 
-    // Используем уже готовый API
-    const response = await logoutUserApi(userId);
-
-    if (!response) {
-      throw new Error('Ошибка при выходе из системы');
-    }
-
-    // Очищаем локальное хранилище
-    localStorage.removeItem('refreshToken');
-
     return response;
   } catch (error) {
-    localStorage.removeItem('refreshToken');
+    // Добавляем задержку кода
+    await delay();
+
     throw error;
   }
 });

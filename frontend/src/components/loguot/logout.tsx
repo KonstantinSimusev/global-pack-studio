@@ -3,8 +3,6 @@ import styles from './logout.module.css';
 import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Spinner } from '../spinner/spinner';
-
 import { LayerContext } from '../../contexts/layer/layerContext';
 import { useDispatch } from '../../services/store';
 import { logoutUser } from '../../services/slices/auth/actions';
@@ -42,10 +40,7 @@ export const Logout = () => {
 
   return (
     <div className={styles.container}>
-      <span className={styles.text}>Хотите&nbsp;выйти из&nbsp;аккаунта?</span>
-      <div className={styles.spinner}>
-        <Spinner />
-      </div>
+      <span className={styles.text}>Хотите&nbsp;выйти?</span>
       <div className={styles.wrapper}>
         <button
           className={styles.button__logout}

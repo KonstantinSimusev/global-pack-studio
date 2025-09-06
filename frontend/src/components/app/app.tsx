@@ -22,7 +22,7 @@ import { ProtectedRoute } from '../protected-route/protected-route';
 
 import { useDispatch } from '../../services/store';
 // import { selectIsAuthenticated } from '../../services/slices/auth/slice';
-import { checkRefreshToken } from '../../services/slices/auth/actions';
+import { checkAccessToken } from '../../services/slices/auth/actions';
 
 const App = () => {
   const { isLightTheme } = useContext(ThemeContext);
@@ -34,14 +34,8 @@ const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // Проверяем токен при загрузке приложения
-    const storedToken = localStorage.getItem('refreshToken');
-    if (storedToken) {
-      dispatch(checkRefreshToken());
-    }
+    dispatch(checkAccessToken());
   }, []);
-
-  console.log(localStorage);
 
   return (
     <div

@@ -3,9 +3,9 @@ export interface ApiListResponse<T> {
   items: T[];
 }
 
-export interface ILogin {
-  id: string;
-  accessToken: string;
+export interface ILoginData {
+  login: string;
+  password: string;
 }
 
 export interface IUser {

@@ -5,11 +5,12 @@ import {
   InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import { JwtService, TokenExpiredError } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 
 import { UserRepository } from '../user/user.repository';
-import { IUserResponse } from 'src/shared/interfaces/api.interface';
+import { ILogin } from '../../shared/interfaces/api.interface';
+import { User } from '../user/entities/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -19,13 +20,13 @@ export class AuthService {
     private configService: ConfigService,
   ) {}
 
-  async login(login: string, password: string): Promise<IUserResponse> {
+  async login(login: string, password: string): Promise<ILogin> {
     try {
       // Поиск пользователя
       const user = await this.userRepository.findOneByLogin(login);
 
       if (!user) {
-        throw new Error();
+        throw new UnauthorizedException('Пользователь не найден');
       }
 
       // Проверка пароля
@@ -35,93 +36,172 @@ export class AuthService {
       );
 
       if (!isPasswordValid) {
-        throw new Error();
+        throw new UnauthorizedException('Неверный пароль');
       }
 
-      // // Создание access token
-      // const accessToken = await this.jwtService.signAsync(
-      //   { userId: user.id, login: user.login },
-      //   {
-      //     secret: this.configService.get('ACCESS_TOKEN_SECRET'),
-      //     expiresIn: this.configService.get('ACCESS_TOKEN_EXPIRATION'),
-      //   },
-      // );
+      // Генерируем accessToken
+      const accessToken = await this.jwtService.signAsync(
+        { userId: user.id, login: user.login },
+        {
+          secret: this.configService.get('ACCESS_TOKEN_SECRET'),
+          expiresIn: parseInt(
+            this.configService.get('ACCESS_TOKEN_EXPIRATION'),
+            10,
+          ),
+        },
+      );
 
-      // // Создание refresh token
+      // Генерируем refreshToken
       const refreshToken = await this.jwtService.signAsync(
         { userId: user.id },
         {
           secret: this.configService.get('REFRESH_TOKEN_SECRET'),
-          expiresIn: this.configService.get('REFRESH_TOKEN_EXPIRATION'),
+          expiresIn: parseInt(
+            this.configService.get('REFRESH_TOKEN_EXPIRATION'),
+            10,
+          ),
         },
       );
 
-      // // Обновление refresh token в базе
+      // Обновили refreshToken в базе данных
       await this.userRepository.patch(user.id, {
         refreshToken,
-        refreshTokenCreatedAt: new Date(),
       });
 
       return {
-        // accessToken,
         id: user.id,
-        login: user.login,
-        refreshToken: refreshToken,
-        refreshTokenCreatedAt: new Date(),
+        accessToken,
       };
     } catch (error) {
-      throw new Error();
+      console.log('Ошибка авторизации');
+      throw new UnauthorizedException('Ошибка авторизации');
     }
   }
 
-  async refreshToken(refreshToken: string): Promise<IUserResponse> {
+  async accessToken(savedAccessToken: string): Promise<ILogin> {
+    let accessDecoded: any;
+    let user: User;
+
     try {
-      // Проверяем подпись и срок жизни токена
-      const decoded = this.jwtService.verify(refreshToken, {
-        secret: this.configService.get('REFRESH_TOKEN_SECRET'),
+      accessDecoded = this.jwtService.verify(savedAccessToken, {
+        secret: this.configService.get('ACCESS_TOKEN_SECRET'),
       });
 
-      // Находим пользователя по ID из токена
-      const user = await this.userRepository.findOne(decoded.userId);
-
-      if (!user) {
-        throw new Error();
+      if (!accessDecoded || !accessDecoded.userId) {
+        throw new UnauthorizedException('Access token не валидный');
       }
 
-      // Генерируем новый refresh token
-      const newRefreshToken = await this.jwtService.signAsync(
-        { userId: user.id },
+      user = await this.userRepository.findOne(accessDecoded.userId);
+
+      if (!user) {
+        throw new UnauthorizedException('Пользователь не найден');
+      }
+
+      // Генерируем новый access token
+      const newAccessToken = await this.jwtService.signAsync(
+        { userId: user.id, login: user.login },
         {
-          secret: this.configService.get('REFRESH_TOKEN_SECRET'),
-          expiresIn: this.configService.get('REFRESH_TOKEN_EXPIRATION'),
+          secret: this.configService.get('ACCESS_TOKEN_SECRET'),
+          expiresIn: parseInt(
+            this.configService.get('ACCESS_TOKEN_EXPIRATION'),
+            10,
+          ),
         },
       );
 
-      // Обновляем токен в базе
-      await this.userRepository.patch(user.id, {
-        refreshToken: newRefreshToken,
-        refreshTokenCreatedAt: new Date(),
-      });
+      console.log('Новый access token создан');
 
       return {
         id: user.id,
-        login: user.login,
-        refreshToken: newRefreshToken,
-        refreshTokenCreatedAt: new Date(),
+        accessToken: newAccessToken,
       };
     } catch (error) {
-      throw new Error();
+      if (error instanceof TokenExpiredError && user) {
+        console.log('Access token просрочен, нужно обновить');
+
+        // Логика обновления
+        try {
+          // Получаем refreshToken из базы данных
+          const dbRefreshToken = user.refreshToken;
+
+          if (!dbRefreshToken) {
+            throw new UnauthorizedException('Refresh token отсутствует');
+          }
+
+          console.log(typeof dbRefreshToken);
+          console.log(dbRefreshToken);
+
+          // Проверяем срок жизни refreshToken
+          const refreshDecoded = this.jwtService.verify(dbRefreshToken, {
+            secret: this.configService.get('REFRESH_TOKEN_SECRET'),
+          });
+
+          if (!refreshDecoded) {
+            throw new Error('Refresh token просрочен');
+          }
+
+          // Генерируем новый access token
+          const newAccessToken = await this.jwtService.signAsync(
+            { userId: user.id, login: user.login },
+            {
+              secret: this.configService.get('ACCESS_TOKEN_SECRET'),
+              expiresIn: parseInt(
+                this.configService.get('ACCESS_TOKEN_EXPIRATION'),
+                10,
+              ),
+            },
+          );
+
+          // Генерируем новый refresh token
+          const newRefreshToken = await this.jwtService.signAsync(
+            { userId: user.id },
+            {
+              secret: this.configService.get('REFRESH_TOKEN_SECRET'),
+              expiresIn: parseInt(
+                this.configService.get('REFRESH_TOKEN_EXPIRATION'),
+                10,
+              ),
+            },
+          );
+
+          // Обновляем токен в базе
+          await this.userRepository.patch(user.id, {
+            refreshToken: newRefreshToken,
+          });
+
+          console.log('Новый access token создан');
+          console.log('Новый refresh token обновлен в базе');
+
+          return {
+            id: user.id,
+            accessToken: newAccessToken,
+          };
+        } catch (error) {
+          console.log('Требуется повторная авторизация');
+          throw new UnauthorizedException('Требуется повторная авторизация');
+        }
+      }
+      console.log('Требуется повторная авторизация');
+      throw new UnauthorizedException('Требуется повторная авторизация');
     }
   }
 
-  async logout(userId: string): Promise<void> {
+  async logout(accessToken: any): Promise<void> {
     try {
-      await this.userRepository.patch(userId, {
+      const user = await this.userRepository.findOne(accessToken.userId);
+
+      // Если пользователь не найден - бросаем ошибку
+      if (!user) {
+        throw new UnauthorizedException('Пользователь не найден');
+      }
+
+      await this.userRepository.patch(accessToken.userId, {
         refreshToken: null,
-        refreshTokenCreatedAt: null,
       });
     } catch (error) {
-      throw new Error();
+      throw new InternalServerErrorException(
+        'Ошибка при обновлении данных пользователя',
+      );
     }
   }
 }

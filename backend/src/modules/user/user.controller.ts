@@ -1,9 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 
 import {
-  ApiListResponse,
   ISuccessResponse,
-  IUserResponse,
 } from '../../shared/interfaces/api.interface';
 import { UserService } from './user.service';
 
@@ -14,17 +12,17 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  async findAll(): Promise<ApiListResponse<IUserResponse>> {
+  async findAll() {
     return this.userService.findAll();
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string): Promise<IUserResponse> {
+  async findOne(@Param('id') id: string) {
     return this.userService.findOne(id);
   }
 
   @Post()
-  async create(@Body() dto: CreateUserDto): Promise<IUserResponse> {
+  async create(@Body() dto: CreateUserDto) {
     return this.userService.create(dto);
   }
 

@@ -13,7 +13,6 @@ import { CreateUserDto } from './dto/create-user.dto';
 import {
   ApiListResponse,
   ISuccessResponse,
-  IUserResponse,
 } from '../../shared/interfaces/api.interface';
 import { User } from './entities/user.entity';
 
@@ -21,20 +20,13 @@ import { User } from './entities/user.entity';
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
-  async findAll(): Promise<ApiListResponse<IUserResponse>> {
+  async findAll(): Promise<ApiListResponse<User>> {
     try {
       const users = await this.userRepository.findAll();
 
-      const items = users.map((user) => ({
-        id: user.id,
-        login: user.login,
-        refreshToken: user.refreshToken,
-        refreshTokenCreatedAt: user.refreshTokenCreatedAt,
-      }));
-
       return {
-        total: items.length,
-        items,
+        total: users.length,
+        items: users,
       };
     } catch (error) {
       throw new InternalServerErrorException(
@@ -43,21 +35,15 @@ export class UserService {
     }
   }
 
-  async findOne(id: string): Promise<IUserResponse> {
+  async findOne(id: string): Promise<User> {
     try {
-      const user = await this.userRepository.findOne(id);
-      return {
-        id: user.id,
-        login: user.login,
-        refreshToken: user.refreshToken,
-        refreshTokenCreatedAt: user.refreshTokenCreatedAt,
-      };
+      return await this.userRepository.findOne(id);
     } catch (error) {
       throw new NotFoundException('Пользователь не найден');
     }
   }
 
-  async create(dto: CreateUserDto): Promise<IUserResponse> {
+  async create(dto: CreateUserDto): Promise<User> {
     try {
       // Генерируем соль и хешируем пароль
       const salt = await bcrypt.genSalt(10);
@@ -69,14 +55,7 @@ export class UserService {
       user.login = dto.login;
       user.hashedPassword = hashedPassword;
 
-      const createdUser = await this.userRepository.create(user);
-
-      return {
-        id: createdUser.id,
-        login: createdUser.login,
-        refreshToken: createdUser.refreshToken,
-        refreshTokenCreatedAt: createdUser.refreshTokenCreatedAt,
-      };
+      return await this.userRepository.create(user);
     } catch (error) {
       if (error.code === '23505') {
         throw new ConflictException(

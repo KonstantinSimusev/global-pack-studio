@@ -31,6 +31,7 @@ export const ProtectedRoute = () => {
         location.pathname,
       );
     }
+
     navigate(currentPath, { replace: true });
   }, [isAuthenticated, currentPath, location.pathname, navigate]);
 

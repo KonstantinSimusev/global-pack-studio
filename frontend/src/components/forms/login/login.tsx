@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from '../../../services/store';
 import {
   selectError,
   selectIsLoading,
+  clearError,
 } from '../../../services/slices/auth/slice';
 import { LayerContext } from '../../../contexts/layer/layerContext';
 import { loginUser } from '../../../services/slices/auth/actions';
@@ -30,8 +31,6 @@ export const LoginForm = () => {
   const dispatch = useDispatch();
   const isLoading = useSelector(selectIsLoading);
   const error = useSelector(selectError);
-  // const location = useLocation();
-  // const { from } = location.state || { from: { pathname: '/timesheet' } };
   const { setIsOpenOverlay, setIsLoginModalOpen } = useContext(LayerContext);
 
   // Состояние для хранения значений полей формы
@@ -62,6 +61,8 @@ export const LoginForm = () => {
       [name]: '',
     });
 
+    // Очищаем ошибки с сервера
+    dispatch(clearError());
   };
 
   // Обработчик потери фокуса для валидации
@@ -90,32 +91,16 @@ export const LoginForm = () => {
     // Если форма валидна, можно отправить данные на сервер
     if (Object.keys(formErrors).length === 0) {
       try {
-        // Перенаправляем на сохраненную страницу или на /timesheet
-        // navigate(from.pathname);
-
-        // Отправляем запрос и ждем ответа
         const response = await dispatch(loginUser(formData));
 
-        // Проверяем, что авторизация прошла успешно
         if (response.payload) {
           navigate('/timesheet');
           setIsLoginModalOpen(false);
           setIsOpenOverlay(false);
-
-          // Очистка формы
-          setFormData({
-            login: '',
-            password: '',
-          });
-
-          // Очистка ошибок
+          setFormData({ login: '', password: '' });
           setErrors({ login: '', password: '' });
         } else {
-          // Очистка формы
-          setFormData({
-            login: '',
-            password: '',
-          });
+          setFormData({ login: '', password: '' });
           throw new Error();
         }
       } catch (error) {
@@ -157,7 +142,6 @@ export const LoginForm = () => {
         </div>
 
         <div className={styles.spinner}>{isLoading && <Spinner />}</div>
-
         {<div className={styles.errors__server}>{error}</div>}
 
         <button className={styles.button__login}>Войти</button>
