@@ -74,13 +74,15 @@ export class AuthController {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
-        maxAge: this.configService.get('ACCESS_TOKEN_EXPIRATION') * 1000,
+        // maxAge: this.configService.get('ACCESS_TOKEN_EXPIRATION') * 1000,
       });
 
       console.log('Access token обновлен в cookies');
 
       return { id };
     } catch (error) {
+      // Очищаем accessToken
+      this.clearCookies(response);
       throw new UnauthorizedException('Требуется повторная авторизация');
     }
   }

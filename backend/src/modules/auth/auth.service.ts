@@ -79,19 +79,20 @@ export class AuthService {
   }
 
   async accessToken(savedAccessToken: string): Promise<ILogin> {
-    let accessDecoded: any;
-    let user: User;
+    let userId: string | null = null;
 
     try {
-      accessDecoded = this.jwtService.verify(savedAccessToken, {
+      const accessDecoded = this.jwtService.verify(savedAccessToken, {
         secret: this.configService.get('ACCESS_TOKEN_SECRET'),
       });
 
-      if (!accessDecoded || !accessDecoded.userId) {
+      userId = accessDecoded.userId;
+
+      if (!accessDecoded || !userId) {
         throw new UnauthorizedException('Access token не валидный');
       }
 
-      user = await this.userRepository.findOne(accessDecoded.userId);
+      const user = await this.userRepository.findOne(userId);
 
       if (!user) {
         throw new UnauthorizedException('Пользователь не найден');
@@ -109,48 +110,40 @@ export class AuthService {
         },
       );
 
-      console.log('Новый access token создан');
+      console.log('Новый access token создан в accessToken()');
 
       return {
         id: user.id,
         accessToken: newAccessToken,
       };
     } catch (error) {
-      if (error instanceof TokenExpiredError && user) {
+      if (error instanceof TokenExpiredError) {
         console.log('Access token просрочен, нужно обновить');
 
         // Логика обновления
+
         try {
           // Получаем refreshToken из базы данных
+          console.log('Получаем refreshToken из базы данных');
+          const user = await this.userRepository.findOne(userId);
           const dbRefreshToken = user.refreshToken;
 
           if (!dbRefreshToken) {
             throw new UnauthorizedException('Refresh token отсутствует');
           }
 
-          console.log(typeof dbRefreshToken);
-          console.log(dbRefreshToken);
-
           // Проверяем срок жизни refreshToken
+          console.log('Проверяем срок жизни refreshToken');
           const refreshDecoded = this.jwtService.verify(dbRefreshToken, {
             secret: this.configService.get('REFRESH_TOKEN_SECRET'),
           });
 
           if (!refreshDecoded) {
+            console.log('Refresh token просрочен');
             throw new Error('Refresh token просрочен');
           }
 
-          // Генерируем новый access token
-          const newAccessToken = await this.jwtService.signAsync(
-            { userId: user.id, login: user.login },
-            {
-              secret: this.configService.get('ACCESS_TOKEN_SECRET'),
-              expiresIn: parseInt(
-                this.configService.get('ACCESS_TOKEN_EXPIRATION'),
-                10,
-              ),
-            },
-          );
+          /*
 
           // Генерируем новый refresh token
           const newRefreshToken = await this.jwtService.signAsync(
@@ -169,14 +162,32 @@ export class AuthService {
             refreshToken: newRefreshToken,
           });
 
-          console.log('Новый access token создан');
-          console.log('Новый refresh token обновлен в базе');
+          */
+
+          // Генерируем новый access token
+          console.log('Генерируем новый access token');
+          const newAccessToken = await this.jwtService.signAsync(
+            { userId: user.id, login: user.login },
+            {
+              secret: this.configService.get('ACCESS_TOKEN_SECRET'),
+              expiresIn: parseInt(
+                this.configService.get('ACCESS_TOKEN_EXPIRATION'),
+                10,
+              ),
+            },
+          );
+
+          console.log('Новый access token создан в сервисе');
 
           return {
             id: user.id,
             accessToken: newAccessToken,
           };
-        } catch (error) {
+        } catch {
+          console.log('Удаляем refresh token из базы');
+          await this.userRepository.patch(userId, {
+            refreshToken: null,
+          });
           console.log('Требуется повторная авторизация');
           throw new UnauthorizedException('Требуется повторная авторизация');
         }
