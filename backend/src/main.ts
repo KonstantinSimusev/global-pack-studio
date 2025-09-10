@@ -14,12 +14,19 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe());
   app.setGlobalPrefix('api/gps');
+
   app.enableCors({
-    origin: 'http://localhost:5173',
+    origin: [
+      'https://global-pack-studio.ru',
+      'http://localhost:3000',
+      'http://localhost:5173',
+      'http://localhost:81',
+    ],
     methods: 'GET, HEAD, PUT, PATCH, POST, DELETE, OPTIONS',
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
   });
+
   await app.listen(port);
   console.log(`🚀 Приложение запущено на порту ${port}`);
 }

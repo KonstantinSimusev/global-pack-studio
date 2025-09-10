@@ -4,12 +4,13 @@ export interface ApiListResponse<T> {
 }
 
 export interface ILogin {
-  id: string;
+  user: IUser;
   accessToken: string;
 }
 
 export interface IUser {
-  id: string;
+  id?: string;
+  profession?: string;
 }
 
 export interface ISuccessResponse {

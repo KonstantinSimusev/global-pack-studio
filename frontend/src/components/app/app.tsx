@@ -13,6 +13,7 @@ import { Home } from '../pages/home/home';
 import { Timesheet } from '../pages/timesheet/timesheet';
 import { Production } from '../pages/production/production';
 import { Footer } from '../footer/footer';
+import { DefaultPage } from '../pages/default/default';
 import { NotFound } from '../pages/not-found/not-found';
 import { Overlay } from '../overlay/overlay';
 import { Modal } from '../modal/modal';
@@ -48,8 +49,9 @@ const App = () => {
       <Header />
       <Banner />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<DefaultPage />} />
         <Route element={<ProtectedRoute />}>
+          <Route path="/home" element={<Home />} />
           <Route path="/timesheet" element={<Timesheet />} />
           <Route path="/production" element={<Production />} />
         </Route>

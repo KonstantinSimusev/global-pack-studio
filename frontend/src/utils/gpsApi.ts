@@ -1,6 +1,13 @@
 import type { ILoginData, ISuccessResponse, IUser } from './api.interface';
 
-const URL = import.meta.env.VITE_API_URL;
+export const URL = import.meta.env.VITE_API_URL;
+
+// if (!URL) {
+//   console.error('API URL не определен!');
+//   throw new Error('Не удалось получить API URL');
+// }
+
+// console.log('Используемый API URL:', URL);
 
 export const loginUserApi = async (data: ILoginData): Promise<IUser> => {
   try {

@@ -10,7 +10,6 @@ import { ConfigService } from '@nestjs/config';
 
 import { UserRepository } from '../user/user.repository';
 import { ILogin } from '../../shared/interfaces/api.interface';
-import { User } from '../user/entities/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -69,7 +68,7 @@ export class AuthService {
       });
 
       return {
-        id: user.id,
+        user: user,
         accessToken,
       };
     } catch (error) {
@@ -113,7 +112,7 @@ export class AuthService {
       console.log('Новый access token создан в accessToken()');
 
       return {
-        id: user.id,
+        user: user,
         accessToken: newAccessToken,
       };
     } catch (error) {
@@ -180,7 +179,7 @@ export class AuthService {
           console.log('Новый access token создан в сервисе');
 
           return {
-            id: user.id,
+            user: user,
             accessToken: newAccessToken,
           };
         } catch {

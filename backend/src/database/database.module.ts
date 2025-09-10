@@ -17,7 +17,10 @@ import { User } from '../modules/user/entities/user.entity';
           type: 'postgres',
           url: dbUrl,
           entities: [User],
+          migrations: [`${__dirname}/database/migrations/**/*{.ts,.js}`],
           synchronize: false,
+          retryAttempts: 5,    // Количество попыток переподключения
+          retryDelay: 1000,    // Задержка между попытками в миллисекундах
         };
       },
     }),

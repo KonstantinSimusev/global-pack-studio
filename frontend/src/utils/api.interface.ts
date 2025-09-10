@@ -9,7 +9,8 @@ export interface ILoginData {
 }
 
 export interface IUser {
-  id: string;
+  id?: string;
+  profession?: string;
 }
 
 export interface ISuccessResponse {

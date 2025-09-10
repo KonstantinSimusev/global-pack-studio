@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Inject,
@@ -8,14 +7,13 @@ import {
   Req,
   Res,
   UnauthorizedException,
-  UseGuards,
 } from '@nestjs/common';
 import { Response, Request } from 'express';
 import { ConfigService } from '@nestjs/config';
 
 import { AuthService } from './auth.service';
 
-import { CreateLoginDTO, CreateLogoutDTO } from './dto/create-auth.dto';
+import { CreateLoginDTO } from './dto/create-auth.dto';
 import { ISuccessResponse, IUser } from 'src/shared/interfaces/api.interface';
 
 @Controller('auth')
@@ -31,7 +29,7 @@ export class AuthController {
     @Res({ passthrough: true }) response: Response,
   ): Promise<IUser> {
     try {
-      const { id, accessToken } = await this.authService.login(
+      const { user, accessToken } = await this.authService.login(
         createLoginDTO.login,
         createLoginDTO.password,
       );
@@ -46,7 +44,7 @@ export class AuthController {
 
       console.log('Access token создан');
 
-      return { id };
+      return { ...user };
     } catch (error) {
       throw new UnauthorizedException('Ошибка авторизации');
     }
@@ -66,7 +64,7 @@ export class AuthController {
         throw new UnauthorizedException('Access token не найден в cookies');
       }
 
-      const { id, accessToken } =
+      const { user, accessToken } =
         await this.authService.accessToken(savedAccessToken);
 
       // Обновляем access token в cookie
@@ -79,7 +77,7 @@ export class AuthController {
 
       console.log('Access token обновлен в cookies');
 
-      return { id };
+      return { ...user };
     } catch (error) {
       // Очищаем accessToken
       this.clearCookies(response);

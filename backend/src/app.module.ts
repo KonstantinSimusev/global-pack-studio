@@ -14,11 +14,19 @@ import { AuthModule } from './modules/auth/auth.module';
       isGlobal: true,
     }),
     DatabaseModule,
-    ServeStaticModule.forRoot({
-      rootPath: path.join(process.cwd(), 'public'),
-    }),
     UserModule,
     AuthModule,
+    // Первый статический модуль
+    ServeStaticModule.forRoot({
+      rootPath: path.join(__dirname, '..', 'dist', 'assets'),
+    }),
+    // Второй статический модуль с особыми настройками
+    ServeStaticModule.forRoot({
+      rootPath: path.join(__dirname, 'public'),
+      serveStaticOptions: {
+        index: false,
+      },
+    }),
   ],
   controllers: [],
   providers: [],

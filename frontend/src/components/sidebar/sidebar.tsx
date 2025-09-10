@@ -11,7 +11,10 @@ import { LayerContext } from '../../contexts/layer/layerContext';
 import { ThemeContext } from '../../contexts/theme/themeContext';
 
 import { useSelector } from '../../services/store';
-import { selectIsAuthenticated } from '../../services/slices/auth/slice';
+import {
+  selectIsAuthenticated,
+  selectUser,
+} from '../../services/slices/auth/slice';
 
 export const Sidebar = () => {
   const { isLightTheme } = useContext(ThemeContext);
@@ -24,6 +27,7 @@ export const Sidebar = () => {
   } = useContext(LayerContext);
 
   const isAuthenticated = useSelector(selectIsAuthenticated);
+  const user = useSelector(selectUser);
   const location = useLocation(); // Получаем текущий путь
 
   const hanldeClick = () => {
@@ -60,17 +64,19 @@ export const Sidebar = () => {
 
       <nav className={styles.navigation}>
         <ul className={styles.navigation__list}>
-          <li
-            className={clsx(
-              styles.link,
-              location.pathname === '/' && styles.link__active,
-            )}
-            onClick={hanldeClick}
-          >
-            <Link to="/">Главная</Link>
-          </li>
-
           {isAuthenticated && (
+            <li
+              className={clsx(
+                styles.link,
+                location.pathname === '/home' && styles.link__active,
+              )}
+              onClick={hanldeClick}
+            >
+              <Link to="/home">Главная</Link>
+            </li>
+          )}
+
+          {isAuthenticated && user?.profession === 'master' && (
             <>
               <li
                 className={clsx(
@@ -91,15 +97,17 @@ export const Sidebar = () => {
               >
                 <Link to="/production">Производство</Link>
               </li>
-
-              <li className={styles.link} onClick={hanldeClickLogout}>
-                Выйти
-              </li>
             </>
           )}
 
+          {isAuthenticated && (
+            <li className={styles.link} onClick={hanldeClickLogout}>
+              Выйти
+            </li>
+          )}
+
           {!isAuthenticated && (
-            <li className={styles.link} onClick={hanldeClickLogin}>
+            <li className={clsx(styles.link, styles.link__active)} onClick={hanldeClickLogin}>
               Войти
             </li>
           )}

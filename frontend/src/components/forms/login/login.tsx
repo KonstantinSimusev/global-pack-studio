@@ -94,7 +94,7 @@ export const LoginForm = () => {
         const response = await dispatch(loginUser(formData));
 
         if (response.payload) {
-          navigate('/timesheet');
+          navigate('/home');
           setIsLoginModalOpen(false);
           setIsOpenOverlay(false);
           setFormData({ login: '', password: '' });

@@ -10,7 +10,7 @@ import { logoutUser } from '../../services/slices/auth/actions';
 export const Logout = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { setIsOpenMenu, setIsOpenOverlay, setIsLogoutOpenModal } =
+  const { setIsOpenOverlay, setIsLogoutOpenModal } =
     useContext(LayerContext);
 
   const handleClickLogout = async () => {
@@ -35,7 +35,7 @@ export const Logout = () => {
 
   const handleClickReturn = () => {
     setIsLogoutOpenModal(false);
-    setIsOpenMenu(true);
+    setIsOpenOverlay(false);
   };
 
   return (

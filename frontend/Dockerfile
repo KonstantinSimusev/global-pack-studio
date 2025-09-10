@@ -1,9 +1,15 @@
-FROM node:20-alpine AS builder
+# Этап сборки
+FROM node:20-alpine AS build
 WORKDIR /app
+
+# Копируем package.json и package-lock.json
 COPY package*.json ./
+
+# Устанавливаем зависимости
 RUN npm ci
 
+# Копируем исходный код
 COPY . .
-RUN npm run build
 
-CMD ["npm", "run", "start:prod"]
+# Выполняем сборку проекта
+RUN npm run build

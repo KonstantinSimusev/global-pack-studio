@@ -54,6 +54,7 @@ export class UserService {
 
       user.login = dto.login;
       user.hashedPassword = hashedPassword;
+      user.profession = dto.profession;
 
       return await this.userRepository.create(user);
     } catch (error) {

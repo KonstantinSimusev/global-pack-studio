@@ -1,8 +1,14 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
-
 import {
-  ISuccessResponse,
-} from '../../shared/interfaces/api.interface';
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
+
+import { ISuccessResponse } from '../../shared/interfaces/api.interface';
 import { UserService } from './user.service';
 
 import { CreateUserDto } from './dto/create-user.dto';
@@ -23,8 +29,21 @@ export class UserController {
 
   @Post()
   async create(@Body() dto: CreateUserDto) {
-    return this.userService.create(dto);
+    return await this.userService.create(dto);
   }
+
+  // @Patch(':id')
+  // async update(
+  //   @Param('id') id: string,
+  //   @Body() updateData: UpdateUserDto,
+  // ): Promise<ISuccessResponse> {
+  //   const updatedUser = await this.userService.patch(id, updateData);
+  //   return {
+  //     success: true,
+  //     message: 'Пользователь успешно обновлен',
+  //     id: updatedUser.id,
+  //   };
+  // }
 
   @Delete(':id')
   async delete(@Param('id') id: string): Promise<ISuccessResponse> {

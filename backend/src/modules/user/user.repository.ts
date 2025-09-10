@@ -9,8 +9,6 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { User } from './entities/user.entity';
-import { error } from 'console';
-import { ISuccessResponse } from 'src/shared/interfaces/api.interface';
 
 @Injectable()
 export class UserRepository {

@@ -17,9 +17,16 @@ export class User {
   login: string;
 
   @Column({
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+  })
+  profession: string;
+
+  @Column({
     name: 'hashed_password',
     type: 'varchar',
-    length: 256, // типичная длина хэша
+    length: 512, // типичная длина хэша
     nullable: false,
   })
   hashedPassword: string;
