@@ -5,15 +5,18 @@ WORKDIR /app
 # Копируем package.json и package-lock.json
 COPY package*.json ./
 
+# Копируем .env файл
+COPY frontend/.env ./
+
+# Определяем ARG до их использования
+ARG VITE_API_URL
+ARG VITE_CDN_URL
+
 # Устанавливаем зависимости
 RUN npm ci
 
 # Копируем исходный код
 COPY . .
-
-# Используем ARG для передачи переменных сборки
-ARG VITE_API_URL
-ARG VITE_CDN_URL
 
 # Устанавливаем переменные окружения
 ENV VITE_API_URL=${VITE_API_URL}
