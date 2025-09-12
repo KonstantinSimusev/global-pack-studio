@@ -5,8 +5,14 @@ WORKDIR /app
 # Копируем package.json и package-lock.json
 COPY package*.json ./
 
+# Проверяем содержимое текущей директории перед копированием
+RUN ls -la
+
 # Копируем .env файл
-COPY .env .
+COPY .env. /
+
+# Проверяем, что .env появился
+RUN ls -la && cat.env
 
 # Определяем ARG до их использования
 ARG VITE_API_URL
