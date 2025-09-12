@@ -11,5 +11,12 @@ RUN npm ci
 # Копируем исходный код
 COPY . .
 
+# Копируйте файл .env, если он используется
+COPY .env .
+
+# Установите переменные окружения
+ENV VITE_API_URL=$VITE_API_URL
+ENV VITE_CDN_URL=$VITE_CDN_URL
+
 # Выполняем сборку проекта
 RUN npm run build
