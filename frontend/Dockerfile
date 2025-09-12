@@ -6,7 +6,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Копируем .env файл
-COPY frontend/.env ./
+COPY .env ./
 
 # Определяем ARG до их использования
 ARG VITE_API_URL
