@@ -46,6 +46,9 @@ services:
   frontend:
     image: 'ghcr.io/${OWNER}/gps-frontend:v1.0.0'
     container_name: gps-frontend
+    environment:
+      VITE_API_URL: ${VITE_API_URL}
+      VITE_CDN_URL: ${VITE_CDN_URL}
     volumes:
       - frontend_dist:/app/dist
     networks:
