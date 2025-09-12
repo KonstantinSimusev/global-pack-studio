@@ -17,6 +17,11 @@ services:
       - 5432:5432
     networks:
       - backend-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   backend:
     build:
@@ -26,7 +31,6 @@ services:
     container_name: gps-backend
     restart: always
     environment:
-      PORT: 3000
       DB_ADDRESS: ${DB_ADDRESS}
       ACCESS_TOKEN_SECRET: ${ACCESS_TOKEN_SECRET}
       REFRESH_TOKEN_SECRET: ${REFRESH_TOKEN_SECRET}
@@ -39,7 +43,8 @@ services:
     networks:
       - backend-network
     depends_on:
-      - database
+      database:
+        condition: service_healthy
 
   frontend:
     build:
@@ -47,9 +52,6 @@ services:
       dockerfile: Dockerfile
     image: 'ghcr.io/${OWNER}/gps-frontend:v1.0.0'
     container_name: gps-frontend
-    environment:
-      VITE_API_URL: ${VITE_API_URL}
-      VITE_CDN_URL: ${VITE_CDN_URL}
     volumes:
       - frontend_dist:/app/dist
     networks:
@@ -73,6 +75,11 @@ services:
     networks:
       - frontend-network
       - backend-network
+    depends_on:
+      database:
+        condition: service_healthy
+      backend:
+        condition: service_started
 
 volumes:
   db_data:

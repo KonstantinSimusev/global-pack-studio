@@ -11,6 +11,7 @@ export const LayerProvider = ({ children }: TLayerProviderProps) => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isLogoutOpenModal, setIsLogoutOpenModal] = useState(false);
+  const [isCookie, setIsCookie] = useState(false);
 
   return (
     <LayerContext.Provider
@@ -20,11 +21,13 @@ export const LayerProvider = ({ children }: TLayerProviderProps) => {
         isOpenModal,
         isLoginModalOpen,
         isLogoutOpenModal,
+        isCookie,
         setIsOpenOverlay,
         setIsOpenMenu,
         setIsOpenModal,
         setIsLoginModalOpen,
         setIsLogoutOpenModal,
+        setIsCookie,
       }}
     >
       {children}

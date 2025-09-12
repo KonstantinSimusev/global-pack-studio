@@ -6,9 +6,12 @@ import { BurgerButton } from '../buttons/burger/burger';
 
 import { useSelector } from '../../services/store';
 import { selectIsAuthenticated } from '../../services/slices/auth/slice';
+import { useContext } from 'react';
+import { LayerContext } from '../../contexts/layer/layerContext';
 
 export const Header = () => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
+  const { isCookie } = useContext(LayerContext);
 
   return (
     <header className={styles.container}>
@@ -18,7 +21,7 @@ export const Header = () => {
       <h1 className={styles.title}>
         {isAuthenticated ? 'МагМеталлПак' : 'Global Pack Studio'}
       </h1>
-      <BurgerButton />
+      {isCookie && <BurgerButton />}
       <Sidebar />
     </header>
   );

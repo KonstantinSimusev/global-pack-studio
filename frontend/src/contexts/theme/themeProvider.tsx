@@ -10,16 +10,16 @@ export const ThemeProvider = ({ children }: TThemeProvider) => {
     const savedTheme = localStorage.getItem('theme');
 
     if (savedTheme === null) {
-      return true;
+      return false;
     }
 
     // Если в хранилище светлая тема
-    if (savedTheme === 'true') {
-      return true;
+    if (savedTheme === 'false') {
+      return false;
     }
 
     // Если в хранилище светлая тема
-    return false;
+    return true;
   });
 
   useEffect(() => {

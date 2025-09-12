@@ -8,6 +8,8 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 
+import { plainToInstance } from 'class-transformer';
+
 import { UserRepository } from './user.repository';
 import { CreateUserDto } from './dto/create-user.dto';
 import {
@@ -50,11 +52,18 @@ export class UserService {
       const hashedPassword = await bcrypt.hash(dto.password, salt);
 
       // Создаем нового пользователя
-      const user = new User();
+      // Используем spread-оператор для копирования всех полей из DTO
+      // Добавляем хешированный пароль в объект
+      const userData = {
+        ...dto, // Копируем все поля из входящего DTO (login, password, profession)
+        hashedPassword: hashedPassword, // Перезаписываем NULL на хешированный пароль
+      };
 
-      user.login = dto.login;
-      user.hashedPassword = hashedPassword;
-      user.profession = dto.profession;
+      // Преобразуем простой объект в экземпляр сущности User
+      // plainToInstance - это функция из библиотеки class-transformer
+      // Она помогает преобразовать обычный объект в полноценный экземпляр класса
+      // с учетом всех декораторов и валидаций из сущности TypeORM
+      const user = plainToInstance(User, userData);
 
       return await this.userRepository.create(user);
     } catch (error) {

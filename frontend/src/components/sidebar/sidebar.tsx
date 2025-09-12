@@ -101,13 +101,13 @@ export const Sidebar = () => {
           )}
 
           {isAuthenticated && (
-            <li className={styles.link} onClick={hanldeClickLogout}>
+            <li className={clsx(styles.link)} onClick={hanldeClickLogout}>
               Выйти
             </li>
           )}
 
           {!isAuthenticated && (
-            <li className={clsx(styles.link, styles.link__active)} onClick={hanldeClickLogin}>
+            <li className={clsx(styles.link, styles.link__active, styles.top)} onClick={hanldeClickLogin}>
               Войти
             </li>
           )}

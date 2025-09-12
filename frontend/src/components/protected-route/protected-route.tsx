@@ -1,6 +1,6 @@
 import styles from './protected-route.module.css';
 
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 import { Spinner } from '../spinner/spinner';
@@ -10,8 +10,10 @@ import {
   selectIsAuthenticated,
   selectIsLoading,
 } from '../../services/slices/auth/slice';
+import { LayerContext } from '../../contexts/layer/layerContext';
 
 export const ProtectedRoute = () => {
+  const { setIsCookie } = useContext(LayerContext);
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const isLoading = useSelector(selectIsLoading);
   const location = useLocation();
@@ -20,6 +22,7 @@ export const ProtectedRoute = () => {
   const [currentPath, setCurrentPath] = useState('');
 
   useEffect(() => {
+    setIsCookie(true);
     // Сохраняем текущий путь при загрузке
     setCurrentPath(location.pathname);
 

@@ -47,14 +47,14 @@ export const Logout = () => {
           type="button"
           onClick={handleClickLogout}
         >
-          Да
+          Выйти
         </button>
         <button
           className={styles.button__return}
           type="button"
           onClick={handleClickReturn}
         >
-          Отмена
+          Отменить
         </button>
       </div>
     </div>

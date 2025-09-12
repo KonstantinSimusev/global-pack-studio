@@ -1,12 +1,9 @@
 name: Docker Image CI
 
 on:
-  pull_request:  # Запускаем только при PR
+  push:
     branches:
-      - '**'  # Для всех веток
-  # push:
-  #   branches:
-  #     - '**'
+      - '**'
 
 env:
   REPO: ''

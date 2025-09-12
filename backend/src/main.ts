@@ -1,10 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import { config } from './app.config';
 import cookieParser from 'cookie-parser';
-
-const { port } = config;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -27,7 +24,7 @@ async function bootstrap() {
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
   });
 
-  await app.listen(port);
-  console.log(`🚀 Приложение запущено на порту ${port}`);
+  await app.listen(3000);
+  console.log('🚀 Приложение запущено на порту 3000');
 }
 bootstrap();

@@ -23,7 +23,7 @@
 .wrapper {
   display: flex;
   justify-content: space-between;
-  gap: 30px;
+  gap: 20px;
 }
 
 .button__return {
@@ -43,6 +43,7 @@
   padding: 12px 0;
   font-weight: 400;
   cursor: pointer;
+  font-size: 14px;
 }
 
 .button__logout:active,
