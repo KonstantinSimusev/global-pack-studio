@@ -9,7 +9,7 @@ COPY package*.json ./
 RUN ls -la
 
 # Копируем .env файл
-COPY .env. /
+COPY .env ./
 
 # Проверяем, что .env появился
 RUN ls -la && cat.env
