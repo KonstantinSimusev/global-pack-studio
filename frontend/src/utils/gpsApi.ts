@@ -1,6 +1,6 @@
 import type { ILoginData, ISuccessResponse, IUser } from './api.interface';
 
-export const URL = import.meta.env.VITE_API_URL;
+export const URL = '/api/gps';
 
 // if (!URL) {
 //   console.error('API URL не определен!');
