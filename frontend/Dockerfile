@@ -12,7 +12,7 @@ RUN ls -la
 COPY .env ./
 
 # Проверяем, что .env появился
-RUN ls -la && cat.env
+RUN ls -la && cat .env
 
 # Определяем ARG до их использования
 ARG VITE_API_URL
