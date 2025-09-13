@@ -51,5 +51,6 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: '.'
+          file: 'nginx/Dockerfile'
           push: true
           tags: ghcr.io/${{ env.REPO }}/gps-server:v1.0.0
