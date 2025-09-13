@@ -11,7 +11,7 @@
     "fix:css": "stylelint **/*.css **/*.scss --fix",
     "preview": "vite preview",
     "deploy": "npm run build && gh-pages -d dist",
-    "start": "vite serve dist"
+    "start:prod": "vite serve dist"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.8.2",
