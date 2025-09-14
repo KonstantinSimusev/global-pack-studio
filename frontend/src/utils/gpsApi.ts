@@ -1,7 +1,7 @@
 import type { ILoginData, ISuccessResponse, IUser } from './api.interface';
 
 // Используем переменную окружения
-export const URL = import.meta.env.VITE_API_URL;
+export const URL = import.meta.env.VITE_API_URL ?? '/api/gps';
 
 export const loginUserApi = async (data: ILoginData): Promise<IUser> => {
   try {
