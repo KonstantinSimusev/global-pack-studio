@@ -65,6 +65,30 @@ export const logoutUserApi = async (): Promise<ISuccessResponse> => {
 
     return await response.json();
   } catch (error) {
-    throw new Error();
+    throw error;
+  }
+};
+
+export const getTeamUsersApi = async (): Promise<IUser[]> => {
+  try {
+    // Здесь происходит запрос к серверу
+    const response = await fetch(`${URL}/auth/team`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+      },
+      credentials: 'include', // Важно для работы с cookie
+    });
+
+    if (!response.ok) {
+      // Если ответ не успешный, создаем ошибку, происходит переход в catch
+      throw new Error();
+    }
+
+    // Если все хорошо, возвращаем данные
+    return await response.json();
+  } catch (error) {
+    // Сюда попадаем при любом throw new Error()
+    throw error;
   }
 };

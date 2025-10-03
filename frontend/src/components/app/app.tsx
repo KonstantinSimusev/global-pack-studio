@@ -22,8 +22,8 @@ import { Logout } from '../loguot/logout';
 import { ProtectedRoute } from '../protected-route/protected-route';
 
 import { useDispatch } from '../../services/store';
-// import { selectIsAuthenticated } from '../../services/slices/auth/slice';
 import { checkAccessToken } from '../../services/slices/auth/actions';
+// import { selectIsAuthenticated } from '../../services/slices/auth/slice';
 
 const App = () => {
   const { isLightTheme } = useContext(ThemeContext);

@@ -16,5 +16,4 @@ export interface IUser {
 export interface ISuccessResponse {
   success: boolean;
   message: string;
-  id: string;
 }

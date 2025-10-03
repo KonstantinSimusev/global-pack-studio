@@ -67,8 +67,6 @@ export class UserRepository {
 
       return user;
     } catch (error) {
-      // Обрабатываем ошибки
-      console.error('Ошибка при поиске пользователя по логину:', error);
       throw new InternalServerErrorException(
         'Произошла ошибка при поиске пользователя по логину',
       );
@@ -99,30 +97,65 @@ export class UserRepository {
     }
   }
 
+  async createMany(users: User[]): Promise<User[]> {
+    try {
+      // Проверка входных данных
+      if (!users || users.length === 0) {
+        throw new BadRequestException(
+          'Массив пользователей не может быть пустым',
+        );
+      }
+
+      // Проверка обязательных полей для каждого пользователя
+      users.forEach((user) => {
+        if (!user.login || !user.hashedPassword) {
+          throw new BadRequestException(
+            'Для каждого пользователя обязательны поля login и hashedPassword',
+          );
+        }
+      });
+
+      // Массовое сохранение
+      const createdUsers = await this.userRepository.save(users);
+
+      return createdUsers;
+    } catch (error) {
+      // Обработка ошибок дублирования
+      if (error.code === '23505') {
+        throw new ConflictException(
+          'Один или несколько пользователей уже существуют в системе',
+        );
+      }
+
+      throw new InternalServerErrorException(
+        'Произошла ошибка при массовом создании пользователей',
+      );
+    }
+  }
+
   async patch(id: string, updateData: Partial<User>): Promise<User> {
     try {
-      // Проверяем существование пользователя
       const user = await this.userRepository.findOne({
         where: { id },
       });
 
       if (!user) {
-        throw new NotFoundException(
-          'Пользователь не найден (ID не существует)',
-        );
+        throw new NotFoundException('Пользователь не найден');
       }
 
-      // Обновляем данные
-      Object.assign(user, updateData);
-
-      // Проверка обязательных полей после обновления
       if (!user.login || !user.hashedPassword) {
         throw new BadRequestException(
-          'Обязательны поля login и hashedPassword (Недостаточно данных для обновления)',
+          'Обязательны поля login и hashedPassword',
         );
       }
 
-      return await this.userRepository.save(user);
+      // Применяем обновления напрямую к объекту
+      Object.assign(user, updateData);
+
+      // Сохраняем изменения
+      const updatedUser = await this.userRepository.save(user);
+
+      return updatedUser;
     } catch (error) {
       if (error.code === '23505') {
         throw new ConflictException(
@@ -166,6 +199,30 @@ export class UserRepository {
 
       throw new InternalServerErrorException(
         'Произошла ошибка при удалении пользователя (Ошибка операции удаления)',
+      );
+    }
+  }
+
+  async getTeamUsers(userId: string): Promise<User[]> {
+    try {
+      // Сначала находим пользователя по ID, чтобы получить номер его команды
+      const user = await this.userRepository.findOne({
+        where: { id: userId },
+      });
+
+      if (!user) {
+        throw new NotFoundException('Пользователь не найден');
+      }
+
+      // Теперь находим всех пользователей с таким же номером команды
+      const teamUsers = await this.userRepository.find({
+        where: { teamNumber: user.teamNumber },
+      });
+
+      return teamUsers;
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Произошла ошибка при получении пользователей команды',
       );
     }
   }

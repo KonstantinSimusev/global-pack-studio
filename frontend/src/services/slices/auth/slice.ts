@@ -1,11 +1,17 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import { checkAccessToken, loginUser, logoutUser } from './actions';
+import {
+  checkAccessToken,
+  loginUser,
+  logoutUser,
+  getTeamUsers,
+} from './actions';
 import type { IUser } from '../../../utils/api.interface';
 
 interface IAuthState {
   isAuthenticated: boolean;
   isLoading: boolean;
   user: IUser | null;
+  users: IUser[];
   error: string | null;
 }
 
@@ -13,6 +19,7 @@ const initialState: IAuthState = {
   isAuthenticated: false,
   isLoading: false,
   user: null,
+  users: [],
   error: null,
 };
 
@@ -28,10 +35,33 @@ export const authSlice = createSlice({
     selectIsAuthenticated: (state: IAuthState) => state.isAuthenticated,
     selectIsLoading: (state: IAuthState) => state.isLoading,
     selectUser: (state: IAuthState) => state.user,
+    selectUsers: (state: IAuthState) => state.users,
     selectError: (state: IAuthState) => state.error,
   },
   extraReducers: (builder) => {
     builder
+      // Обработчик для getTeamUsers
+      .addCase(getTeamUsers.pending, (state) => {
+        state.isLoading = true;
+        state.isAuthenticated = false;
+        state.users = [];
+        state.error = null;
+      })
+      .addCase(
+        getTeamUsers.fulfilled,
+        (state, action: PayloadAction<IUser[]>) => {
+          state.isAuthenticated = true;
+          state.isLoading = false;
+          state.users = action.payload;
+          state.error = null;
+        },
+      )
+      .addCase(getTeamUsers.rejected, (state, action) => {
+        state.isAuthenticated = false;
+        state.isLoading = false;
+        state.users = [];
+        state.error = action.error.message ?? 'Ошибка получения списка';
+      })
       // Обработчик для loginUser
       .addCase(loginUser.pending, (state) => {
         state.isLoading = true;
@@ -75,6 +105,7 @@ export const authSlice = createSlice({
         state.isAuthenticated = false;
         state.isLoading = false;
         state.user = null;
+        state.users = [];
         state.error = null;
       })
       .addCase(logoutUser.rejected, (state, action) => {
@@ -91,5 +122,6 @@ export const {
   selectIsAuthenticated,
   selectIsLoading,
   selectUser,
+  selectUsers,
   selectError,
 } = authSlice.selectors;

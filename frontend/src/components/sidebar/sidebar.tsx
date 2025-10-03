@@ -76,7 +76,7 @@ export const Sidebar = () => {
             </li>
           )}
 
-          {isAuthenticated && user?.profession === 'master' && (
+          {isAuthenticated && user?.profession === 'мастер участка' && (
             <>
               <li
                 className={clsx(

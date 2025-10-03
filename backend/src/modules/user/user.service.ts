@@ -76,6 +76,34 @@ export class UserService {
     }
   }
 
+  async createMany(dtos: CreateUserDto[]): Promise<User[]> {
+    try {
+      if (!dtos || dtos.length === 0) {
+        throw new BadRequestException(
+          'Массив пользователей не может быть пустым',
+        );
+      }
+
+      // Используем существующий метод create для каждого пользователя
+      const users = await Promise.all(
+        dtos.map(async (dto) => {
+          return this.create(dto);
+        }),
+      );
+
+      return await this.userRepository.createMany(users);
+    } catch (error) {
+      if (error.code === '23505') {
+        throw new ConflictException(
+          'Один или несколько пользователей уже существуют в системе',
+        );
+      }
+      throw new InternalServerErrorException(
+        'Произошла ошибка при массовом создании пользователей',
+      );
+    }
+  }
+
   async patch(
     id: string,
     updateData: Partial<User>,
@@ -95,7 +123,6 @@ export class UserService {
       return {
         success: true,
         message: 'Пользователь успешно обновлен',
-        id: updatedUser.id,
       };
     } catch (error) {
       if (error.code === '23505') {
@@ -121,7 +148,6 @@ export class UserService {
       return {
         success: true,
         message: 'Пользователь успешно удален',
-        id: user.id,
       };
     } catch (error) {
       if (error.code === '23503') {

@@ -1,7 +1,7 @@
 import {
   Body,
   Controller,
-  Inject,
+  Get,
   InternalServerErrorException,
   Post,
   Req,
@@ -9,7 +9,6 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Response, Request } from 'express';
-import { ConfigService } from '@nestjs/config';
 
 import { AuthService } from './auth.service';
 
@@ -18,10 +17,7 @@ import { ISuccessResponse, IUser } from 'src/shared/interfaces/api.interface';
 
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private authService: AuthService,
-    @Inject(ConfigService) private configService: ConfigService,
-  ) {}
+  constructor(private authService: AuthService) {}
 
   @Post('login')
   async login(
@@ -29,59 +25,16 @@ export class AuthController {
     @Res({ passthrough: true }) response: Response,
   ): Promise<IUser> {
     try {
-      const { user, accessToken } = await this.authService.login(
+      const { updateUser, accessToken } = await this.authService.login(
         createLoginDTO.login,
         createLoginDTO.password,
       );
 
-      // Устанавливаем Access Token в HTTP Only Cookie
-      response.cookie('access_token', accessToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
-        // maxAge: this.configService.get('ACCESS_TOKEN_EXPIRATION') * 1000,
-      });
+      this.setAccessToken(response, accessToken);
 
-      console.log('Access token создан');
-
-      return { ...user };
-    } catch (error) {
+      return { ...updateUser };
+    } catch {
       throw new UnauthorizedException('Ошибка авторизации');
-    }
-  }
-
-  @Post('token')
-  async accessToken(
-    @Res({ passthrough: true }) response: Response,
-    @Req() request: Request,
-  ): Promise<IUser> {
-    try {
-      // Получаем accessToken из cookies
-      const savedAccessToken = request.cookies.access_token;
-
-      if (!savedAccessToken) {
-        console.log('Access token не найден в cookies');
-        throw new UnauthorizedException('Access token не найден в cookies');
-      }
-
-      const { user, accessToken } =
-        await this.authService.accessToken(savedAccessToken);
-
-      // Обновляем access token в cookie
-      response.cookie('access_token', accessToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
-        // maxAge: this.configService.get('ACCESS_TOKEN_EXPIRATION') * 1000,
-      });
-
-      console.log('Access token обновлен в cookies');
-
-      return { ...user };
-    } catch (error) {
-      // Очищаем accessToken
-      this.clearCookies(response);
-      throw new UnauthorizedException('Требуется повторная авторизация');
     }
   }
 
@@ -91,31 +44,80 @@ export class AuthController {
     @Req() request: Request,
   ): Promise<ISuccessResponse> {
     try {
-      const savedAccessToken = request.cookies.access_token;
-
-      if (!savedAccessToken) {
-        throw new UnauthorizedException('Access token не найден в cookies');
-      }
-
+      const savedAccessToken = this.getAccessToken(request);
       await this.authService.logout(savedAccessToken);
-
-      // Очищаем accessToken
       this.clearCookies(response);
 
-      // Возвращаем успешный статус
       return {
         success: true,
         message: 'Успешный выход из системы',
-        id: savedAccessToken.userId,
       };
-    } catch (error) {
-      // В любом случае очищаем токены
+    } catch {
       this.clearCookies(response);
 
       throw new InternalServerErrorException(
         'Произошла ошибка при выходе из системы',
       );
     }
+  }
+
+  @Post('token')
+  async checkAccessToken(
+    @Res({ passthrough: true }) response: Response,
+    @Req() request: Request,
+  ) {
+    try {
+      const savedAccessToken = this.getAccessToken(request);
+
+      const { user, newAccessToken } =
+        await this.authService.validateAccessToken(savedAccessToken);
+
+      this.setAccessToken(response, newAccessToken);
+
+      return { ...user };
+    } catch {
+      this.clearCookies(response);
+      throw new UnauthorizedException('Требуется повторная авторизация');
+    }
+  }
+
+  @Get('team')
+  async getTeamUsers(
+    @Res({ passthrough: true }) response: Response,
+    @Req() request: Request,
+  ) {
+    try {
+      const savedAccessToken = this.getAccessToken(request);
+
+      const { user, newAccessToken } =
+        await this.authService.validateAccessToken(savedAccessToken);
+
+      this.setAccessToken(response, newAccessToken);
+
+      // Получаем пользователей команды
+      return await this.authService.getTeamUsers(user.id);
+    } catch {
+      this.clearCookies(response);
+      throw new UnauthorizedException('Требуется повторная авторизация');
+    }
+  }
+
+  private getAccessToken(request: Request): string {
+    const savedAccessToken = request.cookies.access_token;
+
+    if (!savedAccessToken) {
+      throw new UnauthorizedException('Access token не найден в cookies');
+    }
+
+    return savedAccessToken;
+  }
+
+  private setAccessToken(response: Response, accessToken: string) {
+    response.cookie('access_token', accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+    });
   }
 
   private clearCookies(response: Response): void {

@@ -3,6 +3,7 @@ import {
   checkAccessTokenApi,
   loginUserApi,
   logoutUserApi,
+  getTeamUsersApi,
 } from '../../../utils/gpsApi';
 import { delay } from '../../../utils/delay';
 import type { ILoginData, IUser } from '../../../utils/api.interface';
@@ -70,3 +71,27 @@ export const logoutUser = createAsyncThunk('auth/logout', async () => {
     throw error;
   }
 });
+
+export const getTeamUsers = createAsyncThunk(
+  'auth/team',
+  async () => {
+    try {
+      const response = await getTeamUsersApi();
+
+      // Добавляем задержку кода
+      await delay();
+
+      if (!response) {
+        throw new Error();
+      }
+
+      return response;
+    } catch (error) {
+      // Добавляем задержку кода
+      await delay();
+
+      // Пойдет в checkAccessToken.rejected в authSlice
+      throw error;
+    }
+  },
+);
