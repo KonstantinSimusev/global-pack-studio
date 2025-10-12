@@ -9,7 +9,14 @@ async function bootstrap() {
   // Добавляем middleware для работы с cookies
   app.use(cookieParser());
 
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+    }),
+  );
+  
   app.setGlobalPrefix('api/gps');
 
   app.enableCors({

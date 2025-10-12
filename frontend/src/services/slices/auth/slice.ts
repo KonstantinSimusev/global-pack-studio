@@ -4,6 +4,7 @@ import {
   loginUser,
   logoutUser,
   getTeamUsers,
+  addWorker,
 } from './actions';
 import type { IUser } from '../../../utils/api.interface';
 
@@ -112,6 +113,23 @@ export const authSlice = createSlice({
         state.isAuthenticated = false;
         state.isLoading = false;
         state.error = action.error.message ?? 'Ошибка при выходе из системы';
+      })
+      // Обработчик для addWorker
+      .addCase(addWorker.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(addWorker.fulfilled, (state, action: PayloadAction<IUser>) => {
+        state.isAuthenticated = true;
+        state.isLoading = false;
+        state.user = action.payload;
+        state.error = null;
+      })
+      .addCase(addWorker.rejected, (state, action) => {
+        state.isAuthenticated = false;
+        state.isLoading = false;
+        state.user = null;
+        state.error = action.error.message ?? 'Работник не найден';
       });
   },
 });

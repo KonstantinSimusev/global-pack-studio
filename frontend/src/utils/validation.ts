@@ -118,6 +118,76 @@ export const validationRules: IValidationRules = {
       },
     ],
   },
+  personalNumber: {
+    required: true,
+    validators: [
+      {
+        type: 'required',
+        pattern: /^.+$/,
+        message: 'Это поле обязательно',
+      },
+      {
+        type: 'number',
+        pattern: /^\d+$/,
+        message: 'Введите только цифры',
+      },
+      {
+        type: 'minLength',
+        pattern: /^\d{3,}$/,
+        message: 'Введите минимум 3 цифры',
+      },
+      {
+        type: 'maxLength',
+        pattern: /^\d{1,10}$/,
+        message: 'Введите не более 10 цифр',
+      },
+    ],
+  },
+  date: {
+    required: true,
+    validators: [
+      {
+        type: 'required',
+        pattern: /^.+$/,
+        message: 'Выберите дату',
+      },
+    ],
+  },
+  shiftNumber: {
+    required: true,
+    validators: [
+      {
+        type: 'required',
+        pattern: /^.+$/,
+        message: 'Это поле обязательно',
+      },
+      {
+        type: 'number',
+        pattern: /^\d+$/,
+        message: 'Введите только цифры',
+      },
+      {
+        type: 'length',
+        pattern: /^(1|2)$/,
+        message: 'Введите число 1 или 2',
+      },
+    ],
+  },
+  teamNumber: {
+    required: true,
+    validators: [
+      {
+        type: 'required',
+        pattern: /^.+$/,
+        message: 'Это поле обязательно',
+      },
+      {
+        type: 'length',
+        pattern: /^(1|2|3|4|5)$/,
+        message: 'Введите чило от 1 до 5',
+      },
+    ],
+  },
 };
 
 // Функция для валидации одного поля
@@ -129,8 +199,15 @@ export const validateField = (
   // Получаем правила валидации для конкретного поля
   const fieldRules = rules[fieldName];
 
+  // Если поле не найдено в правилах валидации
+  if (!fieldRules) return '';
+
   // Проходим по всем валидаторам поля
   for (const validator of fieldRules.validators) {
+    if (fieldName === 'date' && !value) {
+      return validator.message;
+    }
+
     // Если значение не соответствует регулярному выражению
     if (!validator.pattern.test(value)) {
       return validator.message; // Возвращаем сообщение об ошибке

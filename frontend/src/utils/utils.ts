@@ -12,3 +12,13 @@ export const getRedirectPath = (user: IUser): string => {
       return '/home';
   }
 };
+
+// Функция для форматирования даты
+export const formatDate = (date: Date) => {
+  const parsedDate = new Date(date);
+  return parsedDate.toLocaleDateString('ru-RU', {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+  });
+};

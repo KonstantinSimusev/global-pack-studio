@@ -6,7 +6,7 @@ import {
   MinLength,
 } from 'class-validator';
 
-export class CreateUserDto {
+export class CreateUserDTO {
   @IsNumber()
   @IsNotEmpty()
   positionCode: number;

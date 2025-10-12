@@ -8,16 +8,18 @@ import {
   Res,
   UnauthorizedException,
 } from '@nestjs/common';
+
 import { Response, Request } from 'express';
 
 import { AuthService } from './auth.service';
 
 import { CreateLoginDTO } from './dto/create-auth.dto';
-import { ISuccessResponse, IUser } from 'src/shared/interfaces/api.interface';
+import { ISuccess, IUser } from '../../shared/interfaces/api.interface';
+import { clearCookies, getAccessToken, setAccessToken } from '../../shared/utils/utils';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(private readonly authService: AuthService) {}
 
   @Post('login')
   async login(
@@ -25,14 +27,14 @@ export class AuthController {
     @Res({ passthrough: true }) response: Response,
   ): Promise<IUser> {
     try {
-      const { updateUser, accessToken } = await this.authService.login(
+      const { user, accessToken } = await this.authService.login(
         createLoginDTO.login,
         createLoginDTO.password,
       );
 
-      this.setAccessToken(response, accessToken);
+      setAccessToken(response, accessToken);
 
-      return { ...updateUser };
+      return user;
     } catch {
       throw new UnauthorizedException('Ошибка авторизации');
     }
@@ -42,19 +44,17 @@ export class AuthController {
   async logout(
     @Res({ passthrough: true }) response: Response,
     @Req() request: Request,
-  ): Promise<ISuccessResponse> {
+  ): Promise<ISuccess> {
     try {
-      const savedAccessToken = this.getAccessToken(request);
+      const savedAccessToken = getAccessToken(request);
       await this.authService.logout(savedAccessToken);
-      this.clearCookies(response);
+      clearCookies(response);
 
       return {
         success: true,
         message: 'Успешный выход из системы',
       };
     } catch {
-      this.clearCookies(response);
-
       throw new InternalServerErrorException(
         'Произошла ошибка при выходе из системы',
       );
@@ -65,65 +65,19 @@ export class AuthController {
   async checkAccessToken(
     @Res({ passthrough: true }) response: Response,
     @Req() request: Request,
-  ) {
+  ): Promise<IUser> {
     try {
-      const savedAccessToken = this.getAccessToken(request);
+      const savedAccessToken = getAccessToken(request);
 
-      const { user, newAccessToken } =
+      const { user, accessToken } =
         await this.authService.validateAccessToken(savedAccessToken);
 
-      this.setAccessToken(response, newAccessToken);
+      setAccessToken(response, accessToken);
 
-      return { ...user };
+      return user;
     } catch {
-      this.clearCookies(response);
+      clearCookies(response);
       throw new UnauthorizedException('Требуется повторная авторизация');
     }
-  }
-
-  @Get('team')
-  async getTeamUsers(
-    @Res({ passthrough: true }) response: Response,
-    @Req() request: Request,
-  ) {
-    try {
-      const savedAccessToken = this.getAccessToken(request);
-
-      const { user, newAccessToken } =
-        await this.authService.validateAccessToken(savedAccessToken);
-
-      this.setAccessToken(response, newAccessToken);
-
-      // Получаем пользователей команды
-      return await this.authService.getTeamUsers(user.id);
-    } catch {
-      this.clearCookies(response);
-      throw new UnauthorizedException('Требуется повторная авторизация');
-    }
-  }
-
-  private getAccessToken(request: Request): string {
-    const savedAccessToken = request.cookies.access_token;
-
-    if (!savedAccessToken) {
-      throw new UnauthorizedException('Access token не найден в cookies');
-    }
-
-    return savedAccessToken;
-  }
-
-  private setAccessToken(response: Response, accessToken: string) {
-    response.cookie('access_token', accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
-    });
-  }
-
-  private clearCookies(response: Response): void {
-    response.cookie('access_token', '', {
-      httpOnly: true,
-      expires: new Date(0),
-    });
   }
 }

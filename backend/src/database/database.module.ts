@@ -1,7 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
+
 import { User } from '../modules/user/entities/user.entity';
+import { Shift } from '../modules/shift/entities/shift.entity';
+import { UserShift } from '../modules/user-shift/entities/user-shift.entity';
 
 @Module({
   imports: [
@@ -16,10 +19,10 @@ import { User } from '../modules/user/entities/user.entity';
         return {
           type: 'postgres',
           url: dbUrl,
-          entities: [User],
+          entities: [User, Shift, UserShift],
           synchronize: false,
-          retryAttempts: 5,    // Количество попыток переподключения
-          retryDelay: 1000,    // Задержка между попытками в миллисекундах
+          retryAttempts: 5, // Количество попыток переподключения
+          retryDelay: 1000, // Задержка между попытками в миллисекундах
         };
       },
     }),

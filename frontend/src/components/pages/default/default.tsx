@@ -8,7 +8,7 @@ export const DefaultPage = () => {
 
   return (
     <div className={styeles.container}>
-      {isCookie && <p className={styeles.text}>Сделаем мир лучше...</p>}
+      {isCookie && <p className={styeles.text}>Пожалуйста, авторизуйтесь...</p>}
       {!isCookie && (
         <div className={styeles.container__agree}>
           <div className={styeles.container__agree}>

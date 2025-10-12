@@ -10,10 +10,14 @@ export const Overlay = () => {
     isOpenMenu,
     isLoginModalOpen,
     isLogoutOpenModal,
+    isAddWorkerOpenModall,
+    isAddShiftOpenModall,
     setIsOpenOverlay,
     setIsOpenMenu,
     setIsLoginModalOpen,
     setIsLogoutOpenModal,
+    setIsAddWorkerOpenModall,
+    setIsAddShiftOpenModall,
   } = useContext(LayerContext);
 
   useEscapeHandler(() => {
@@ -32,6 +36,14 @@ export const Overlay = () => {
     if (isLogoutOpenModal) {
       setIsLogoutOpenModal(false);
     }
+
+    if (isAddWorkerOpenModall) {
+      setIsAddWorkerOpenModall(false);
+    }
+
+    if (isAddShiftOpenModall) {
+      setIsAddShiftOpenModall(false);
+    }
   });
 
   const handleClick = (event: React.MouseEvent) => {
@@ -41,6 +53,8 @@ export const Overlay = () => {
       setIsOpenMenu(false);
       setIsLoginModalOpen(false);
       setIsLogoutOpenModal(false);
+      setIsAddWorkerOpenModall(false);
+      setIsAddShiftOpenModall(false);
     }
   };
 

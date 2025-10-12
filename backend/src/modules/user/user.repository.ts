@@ -1,14 +1,16 @@
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+
 import {
   BadRequestException,
-  ConflictException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
 
 import { User } from './entities/user.entity';
+import { IWorker } from '../../shared/interfaces/api.interface';
+import { Profession } from '../../shared/enums/enums';
 
 @Injectable()
 export class UserRepository {
@@ -17,197 +19,30 @@ export class UserRepository {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  async findAll(): Promise<User[]> {
+  async findUsers(): Promise<User[]> {
     try {
       const users = await this.userRepository.find({});
       return users;
     } catch (error) {
-      throw new InternalServerErrorException(
-        'Произошла ошибка при получении списка пользователей (Ошибка получения данных)',
-      );
-    }
-  }
-
-  async findOne(id: string): Promise<User> {
-    try {
-      const user = await this.userRepository.findOne({
-        where: { id },
-        // Можно добавить relations для загрузки связанных сущностей
-        // relations: ['roles', 'posts'],
-        // Можно добавить select для выбора определенных полей
-        // select: ['id', 'name', 'email']
+      console.error('Ошибка в findUsers():', {
+        message: error.message,
+        stack: error.stack,
+        name: error.name,
+        code: error.code,
+        sql: error.sql,
+        parameters: error.parameters,
       });
-
-      if (!user) {
-        throw new NotFoundException(
-          'Пользователь не найден (ID не существует)',
-        );
-      }
-
-      return user;
-    } catch (error) {
       throw new InternalServerErrorException(
-        'Произошла ошибка при получении пользователя (Ошибка доступа к данным)',
+        'Произошла ошибка при получении списка пользователей',
       );
     }
   }
 
-  async findOneByLogin(login: string): Promise<User | null> {
-    try {
-      // Ищем пользователя по логину
-      const user = await this.userRepository.findOne({
-        where: { login },
-        // select: ['id', 'login', 'hashedPassword', 'refreshToken'],
-      });
-
-      // Если пользователь не найден, возвращаем null
-      if (!user) {
-        return null;
-      }
-
-      return user;
-    } catch (error) {
-      throw new InternalServerErrorException(
-        'Произошла ошибка при поиске пользователя по логину',
-      );
-    }
-  }
-
-  async create(user: User): Promise<User> {
-    try {
-      // Проверка обязательных полей
-      if (!user.login || !user.hashedPassword) {
-        throw new BadRequestException(
-          'Обязательны поля login и hashedPassword (Недостаточно данных для создания)',
-        );
-      }
-      return await this.userRepository.save(user);
-    } catch (error) {
-      // Обрабатываем специфические ошибки
-      if (error.code === '23505') {
-        // Дубликат записи
-        throw new ConflictException(
-          'Пользователь с таким логином уже существует',
-        );
-      }
-
-      throw new InternalServerErrorException(
-        'Произошла ошибка при создании пользователя',
-      );
-    }
-  }
-
-  async createMany(users: User[]): Promise<User[]> {
-    try {
-      // Проверка входных данных
-      if (!users || users.length === 0) {
-        throw new BadRequestException(
-          'Массив пользователей не может быть пустым',
-        );
-      }
-
-      // Проверка обязательных полей для каждого пользователя
-      users.forEach((user) => {
-        if (!user.login || !user.hashedPassword) {
-          throw new BadRequestException(
-            'Для каждого пользователя обязательны поля login и hashedPassword',
-          );
-        }
-      });
-
-      // Массовое сохранение
-      const createdUsers = await this.userRepository.save(users);
-
-      return createdUsers;
-    } catch (error) {
-      // Обработка ошибок дублирования
-      if (error.code === '23505') {
-        throw new ConflictException(
-          'Один или несколько пользователей уже существуют в системе',
-        );
-      }
-
-      throw new InternalServerErrorException(
-        'Произошла ошибка при массовом создании пользователей',
-      );
-    }
-  }
-
-  async patch(id: string, updateData: Partial<User>): Promise<User> {
-    try {
-      const user = await this.userRepository.findOne({
-        where: { id },
-      });
-
-      if (!user) {
-        throw new NotFoundException('Пользователь не найден');
-      }
-
-      if (!user.login || !user.hashedPassword) {
-        throw new BadRequestException(
-          'Обязательны поля login и hashedPassword',
-        );
-      }
-
-      // Применяем обновления напрямую к объекту
-      Object.assign(user, updateData);
-
-      // Сохраняем изменения
-      const updatedUser = await this.userRepository.save(user);
-
-      return updatedUser;
-    } catch (error) {
-      if (error.code === '23505') {
-        throw new ConflictException(
-          'Пользователь с таким логином уже существует (Дублирование данных)',
-        );
-      }
-
-      throw new InternalServerErrorException(
-        'Произошла ошибка при обновлении пользователя (Ошибка сохранения данных)',
-      );
-    }
-  }
-
-  async delete(id: string): Promise<void> {
-    try {
-      // Сначала проверяем существование пользователя
-      const user = await this.userRepository.findOne({
-        where: { id },
-      });
-
-      if (!user) {
-        throw new NotFoundException(
-          'Пользователь не найден (ID не существует)',
-        );
-      }
-
-      // Удаляем пользователя
-      const result = await this.userRepository.delete(id);
-
-      if (result.affected === 0) {
-        throw new NotFoundException(
-          'Пользователь не найден (Не удалось удалить запись)',
-        );
-      }
-    } catch (error) {
-      if (error.code === '23503') {
-        throw new ConflictException(
-          'Пользователь связан с другими записями (Нарушение целостности данных)',
-        );
-      }
-
-      throw new InternalServerErrorException(
-        'Произошла ошибка при удалении пользователя (Ошибка операции удаления)',
-      );
-    }
-  }
-
-  async getTeamUsers(userId: string): Promise<User[]> {
+  async findTeamUsers(id: string): Promise<User[]> {
     try {
       // Сначала находим пользователя по ID, чтобы получить номер его команды
       const user = await this.userRepository.findOne({
-        where: { id: userId },
+        where: { id },
       });
 
       if (!user) {
@@ -220,10 +55,131 @@ export class UserRepository {
       });
 
       return teamUsers;
-    } catch (error) {
+    } catch {
       throw new InternalServerErrorException(
         'Произошла ошибка при получении пользователей команды',
       );
     }
+  }
+
+  async findOneById(id: string): Promise<User> {
+    try {
+      const user = await this.userRepository.findOne({
+        where: { id },
+      });
+
+      if (!user) {
+        throw new NotFoundException('Пользователь не найден');
+      }
+
+      return user;
+    } catch {
+      throw new InternalServerErrorException(
+        'Произошла ошибка при получении пользователя',
+      );
+    }
+  }
+
+  async findOneByLogin(login: string): Promise<User> {
+    try {
+      // Ищем пользователя по логину
+      const user = await this.userRepository.findOne({
+        where: { login },
+      });
+
+      if (!user) {
+        throw new NotFoundException('Пользователь не найден');
+      }
+
+      return user;
+    } catch {
+      throw new InternalServerErrorException(
+        'Произошла ошибка при поиске пользователя по логину',
+      );
+    }
+  }
+
+  async findOneByPersonalNumber(personalNumber: number): Promise<User> {
+    try {
+      // Ищем пользователя по логину
+      const user = await this.userRepository.findOne({
+        where: { personalNumber },
+      });
+
+      if (!user) {
+        throw new NotFoundException('Пользователь не найден');
+      }
+
+      return user;
+    } catch {
+      throw new InternalServerErrorException(
+        'Произошла ошибка при поиске пользователя по логину',
+      );
+    }
+  }
+
+  async create(user: User): Promise<void> {
+    try {
+      if (!user.login || !user.hashedPassword) {
+        throw new BadRequestException(
+          'Обязательны поля login и hashedPassword',
+        );
+      }
+
+      await this.userRepository.save(user);
+    } catch {
+      throw new InternalServerErrorException(
+        'Произошла ошибка при создании пользователя',
+      );
+    }
+  }
+
+  async update(id: string, updateData: Partial<User>): Promise<User> {
+    try {
+      const user = await this.userRepository.findOne({
+        where: { id },
+      });
+
+      if (!user) {
+        throw new NotFoundException('Пользователь не найден');
+      }
+
+      if (!user.login) {
+        throw new BadRequestException(
+          'Обязательны поля login',
+        );
+      }
+
+      // Применяем обновления напрямую к объекту
+      Object.assign(user, updateData);
+
+      // Сохраняем изменения
+      await this.userRepository.save(user);
+
+      return user;
+    } catch {
+      throw new InternalServerErrorException(
+        'Произошла ошибка при обновлении пользователя',
+      );
+    }
+  }
+
+  async findWorkers(): Promise<IWorker[]> {
+    const workers = await this.userRepository
+      .createQueryBuilder('user')
+      .select('user.profession', 'name')
+      .addSelect('user.team_number', 'teamNumber')
+      .addSelect('COUNT(user.id)', 'count')
+      .groupBy('user.profession, user.team_number')
+      .where('user.profession NOT IN (:manager, :master, :chief)', {
+        manager: Profession.MANAGER,
+        master: Profession.MASTER,
+        chief: Profession.CHIEF,
+      })
+      .orderBy('user.profession', 'ASC') // Сначала сортировка по профессии
+      .addOrderBy('user.team_number', 'ASC') // Затем по номеру команды
+      .getRawMany();
+
+    return workers;
   }
 }

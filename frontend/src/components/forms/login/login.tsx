@@ -1,6 +1,6 @@
 import styles from './login.module.css';
 
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Spinner } from '../../spinner/spinner';
@@ -31,7 +31,8 @@ export const LoginForm = () => {
   const dispatch = useDispatch();
   const isLoading = useSelector(selectIsLoading);
   const error = useSelector(selectError);
-  const { setIsOpenOverlay, setIsLoginModalOpen } = useContext(LayerContext);
+  const { isLoginModalOpen, setIsOpenOverlay, setIsLoginModalOpen } =
+    useContext(LayerContext);
 
   // Состояние для хранения значений полей формы
   const [formData, setFormData] = useState<ILoginData>({
@@ -44,6 +45,12 @@ export const LoginForm = () => {
     login: '',
     password: '',
   });
+
+  useEffect(() => {
+    if (isLoginModalOpen) {
+      dispatch(clearError());
+    }
+  }, [isLoginModalOpen, dispatch]);
 
   // Обработчик изменения поля ввода
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -11,7 +11,8 @@ import { JwtService, TokenExpiredError } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 
 import { UserRepository } from '../user/user.repository';
-import { User } from '../user/entities/user.entity';
+import { IAccessToken } from 'src/shared/interfaces/api.interface';
+import { transformUser } from '../../shared/utils/utils';
 
 @Injectable()
 export class AuthService {
@@ -21,7 +22,7 @@ export class AuthService {
     private configService: ConfigService,
   ) {}
 
-  async login(login: string, password: string) {
+  async login(login: string, password: string): Promise<IAccessToken> {
     try {
       // Поиск пользователя
       const user = await this.userRepository.findOneByLogin(login);
@@ -65,25 +66,14 @@ export class AuthService {
       );
 
       // Обновили refreshToken в базе данных
-      const updateUser = await this.userRepository.patch(user.id, {
+      await this.userRepository.update(user.id, {
         refreshToken,
       });
 
-      console.log(
-        'Этот блок сработал при правильном входе, accessToken создан и refreshToken обновлен',
-      );
+      const apiUser = transformUser(user);
 
-      return {
-        updateUser,
-        accessToken,
-      };
-    } catch (error) {
-      if (
-        error instanceof NotFoundException ||
-        error instanceof BadRequestException
-      ) {
-        throw new UnauthorizedException(error.message);
-      }
+      return { user: apiUser, accessToken };
+    } catch {
       throw new InternalServerErrorException(
         'Произошла ошибка при авторизации',
       );
@@ -112,13 +102,13 @@ export class AuthService {
       }
 
       // Находим пользователя в базе
-      const user = await this.userRepository.findOne(userId);
+      const user = await this.userRepository.findOneById(userId);
 
       if (!user) {
         throw new UnauthorizedException('Пользователь не найден');
       }
 
-      await this.userRepository.patch(user.id, {
+      await this.userRepository.update(user.id, {
         refreshToken: null,
       });
     } catch {
@@ -128,9 +118,7 @@ export class AuthService {
     }
   }
 
-  async validateAccessToken(
-    savedAccessToken: string,
-  ): Promise<{ user: User; newAccessToken: string }> {
+  async validateAccessToken(savedAccessToken: string): Promise<IAccessToken> {
     let userId: string | undefined;
 
     try {
@@ -154,7 +142,7 @@ export class AuthService {
       }
 
       // Находим пользователя в базе
-      const user = await this.userRepository.findOne(userId);
+      const user = await this.userRepository.findOneById(userId);
 
       if (!user) {
         throw new UnauthorizedException('Пользователь не найден');
@@ -170,7 +158,7 @@ export class AuthService {
       }
 
       // Генерируем новый access token
-      const newAccessToken = await this.jwtService.signAsync(
+      const accessToken = await this.jwtService.signAsync(
         { userId: user.id, login: user.login },
         {
           secret: this.configService.get('ACCESS_TOKEN_SECRET'),
@@ -181,14 +169,13 @@ export class AuthService {
         },
       );
 
-      return {
-        user,
-        newAccessToken,
-      };
+      const apiUser = transformUser(user);
+
+      return { user: apiUser, accessToken };
     } catch (error) {
       if (error instanceof TokenExpiredError) {
         // Находим пользователя в базе
-        const user = await this.userRepository.findOne(userId);
+        const user = await this.userRepository.findOneById(userId);
 
         if (!user) {
           throw new UnauthorizedException('Пользователь не найден');
@@ -210,7 +197,7 @@ export class AuthService {
             throw new UnauthorizedException('Refresh token просрочен');
           }
         } catch {
-          await this.userRepository.patch(user.id, {
+          await this.userRepository.update(user.id, {
             refreshToken: null,
           });
 
@@ -218,7 +205,7 @@ export class AuthService {
         }
 
         // Генерируем новый access token
-        const newAccessToken = await this.jwtService.signAsync(
+        const accessToken = await this.jwtService.signAsync(
           { userId: user.id, login: user.login },
           {
             secret: this.configService.get('ACCESS_TOKEN_SECRET'),
@@ -229,33 +216,12 @@ export class AuthService {
           },
         );
 
-        return {
-          user,
-          newAccessToken,
-        };
+        const apiUser = transformUser(user);
+
+        return { user: apiUser, accessToken };
       }
 
       throw new UnauthorizedException('Требуется повторная авторизация');
-    }
-  }
-
-  async getTeamUsers(userId: string): Promise<User[]> {
-    try {
-      // Получаем пользователя по ID
-      const user = await this.userRepository.findOne(userId);
-
-      if (!user) {
-        throw new NotFoundException('Пользователь не найден');
-      }
-
-      // Получаем всех пользователей команды
-      const teamUsers = await this.userRepository.getTeamUsers(userId);
-
-      return teamUsers;
-    } catch (error) {
-      throw new InternalServerErrorException(
-        'Произошла ошибка при получении пользователей команды'
-      );
     }
   }
 }

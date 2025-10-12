@@ -7,6 +7,8 @@ import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './database/database.module';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { ShiftModule } from './modules/shift/shift.module';
+import { UserShiftModule } from './modules/user-shift/user-shift.module';
 
 @Module({
   imports: [
@@ -16,6 +18,8 @@ import { AuthModule } from './modules/auth/auth.module';
     DatabaseModule,
     UserModule,
     AuthModule,
+    ShiftModule,
+    UserShiftModule,
     // Первый статический модуль
     ServeStaticModule.forRoot({
       rootPath: path.join(__dirname, '..', 'dist', 'assets'),

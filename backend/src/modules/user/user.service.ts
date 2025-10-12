@@ -2,7 +2,6 @@ import * as bcrypt from 'bcrypt';
 
 import {
   BadRequestException,
-  ConflictException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -11,51 +10,26 @@ import {
 import { plainToInstance } from 'class-transformer';
 
 import { UserRepository } from './user.repository';
-import { CreateUserDto } from './dto/create-user.dto';
-import {
-  ApiListResponse,
-  ISuccessResponse,
-} from '../../shared/interfaces/api.interface';
+import { CreateUserDTO } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
+import { IList, IUser } from '../../shared/interfaces/api.interface';
+import { transformUser } from '../../shared/utils/utils';
 
 @Injectable()
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
-  async findAll(): Promise<ApiListResponse<User>> {
-    try {
-      const users = await this.userRepository.findAll();
-
-      return {
-        total: users.length,
-        items: users,
-      };
-    } catch (error) {
-      throw new InternalServerErrorException(
-        'Произошла ошибка при получении списка пользователей',
-      );
-    }
-  }
-
-  async findOne(id: string): Promise<User> {
-    try {
-      return await this.userRepository.findOne(id);
-    } catch (error) {
-      throw new NotFoundException('Пользователь не найден');
-    }
-  }
-
-  async create(dto: CreateUserDto): Promise<User> {
+  async createOne(createdUser: CreateUserDTO): Promise<void> {
     try {
       // Генерируем соль и хешируем пароль
       const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(dto.password, salt);
+      const hashedPassword = await bcrypt.hash(createdUser.password, salt);
 
       // Создаем нового пользователя
       // Используем spread-оператор для копирования всех полей из DTO
       // Добавляем хешированный пароль в объект
-      const userData = {
-        ...dto, // Копируем все поля из входящего DTO (login, password, profession)
+      const newUser = {
+        ...createdUser, // Копируем все поля из входящего DTO (login, password, profession)
         hashedPassword: hashedPassword, // Перезаписываем NULL на хешированный пароль
       };
 
@@ -63,98 +37,81 @@ export class UserService {
       // plainToInstance - это функция из библиотеки class-transformer
       // Она помогает преобразовать обычный объект в полноценный экземпляр класса
       // с учетом всех декораторов и валидаций из сущности TypeORM
-      const user = plainToInstance(User, userData);
+      const user = plainToInstance(User, newUser);
 
-      return await this.userRepository.create(user);
-    } catch (error) {
-      if (error.code === '23505') {
-        throw new ConflictException(
-          'Пользователь с таким логином уже существует',
-        );
-      }
+      await this.userRepository.create(user);
+    } catch {
       throw new BadRequestException('Некорректные данные для регистрации');
     }
   }
 
-  async createMany(dtos: CreateUserDto[]): Promise<User[]> {
+  async createUsers(users: CreateUserDTO[]): Promise<void> {
     try {
-      if (!dtos || dtos.length === 0) {
+      if (!users || users.length === 0) {
         throw new BadRequestException(
           'Массив пользователей не может быть пустым',
         );
       }
 
-      // Используем существующий метод create для каждого пользователя
-      const users = await Promise.all(
-        dtos.map(async (dto) => {
-          return this.create(dto);
-        }),
-      );
-
-      return await this.userRepository.createMany(users);
-    } catch (error) {
-      if (error.code === '23505') {
-        throw new ConflictException(
-          'Один или несколько пользователей уже существуют в системе',
-        );
-      }
+      await Promise.all(users.map((user) => this.createOne(user)));
+    } catch {
       throw new InternalServerErrorException(
-        'Произошла ошибка при массовом создании пользователей',
+        'Произошла ошибка при создании пользователей',
       );
     }
   }
 
-  async patch(
-    id: string,
-    updateData: Partial<User>,
-  ): Promise<ISuccessResponse> {
+  async getUsers(): Promise<IList<IUser>> {
     try {
-      // Вызываем метод репозитория
-      const updatedUser = await this.userRepository.patch(id, updateData);
+      const users = await this.userRepository.findUsers();
+      const apiUsers = users.map(transformUser);
 
-      // Проверяем обязательные поля после обновления
-      if (!updatedUser.login || !updatedUser.hashedPassword) {
-        throw new BadRequestException(
-          'Обязательны поля login и hashedPassword',
-        );
-      }
-
-      // Возвращаем успешный ответ
       return {
-        success: true,
-        message: 'Пользователь успешно обновлен',
+        total: apiUsers.length,
+        items: apiUsers,
       };
-    } catch (error) {
-      if (error.code === '23505') {
-        throw new ConflictException(
-          'Пользователь с таким логином уже существует',
-        );
-      }
-
+    } catch {
       throw new InternalServerErrorException(
-        'Произошла ошибка при обновлении пользователя',
+        'Произошла ошибка при получении списка пользователей',
       );
     }
   }
 
-  async delete(id: string): Promise<ISuccessResponse> {
+  async getTeamUsers(userId: string): Promise<IUser[]> {
     try {
-      const user = await this.userRepository.findOne(id);
+      // Получаем пользователя по ID
+      const user = await this.userRepository.findOneById(userId);
+
       if (!user) {
         throw new NotFoundException('Пользователь не найден');
       }
 
-      await this.userRepository.delete(id);
-      return {
-        success: true,
-        message: 'Пользователь успешно удален',
-      };
-    } catch (error) {
-      if (error.code === '23503') {
-        throw new ConflictException('Пользователь связан с другими записями');
-      }
+      // Получаем всех пользователей команды
+      const teamUsers = await this.userRepository.findTeamUsers(userId);
+      const apiUsers = teamUsers.map(transformUser);
+
+      return apiUsers;
+    } catch {
       throw new InternalServerErrorException(
-        'Произошла ошибка при удалении пользователя',
+        'Произошла ошибка при получении пользователей команды',
+      );
+    }
+  }
+
+  async update(id: string, updateData: Partial<User>): Promise<IUser> {
+    try {
+      const user = await this.userRepository.update(id, updateData);
+
+      if (!user) {
+        throw new NotFoundException('Пользователь не найден или не обновлен');
+      }
+
+      const apiUser = transformUser(user);
+
+      return apiUser;
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Произошла ошибка при обновлении пользователя',
       );
     }
   }

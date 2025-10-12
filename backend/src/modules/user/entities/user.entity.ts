@@ -1,7 +1,10 @@
 import { Max, Min } from 'class-validator';
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+
+import { UserShift } from '../../../modules/user-shift/entities/user-shift.entity';
 
 @Entity({
+  schema: 'gps',
   name: 'users',
 })
 export class User {
@@ -109,4 +112,7 @@ export class User {
     nullable: true,
   })
   refreshToken: string | null;
+
+  @OneToMany(() => UserShift, (shift) => shift.user)
+  shifts: UserShift[];
 }

@@ -18,6 +18,8 @@ import { NotFound } from '../pages/not-found/not-found';
 import { Overlay } from '../overlay/overlay';
 import { Modal } from '../modal/modal';
 import { LoginForm } from '../forms/login/login';
+import { ShiftForm } from '../forms/shift/shift';
+import { AddWorkerForm } from '../forms/add-worker/add-worker.form';
 import { Logout } from '../loguot/logout';
 import { ProtectedRoute } from '../protected-route/protected-route';
 
@@ -27,8 +29,13 @@ import { checkAccessToken } from '../../services/slices/auth/actions';
 
 const App = () => {
   const { isLightTheme } = useContext(ThemeContext);
-  const { isOpenOverlay, isLoginModalOpen, isLogoutOpenModal } =
-    useContext(LayerContext);
+  const {
+    isOpenOverlay,
+    isLoginModalOpen,
+    isLogoutOpenModal,
+    isAddWorkerOpenModall,
+    isAddShiftOpenModall,
+  } = useContext(LayerContext);
   // const isAuthenticated = useSelector(selectIsAuthenticated);
   // const location = useLocation();
   // const navigate = useNavigate();
@@ -70,6 +77,18 @@ const App = () => {
       {isLogoutOpenModal && (
         <Modal>
           <Logout />
+        </Modal>
+      )}
+
+      {isAddWorkerOpenModall && (
+        <Modal>
+          <AddWorkerForm />
+        </Modal>
+      )}
+
+      {isAddShiftOpenModall && (
+        <Modal>
+          <ShiftForm />
         </Modal>
       )}
     </div>

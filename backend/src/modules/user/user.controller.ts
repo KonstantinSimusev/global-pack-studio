@@ -1,67 +1,80 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   Param,
   Post,
+  Put,
+  Req,
   Res,
+  UnauthorizedException,
 } from '@nestjs/common';
-import { Response } from 'express'; // Импортируем Response из express
+
+import { Response, Request } from 'express';
 
 import { UserService } from './user.service';
+import { AuthService } from '../auth/auth.service';
 
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserDTO } from './dto/create-user.dto';
+import { UpdateUserDTO } from './dto/update-user.dto';
 
-import { ISuccessResponse } from '../../shared/interfaces/api.interface';
+import { IList, IUser, ISuccess } from '../../shared/interfaces/api.interface';
+import {
+  clearCookies,
+  getAccessToken,
+  setAccessToken,
+} from '../../shared/utils/utils';
 
 @Controller('users')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly authService: AuthService,
+  ) {}
 
   @Get()
-  async findAll(@Res() response: Response) {
-    const result = await this.userService.findAll();
-
-    // Устанавливаем правильный Content-Type
-    response.set('Content-Type', 'application/json');
-
-    // Отправляем отформатированный JSON с отступами в 2 пробела
-    response.send(JSON.stringify(result, null, 2));
-  }
-
-  @Get(':id')
-  async findOne(@Param('id') id: string) {
-    return this.userService.findOne(id);
+  async getUsers(): Promise<IList<IUser>> {
+    return this.userService.getUsers();
   }
 
   @Post()
-  async create(@Body() dto: CreateUserDto) {
-    return await this.userService.create(dto);
-  }
-
-  @Post('bulk')
-  async createMany(@Body() dtos: CreateUserDto[]) {
-    return this.userService.createMany(dtos);
-  }
-
-  /*
-  @Patch(':id')
-  async update(
-    @Param('id') id: string,
-    @Body() updateData: UpdateUserDto,
-  ): Promise<ISuccessResponse> {
-    const updatedUser = await this.userService.patch(id, updateData);
+  async createUsers(@Body() users: CreateUserDTO[]): Promise<ISuccess> {
+    await this.userService.createUsers(users);
     return {
       success: true,
-      message: 'Пользователь успешно обновлен',
-      id: updatedUser.id,
+      message: 'Пользователи успешно созданы',
     };
   }
-  */
 
-  @Delete(':id')
-  async delete(@Param('id') id: string): Promise<ISuccessResponse> {
-    return this.userService.delete(id);
+  @Get('team')
+  async getTeamUsers(
+    @Res({ passthrough: true }) response: Response,
+    @Req() request: Request,
+  ): Promise<IUser[]> {
+    try {
+      const savedAccessToken = getAccessToken(request);
+
+      const { user, accessToken } =
+        await this.authService.validateAccessToken(savedAccessToken);
+
+      setAccessToken(response, accessToken);
+
+      return await this.userService.getTeamUsers(user.id);
+    } catch {
+      clearCookies(response);
+      throw new UnauthorizedException('Требуется повторная авторизация');
+    }
+  }
+
+  @Put(':id')
+  async updateUser(
+    @Param('id') id: string,
+    @Body() updateData: UpdateUserDTO,
+  ): Promise<IUser> {
+    try {
+      return await this.userService.update(id, updateData);
+    } catch (error) {
+      throw error;
+    }
   }
 }
