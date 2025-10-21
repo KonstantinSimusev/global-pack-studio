@@ -8,7 +8,7 @@ import {
   ManyToMany,
 } from 'typeorm';
 
-import { UserShift } from '../../../modules/user-shift/entities/user-shift.entity';
+import { UserShift } from '../../user/entities/user-shift.entity';
 
 @Entity({
   schema: 'gps',
@@ -50,7 +50,6 @@ export class Shift {
   @Max(5)
   teamNumber: number;
 
-  // Связь со списком пользователей в смене
-  @ManyToMany(() => UserShift, (userShift) => userShift.shift)
-  userShifts: UserShift[];
+  @OneToMany(() => UserShift, (userShift) => userShift.shift)
+  users: UserShift[];
 }

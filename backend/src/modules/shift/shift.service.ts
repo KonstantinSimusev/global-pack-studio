@@ -85,7 +85,7 @@ export class ShiftService {
       //   userShifts,
       // });
 
-      await this.shiftRepository.create(newShift);
+      // await this.shiftRepository.create(newShift);
 
       return ;
     } catch (error) {

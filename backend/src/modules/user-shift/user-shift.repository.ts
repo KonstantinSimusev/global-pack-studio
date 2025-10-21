@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 
-import { UserShift } from './entities/user-shift.entity';
+import { UserShift } from '../user/entities/user-shift.entity';
 import { CreateUserShiftDTO } from './dto/create-user-shift.dto';
 
 @Injectable()

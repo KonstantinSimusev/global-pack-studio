@@ -8,8 +8,8 @@ import {
   ManyToMany,
 } from 'typeorm';
 
-import { User } from '../../../modules/user/entities/user.entity';
-import { Shift } from '../../../modules/shift/entities/shift.entity';
+import { User } from './user.entity';
+import { Shift } from '../../shift/entities/shift.entity';
 
 @Entity({
   schema: 'gps',
@@ -58,11 +58,11 @@ export class UserShift {
   @Max(20)
   workHours: number;
 
-  @ManyToMany(() => User, (user) => user.userShifts)
+  @ManyToOne(() => User, (user) => user.shifts)
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @ManyToMany(() => Shift, (shift) => shift.userShifts)
+  @ManyToOne(() => Shift, (shift) => shift.users)
   @JoinColumn({ name: 'shift_id' })
   shift: Shift;
 }

@@ -1,7 +1,7 @@
 import { Max, Min } from 'class-validator';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToMany } from 'typeorm';
 
-import { UserShift } from '../../../modules/user-shift/entities/user-shift.entity';
+import { UserShift } from './user-shift.entity';
 
 @Entity({
   schema: 'gps',
@@ -113,7 +113,6 @@ export class User {
   })
   refreshToken: string | null;
 
-  // Связь со списком смен пользователя
-  @ManyToMany(() => UserShift, (userShift) => userShift.user)
-  userShifts: UserShift[];
+  @OneToMany(() => UserShift, (userShift) => userShift.user)
+  shifts: UserShift[];
 }

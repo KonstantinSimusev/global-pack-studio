@@ -7,7 +7,7 @@ import {
   Max,
   Min,
 } from 'class-validator';
-import { UserShift } from '../../../modules/user-shift/entities/user-shift.entity';
+import { UserShift } from '../../user/entities/user-shift.entity';
 
 export class CreateShiftDTO {
   @Type(() => Date)
