@@ -1,6 +1,5 @@
 .container {
-  display: grid;
-  align-items: end;
+  display: flex;
   padding: 20px;
   background-image: linear-gradient(to left, #fffafa, #1c1c1c);
 }
@@ -29,9 +28,9 @@
 }
 
 .text__top {
-  padding-left: 6%;
+  padding-left: 16%;
 }
 
 .text__bottom {
-  padding-left: 20%;
+  padding-left: 46%;
 }

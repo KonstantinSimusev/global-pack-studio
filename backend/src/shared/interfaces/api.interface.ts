@@ -4,26 +4,21 @@ export interface IList<T> {
 }
 
 export interface IUser {
-  id: string;
-  positionCode: number;
-  lastName: string;
-  firstName: string;
-  patronymic: string;
-  profession: string;
-  personalNumber: number;
-  teamNumber: number;
-  workSchedule: string;
-  workshopCode: string;
-}
-
-export interface IAccessToken {
-  user: IUser;
-  accessToken: string;
+  id?: string;
+  positionCode?: number;
+  lastName?: string;
+  firstName?: string;
+  patronymic?: string;
+  profession?: string;
+  personalNumber?: number;
+  teamNumber?: number;
+  workSchedule?: string;
+  workshopCode?: string;
 }
 
 export interface ISuccess {
-  success: boolean;
-  message: string;
+  message?: string;
+  accessToken?: string;
   user?: IUser;
 }
 
@@ -46,6 +41,12 @@ export interface IUserShift {
   hoursWorked: number;
   section: string | null;
   shiftProfession: string | null;
-  userId: string;
-  shiftId: string;
+  userId?: string;
+  shiftId?: string;
+}
+
+export interface SheduleEntry {
+  date: Date;
+  shiftNumber: number;
+  teamNumber: number;
 }

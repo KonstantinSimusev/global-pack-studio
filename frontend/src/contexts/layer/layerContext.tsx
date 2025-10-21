@@ -8,7 +8,9 @@ interface ILayerContextValue {
   isLogoutOpenModal: boolean;
   isAddWorkerOpenModall: boolean;
   isAddShiftOpenModall: boolean;
+  isDeleteOpenModall: boolean;
   isCookie: boolean;
+  selectedId: string;
   setIsOpenOverlay: (value: boolean) => void;
   setIsOpenMenu: (value: boolean) => void;
   setIsOpenModal: (value: boolean) => void;
@@ -16,7 +18,9 @@ interface ILayerContextValue {
   setIsLogoutOpenModal: (value: boolean) => void;
   setIsAddWorkerOpenModall: (value: boolean) => void;
   setIsAddShiftOpenModall: (value: boolean) => void;
+  setIsDeleteOpenModall: (value: boolean) => void;
   setIsCookie: (value: boolean) => void;
+  setSelectedId: (value: string) => void;
 }
 
 export const LayerContext = createContext<ILayerContextValue>({
@@ -27,7 +31,9 @@ export const LayerContext = createContext<ILayerContextValue>({
   isLogoutOpenModal: false,
   isAddWorkerOpenModall: false,
   isAddShiftOpenModall: false,
+  isDeleteOpenModall: false,
   isCookie: false,
+  selectedId: '',
   setIsOpenOverlay: () => {},
   setIsOpenMenu: () => {},
   setIsOpenModal: () => {},
@@ -35,5 +41,7 @@ export const LayerContext = createContext<ILayerContextValue>({
   setIsLogoutOpenModal: () => {},
   setIsAddWorkerOpenModall: () => {},
   setIsAddShiftOpenModall: () => {},
+  setIsDeleteOpenModall: () => {},
   setIsCookie: () => {},
+  setSelectedId: () => {},
 });

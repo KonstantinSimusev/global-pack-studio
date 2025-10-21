@@ -2,21 +2,23 @@ import styles from './shift-list.module.css';
 
 import { useEffect } from 'react';
 
-import { EditButton } from '../buttons/edit/edit';
-import { DeleteButton } from '../buttons/delete/delete';
-
 import { useDispatch, useSelector } from '../../services/store';
-import { getShifts } from '../../services/slices/shift/actions';
+import { getTeamShifts } from '../../services/slices/shift/actions';
 import { selectShifts } from '../../services/slices/shift/slice';
 
 import { formatDate } from '../../utils/utils';
+import { EditButton } from '../buttons/edit/edit';
+import { DeleteButton } from '../buttons/delete/delete';
 
 export const ShiftList = () => {
   const dispatch = useDispatch();
   const shifts = useSelector(selectShifts);
 
+  const currentDay = new Date();
+  const currentMonth = currentDay.toLocaleString('ru', { month: 'long' });
+
   useEffect(() => {
-    dispatch(getShifts());
+    dispatch(getTeamShifts());
   }, []);
   return (
     <>
@@ -24,25 +26,26 @@ export const ShiftList = () => {
         <ul className={styles.list}>
           {shifts.map((shift, index) => (
             <li key={shift.id} className={styles.item}>
-              <span className={styles.index}>
-                {String(shifts.length - index).padStart(2, '0')}
-              </span>
-              <div className={styles.wrapper}>
-                <span className={styles.date}>{formatDate(shift.date)}</span>
-                <span className={styles.shift_number}>
+              <div className={styles.wrapper__header}>
+                <span className={styles.index}>
+                  {String(shifts.length - index).padStart(2, '0')}
+                </span>
+                <div className={styles.wrapper__button}>
+                  <EditButton id={shift.id} />
+                  <DeleteButton id={shift.id} />
+                </div>
+              </div>
+              <div className={styles.wrapper__info}>
+                <span className={styles.shift__number}>
                   Смена {shift.shiftNumber}
                 </span>
-              </div>
-
-              <div>
-                <EditButton />
-                <DeleteButton />
+                <span className={styles.date}>{formatDate(shift.date)}</span>
               </div>
             </li>
           ))}
         </ul>
       ) : (
-        <div>Смены не найдены</div>
+        <div>За {currentMonth} смен нет</div>
       )}
     </>
   );

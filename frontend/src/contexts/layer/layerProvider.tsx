@@ -13,7 +13,9 @@ export const LayerProvider = ({ children }: TLayerProviderProps) => {
   const [isLogoutOpenModal, setIsLogoutOpenModal] = useState(false);
   const [isAddWorkerOpenModall, setIsAddWorkerOpenModall] = useState(false);
   const [isAddShiftOpenModall, setIsAddShiftOpenModall] = useState(false);
+  const [isDeleteOpenModall, setIsDeleteOpenModall] = useState(false);
   const [isCookie, setIsCookie] = useState(false);
+  const [selectedId, setSelectedId] = useState('');
 
   return (
     <LayerContext.Provider
@@ -25,7 +27,9 @@ export const LayerProvider = ({ children }: TLayerProviderProps) => {
         isLogoutOpenModal,
         isAddWorkerOpenModall,
         isAddShiftOpenModall,
+        isDeleteOpenModall,
         isCookie,
+        selectedId,
         setIsOpenOverlay,
         setIsOpenMenu,
         setIsOpenModal,
@@ -33,7 +37,9 @@ export const LayerProvider = ({ children }: TLayerProviderProps) => {
         setIsLogoutOpenModal,
         setIsAddWorkerOpenModall,
         setIsAddShiftOpenModall,
+        setIsDeleteOpenModall,
         setIsCookie,
+        setSelectedId,
       }}
     >
       {children}

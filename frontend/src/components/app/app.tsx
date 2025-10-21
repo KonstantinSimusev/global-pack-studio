@@ -21,11 +21,13 @@ import { LoginForm } from '../forms/login/login';
 import { ShiftForm } from '../forms/shift/shift';
 import { AddWorkerForm } from '../forms/add-worker/add-worker.form';
 import { Logout } from '../loguot/logout';
+import { Delete } from '../delete/delete';
+import { TeamWorkerList } from '../pages/team-worker-list/team-worker-list';
+
 import { ProtectedRoute } from '../protected-route/protected-route';
 
-import { useDispatch } from '../../services/store';
 import { checkAccessToken } from '../../services/slices/auth/actions';
-// import { selectIsAuthenticated } from '../../services/slices/auth/slice';
+import { useDispatch } from '../../services/store';
 
 const App = () => {
   const { isLightTheme } = useContext(ThemeContext);
@@ -35,8 +37,8 @@ const App = () => {
     isLogoutOpenModal,
     isAddWorkerOpenModall,
     isAddShiftOpenModall,
+    isDeleteOpenModall,
   } = useContext(LayerContext);
-  // const isAuthenticated = useSelector(selectIsAuthenticated);
   // const location = useLocation();
   // const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -61,6 +63,7 @@ const App = () => {
           <Route path="/home" element={<Home />} />
           <Route path="/timesheet" element={<Timesheet />} />
           <Route path="/production" element={<Production />} />
+          <Route path="/teamworkers" element={<TeamWorkerList />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
@@ -74,12 +77,6 @@ const App = () => {
         </Modal>
       )}
 
-      {isLogoutOpenModal && (
-        <Modal>
-          <Logout />
-        </Modal>
-      )}
-
       {isAddWorkerOpenModall && (
         <Modal>
           <AddWorkerForm />
@@ -89,6 +86,18 @@ const App = () => {
       {isAddShiftOpenModall && (
         <Modal>
           <ShiftForm />
+        </Modal>
+      )}
+
+      {isDeleteOpenModall && (
+        <Modal>
+          <Delete />
+        </Modal>
+      )}
+
+      {isLogoutOpenModal && (
+        <Modal>
+          <Logout />
         </Modal>
       )}
     </div>

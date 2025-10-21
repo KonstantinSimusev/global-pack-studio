@@ -1,5 +1,6 @@
-export enum Profession {
-  MANAGER = 'управление',
-  MASTER = 'мастер участка',
-  CHIEF = 'начальник участка',
+export enum ERole {
+  MANAGER = 'MANAGER',
+  MASTER = 'MASTER',
+  ADMIN = 'ADMIN',
+  USER = 'USER',
 }

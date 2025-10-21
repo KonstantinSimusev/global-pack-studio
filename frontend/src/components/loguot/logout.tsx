@@ -4,29 +4,33 @@ import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { LayerContext } from '../../contexts/layer/layerContext';
-import { useDispatch } from '../../services/store';
+import { useDispatch, useSelector } from '../../services/store';
 import { logoutUser } from '../../services/slices/auth/actions';
+import { clearShifts } from '../../services/slices/shift/slice';
+import { Spinner } from '../spinner/spinner';
+import { selectIsLoading } from '../../services/slices/auth/slice';
 
 export const Logout = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { setIsOpenOverlay, setIsLogoutOpenModal } =
-    useContext(LayerContext);
+  const { setIsOpenOverlay, setIsLogoutOpenModal } = useContext(LayerContext);
+  const isLoading = useSelector(selectIsLoading);
 
   const handleClickLogout = async () => {
     try {
+      // Диспачим действие выхода
+      await dispatch(logoutUser());
+
+      // Отчищаем смены
+      dispatch(clearShifts());
+
       // Очищаем состояние оверлеев и модальных окон
       setIsOpenOverlay(false);
       setIsLogoutOpenModal(false);
 
-      // Диспатим действие выхода
-      await dispatch(logoutUser());
-
       // После успешного выхода перенаправляем на главную страницу
       navigate('/');
     } catch (error) {
-      console.error('Ошибка при выходе:', error);
-      // При ошибке также закрываем все оверлеи и перенаправляем
       setIsOpenOverlay(false);
       setIsLogoutOpenModal(false);
       navigate('/');
@@ -41,6 +45,9 @@ export const Logout = () => {
   return (
     <div className={styles.container}>
       <span className={styles.text}>Хотите&nbsp;выйти?</span>
+
+      <div className={styles.spinner}>{isLoading && <Spinner />}</div>
+
       <div className={styles.wrapper}>
         <button
           className={styles.button__logout}

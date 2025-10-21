@@ -33,9 +33,3 @@ export interface IShift {
   shiftNumber: number;
   teamNumber: number;
 }
-
-export interface IWorker {
-  name: string;
-  teamNumber: number;
-  count: number;
-}

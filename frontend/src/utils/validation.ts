@@ -159,7 +159,7 @@ export const validationRules: IValidationRules = {
       {
         type: 'required',
         pattern: /^.+$/,
-        message: 'Это поле обязательно',
+        message: 'Выберите смену',
       },
       {
         type: 'number',

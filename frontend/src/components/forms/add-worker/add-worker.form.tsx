@@ -1,7 +1,7 @@
 import styles from './add-worker.form.module.css';
 
 import { useContext, useState } from 'react';
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Spinner } from '../../spinner/spinner';
 
@@ -18,7 +18,6 @@ import {
   validateForm,
   validationRules,
 } from '../../../utils/validation';
-import { addWorker } from '../../../services/slices/auth/actions';
 
 // Изменим тип IFormData на Record<string, string>
 interface IFormData extends Record<string, string> {
@@ -26,7 +25,7 @@ interface IFormData extends Record<string, string> {
 }
 
 export const AddWorkerForm = () => {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const isLoading = useSelector(selectIsLoading);
   const error = useSelector(selectError);
@@ -93,14 +92,15 @@ export const AddWorkerForm = () => {
           personalNumber: Number(formData.personalNumber),
         };
 
-        const response = await dispatch(addWorker(payload));
+        // const response = await dispatch(addWorker(payload));
 
-        if (response.payload) {
-          // navigate('/timesheet');
+        // if (response.payload) {
+        if (payload) {
           setIsAddWorkerOpenModall(false);
           setIsOpenOverlay(false);
           setFormData({ personalNumber: '' });
           setErrors({ personalNumber: '' });
+          navigate('/teamworkers');
         } else {
           setFormData({ personalNumber: '' });
           throw new Error();

@@ -4,11 +4,18 @@ import { useContext } from 'react';
 import { DeleteIcon } from '../../icons/delete/delete';
 import { LayerContext } from '../../../contexts/layer/layerContext';
 
-export const DeleteButton = () => {
-  const { setIsOpenOverlay } = useContext(LayerContext);
+export const DeleteButton = ({ id }: { id?: string }) => {
+  if (!id) {
+    return null;
+  }
+
+  const { setIsOpenOverlay, setIsDeleteOpenModall, setSelectedId } =
+    useContext(LayerContext);
 
   const handleClick = () => {
     setIsOpenOverlay(true);
+    setIsDeleteOpenModall(true);
+    setSelectedId(id);
   };
 
   return (

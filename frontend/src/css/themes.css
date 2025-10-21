@@ -10,6 +10,7 @@
   --color-default: #1c1c1c;
   --color-icon: rgba(0 0 0 / 0.75);
   --color-button: rgba(255 255 255 / 0.9);
+  --color-button-default: #007dff;
   --color-border: rgba(51 51 51 / 0.3);
   --color-modal-border: transparent;
   --color-sidebar: rgba(0 0 0 / 0.5);
@@ -18,6 +19,7 @@
   --color-banner: #fffafa;
   --color-not-found: rgba(0 0 0 / 0.5);
   --color-button-return: rgba(0 0 0 / 0.6);
+  --color-shift: rgba(255 255 255 / 0.9);
   --bg-color-default: #fffafa;
   --bg-color-button: rgba(0 0 0 / 0.8);
   --bg-color-icon-theme: #dbdbdb;
@@ -25,12 +27,14 @@
   --bg-color-overlay: rgba(0 0 0 / 0.3);
   --bg-color-link: rgba(0 0 0 / 0.5);
   --bg-button-return: rgba(0 0 0 / 0.1);
+  --bg-color-shift: rgba(0 0 0 / 0.8);
 }
 
 .theme-dark {
   --color-default: rgba(255 255 255 / 0.8);
   --color-icon: rgba(255 255 255 / 0.8);
   --color-button: rgba(0 0 0 / 0.8);
+  --color-button-default: #007dff;
   --color-border: rgba(234 234 234 / 0.3);
   --color-modal-border: rgba(234 234 234 / 0.3);
   --color-sidebar: rgba(255 255 255 / 0.5);
@@ -39,6 +43,7 @@
   --color-banner: #fffafa;
   --color-not-found: rgba(255 255 255 / 0.5);
   --color-button-return: rgba(255 255 255 / 0.6);
+  --color-shift: rgba(255 255 255 / 0.9);
   --bg-color-default: #1c1c1c;
   --bg-color-button: rgba(255 255 255 / 0.9);
   --bg-color-icon-theme: #252525;
@@ -46,4 +51,5 @@
   --bg-color-overlay: rgba(0 0 0 / 0.4);
   --bg-color-link: rgba(255 255 255 / 0.5);
   --bg-button-return: rgba(255 255 255 / 0.2);
+  --bg-color-shift: rgba(255 255 255 / 0.2);
 }

@@ -3,9 +3,8 @@ import {
   checkAccessToken,
   loginUser,
   logoutUser,
-  getTeamUsers,
-  addWorker,
 } from './actions';
+
 import type { IUser } from '../../../utils/api.interface';
 
 interface IAuthState {
@@ -41,28 +40,6 @@ export const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Обработчик для getTeamUsers
-      .addCase(getTeamUsers.pending, (state) => {
-        state.isLoading = true;
-        state.isAuthenticated = false;
-        state.users = [];
-        state.error = null;
-      })
-      .addCase(
-        getTeamUsers.fulfilled,
-        (state, action: PayloadAction<IUser[]>) => {
-          state.isAuthenticated = true;
-          state.isLoading = false;
-          state.users = action.payload;
-          state.error = null;
-        },
-      )
-      .addCase(getTeamUsers.rejected, (state, action) => {
-        state.isAuthenticated = false;
-        state.isLoading = false;
-        state.users = [];
-        state.error = action.error.message ?? 'Ошибка получения списка';
-      })
       // Обработчик для loginUser
       .addCase(loginUser.pending, (state) => {
         state.isLoading = true;
@@ -98,6 +75,7 @@ export const authSlice = createSlice({
         state.isLoading = false; // Сбрасываем флаг после ошибки
         state.error = action.error.message ?? 'Ошибка токена';
       })
+      // Обработчик для logoutUser
       .addCase(logoutUser.pending, (state) => {
         state.isLoading = true;
         state.error = null; // Очищаем ошибку при начале выхода
@@ -114,23 +92,6 @@ export const authSlice = createSlice({
         state.isLoading = false;
         state.error = action.error.message ?? 'Ошибка при выходе из системы';
       })
-      // Обработчик для addWorker
-      .addCase(addWorker.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
-      })
-      .addCase(addWorker.fulfilled, (state, action: PayloadAction<IUser>) => {
-        state.isAuthenticated = true;
-        state.isLoading = false;
-        state.user = action.payload;
-        state.error = null;
-      })
-      .addCase(addWorker.rejected, (state, action) => {
-        state.isAuthenticated = false;
-        state.isLoading = false;
-        state.user = null;
-        state.error = action.error.message ?? 'Работник не найден';
-      });
   },
 });
 

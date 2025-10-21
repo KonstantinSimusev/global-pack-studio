@@ -16,7 +16,7 @@ async function bootstrap() {
       transform: true,
     }),
   );
-  
+
   app.setGlobalPrefix('api/gps');
 
   app.enableCors({

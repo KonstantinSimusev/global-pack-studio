@@ -1,21 +1,13 @@
 import {
-  IsUUID,
   IsString,
   IsNumber,
   Min,
   Max,
   IsNotEmpty,
+  IsOptional,
 } from 'class-validator';
 
 export class CreateUserShiftDTO {
-  @IsUUID('4')
-  @IsNotEmpty()
-  userId: string;
-
-  @IsUUID('4')
-  @IsNotEmpty()
-  shiftId: string;
-
   @IsString()
   @IsNotEmpty()
   attendance: string;
@@ -26,8 +18,10 @@ export class CreateUserShiftDTO {
   hoursWorked: number;
 
   @IsString()
-  section: string | null;
+  @IsOptional()
+  section: string;
 
   @IsString()
-  shiftProfession: string | null;
+  @IsOptional()
+  shiftProfession: string;
 }

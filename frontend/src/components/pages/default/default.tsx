@@ -35,7 +35,9 @@ export const DefaultPage = () => {
             </p>
           </div>
           <div className={styeles.container__agree}>
-            <h3 className={styeles.title__politic}>Политика конфиденциальности</h3>
+            <h3 className={styeles.title__politic}>
+              Политика конфиденциальности
+            </h3>
             <ul className={styeles.list__politic}>
               <li>
                 <h4 className={styeles.title}>1. Общие положения</h4>

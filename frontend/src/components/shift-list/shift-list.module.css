@@ -6,31 +6,36 @@
 
 .item {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   padding: 20px;
-  border: 1px solid var(--color-border);
+  background-color: var(--bg-color-shift);
+  gap: 30px;
+  color: var(--color-shift);
   border-radius: 14px;
+  transition: opacity 0.3s ease;
 }
 
-.wrapper {
+.wrapper__header {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.shift_info {
+.wrapper__button {
   display: flex;
-  flex-direction: column;
+  align-items: start;
   gap: 10px;
 }
 
-.shiftInfo1 {
+.wrapper__info {
   display: flex;
-  justify-content: center;
   flex-direction: column;
-  gap: 10px;
+  gap: 2px;
+  font-size: 16px;
 }
 
-.button__container {
-  display: flex;
-  flex-direction: column;
+.index {
+  font-size: 26px;
+  opacity: 0.4;
 }

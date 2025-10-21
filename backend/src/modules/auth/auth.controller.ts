@@ -1,21 +1,11 @@
-import {
-  Body,
-  Controller,
-  Get,
-  InternalServerErrorException,
-  Post,
-  Req,
-  Res,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Body, Controller, Post, Req, Res } from '@nestjs/common';
 
 import { Response, Request } from 'express';
 
 import { AuthService } from './auth.service';
 
-import { CreateLoginDTO } from './dto/create-auth.dto';
+import { LoginDTO } from './dto/login.dto';
 import { ISuccess, IUser } from '../../shared/interfaces/api.interface';
-import { clearCookies, getAccessToken, setAccessToken } from '../../shared/utils/utils';
 
 @Controller('auth')
 export class AuthController {
@@ -23,61 +13,25 @@ export class AuthController {
 
   @Post('login')
   async login(
-    @Body() createLoginDTO: CreateLoginDTO,
-    @Res({ passthrough: true }) response: Response,
+    @Body() dto: LoginDTO,
+    @Res({ passthrough: true }) res: Response,
   ): Promise<IUser> {
-    try {
-      const { user, accessToken } = await this.authService.login(
-        createLoginDTO.login,
-        createLoginDTO.password,
-      );
-
-      setAccessToken(response, accessToken);
-
-      return user;
-    } catch {
-      throw new UnauthorizedException('Ошибка авторизации');
-    }
+    return await this.authService.login(dto.login, dto.password, res);
   }
 
   @Post('logout')
   async logout(
-    @Res({ passthrough: true }) response: Response,
-    @Req() request: Request,
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
   ): Promise<ISuccess> {
-    try {
-      const savedAccessToken = getAccessToken(request);
-      await this.authService.logout(savedAccessToken);
-      clearCookies(response);
-
-      return {
-        success: true,
-        message: 'Успешный выход из системы',
-      };
-    } catch {
-      throw new InternalServerErrorException(
-        'Произошла ошибка при выходе из системы',
-      );
-    }
+    return await this.authService.logout(req, res);
   }
 
   @Post('token')
   async checkAccessToken(
-    @Res({ passthrough: true }) response: Response,
-    @Req() request: Request,
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
   ): Promise<IUser> {
-    try {
-      const savedAccessToken = getAccessToken(request);
-
-      const { user, accessToken } =
-        await this.authService.validateAccessToken(savedAccessToken);
-
-      setAccessToken(response, accessToken);
-
-      return user;
-    } catch {
-      clearCookies(response);
-      throw new UnauthorizedException('Требуется повторная авторизация');
-    }
+    return await this.authService.validateAccessToken(req, res);
   }
 }

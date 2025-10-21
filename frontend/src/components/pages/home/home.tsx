@@ -11,13 +11,13 @@ export const Home = () => {
   // const workers = useSelector(selectWorkers);
 
   // useEffect(() => {
-  //   dispatch(getWorkers());
+    // dispatch(getWorkers());
   // }, []);
-  
+
   return (
     <main className={styles.container}>
       <p>Главная страница</p>
-      
+
       <div>
         {/* {workers.map((worker, index) => (
           <div key={index}>

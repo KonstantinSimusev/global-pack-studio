@@ -9,7 +9,7 @@ export class UserShiftController {
   constructor(private readonly userShiftService: UserShiftService) {}
 
   @Get()
-  async getUserShifts(): Promise<IList<IUserShift>> {
+  async getUserShifts() {
     const shifts = await this.userShiftService.getUserShifts();
     return shifts;
   }

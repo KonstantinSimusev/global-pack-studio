@@ -1,51 +1,70 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import { getWorkers } from './actions';
-import type { IWorker } from '../../../utils/api.interface';
+import { getTeamUsers } from './actions';
+import type { IUser } from '../../../utils/api.interface';
 
-interface IWorkerState {
+interface IUserState {
+  teamUsers: IUser[];
   isLoading: boolean;
-  workers: IWorker[];
   error: string | null;
 }
 
-const initialState: IWorkerState = {
+const initialState: IUserState = {
+  teamUsers: [],
   isLoading: false,
-  workers: [],
   error: null,
 };
 
-export const workerSlice = createSlice({
-  name: 'worker',
+export const userSlice = createSlice({
+  name: 'user',
   initialState,
   reducers: {},
   selectors: {
-    selectIsLoading: (state: IWorkerState) => state.isLoading,
-    selectWorkers: (state: IWorkerState) => state.workers,
-    selectError: (state: IWorkerState) => state.error,
+    selectIsLoading: (state: IUserState) => state.isLoading,
+    selectTeamUsers: (state: IUserState) => state.teamUsers,
+    selectError: (state: IUserState) => state.error,
   },
   extraReducers: (builder) => {
     builder
       // Обработчик для getWorkers
-      .addCase(getWorkers.pending, (state) => {
+      // .addCase(getWorkers.pending, (state) => {
+      //   state.users = [];
+      //   state.isLoading = true;
+      //   state.error = null;
+      // })
+      // .addCase(
+      //   getWorkers.fulfilled,
+      //   (state, action: PayloadAction<IWorker[]>) => {
+      //     state.users = action.payload;
+      //     state.isLoading = false;
+      //     state.error = null;
+      //   },
+      // )
+      // .addCase(getWorkers.rejected, (state, action) => {
+      //   state.users = [];
+      //   state.isLoading = false;
+      //   state.error = action.error.message ?? 'Ошибка получения списка';
+      // })
+      // Обработчик для getTeamUsers
+      .addCase(getTeamUsers.pending, (state) => {
+        state.teamUsers = [];
         state.isLoading = true;
-        state.workers = [];
         state.error = null;
       })
       .addCase(
-        getWorkers.fulfilled,
-        (state, action: PayloadAction<IWorker[]>) => {
+        getTeamUsers.fulfilled,
+        (state, action: PayloadAction<IUser[]>) => {
+          state.teamUsers = action.payload;
           state.isLoading = false;
-          state.workers = action.payload;
           state.error = null;
         },
       )
-      .addCase(getWorkers.rejected, (state, action) => {
+      .addCase(getTeamUsers.rejected, (state, action) => {
         state.isLoading = false;
-        state.workers = [];
+        state.teamUsers = [];
         state.error = action.error.message ?? 'Ошибка получения списка';
       });
   },
 });
 
-export const { selectIsLoading, selectWorkers, selectError } =
-  workerSlice.selectors;
+export const { selectTeamUsers, selectIsLoading, selectError } =
+  userSlice.selectors;

@@ -35,8 +35,8 @@ export const AddButton = ({ label, actionType, onOpen }: AddButtonProps) => {
 
   return (
     <button className={styles.container} type="button" onClick={handleClick}>
-      <AddIcon />
       {label}
+      <AddIcon />
     </button>
   );
 };

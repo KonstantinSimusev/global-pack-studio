@@ -1,10 +1,11 @@
-import { IsNumber, IsString, Max, Min } from 'class-validator';
+import { IsNumber, IsOptional, IsString, IsUUID, Max, Min } from 'class-validator';
 import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
   ManyToOne,
   JoinColumn,
+  ManyToMany,
 } from 'typeorm';
 
 import { User } from '../../../modules/user/entities/user.entity';
@@ -16,19 +17,37 @@ import { Shift } from '../../../modules/shift/entities/shift.entity';
 })
 export class UserShift {
   @PrimaryGeneratedColumn('uuid')
+  @IsUUID()
   id: string;
 
   @Column({
-    name: 'attendance',
+    name: 'work_status',
     type: 'varchar',
     length: 255,
     nullable: false,
   })
   @IsString()
-  attendance: string;
+  workStatus: string;
 
   @Column({
-    name: 'hours_worked',
+    name: 'work_place',
+    type: 'varchar',
+    length: 255,
+    nullable: false,
+  })
+  @IsString()
+  workPlace: string;
+
+  @Column({
+    name: 'shift_profession',
+    type: 'varchar',
+    length: 255,
+    nullable: false,
+  })
+  shiftProfession: string;
+
+  @Column({
+    name: 'work_hours',
     type: 'decimal',
     precision: 5,
     scale: 2,
@@ -37,30 +56,13 @@ export class UserShift {
   @IsNumber()
   @Min(0)
   @Max(20)
-  hoursWorked: number;
+  workHours: number;
 
-  @Column({
-    name: 'section',
-    type: 'varchar',
-    length: 255,
-    nullable: true,
-  })
-  @IsString()
-  section: string | null;
-
-  @Column({
-    name: 'shift_profession',
-    type: 'varchar',
-    length: 255,
-    nullable: false,
-  })
-  shiftProfession: string | null;
-
-  @ManyToOne(() => User, (user) => user.shifts)
+  @ManyToMany(() => User, (user) => user.userShifts)
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @ManyToOne(() => Shift, (shift) => shift.users)
+  @ManyToMany(() => Shift, (shift) => shift.userShifts)
   @JoinColumn({ name: 'shift_id' })
   shift: Shift;
 }

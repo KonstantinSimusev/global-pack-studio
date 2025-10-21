@@ -3,10 +3,8 @@ import {
   checkAccessTokenApi,
   loginUserApi,
   logoutUserApi,
-  getTeamUsersApi,
-  addWorkerApi,
 } from '../../../utils/gpsApi';
-import { delay } from '../../../utils/delay';
+import { delay } from '../../../utils/utils';
 import type { ILoginData, IUser } from '../../../utils/api.interface';
 
 export const loginUser = createAsyncThunk(
@@ -72,44 +70,3 @@ export const logoutUser = createAsyncThunk('auth/logout', async () => {
     throw error;
   }
 });
-
-export const getTeamUsers = createAsyncThunk('users/team', async () => {
-  try {
-    const response = await getTeamUsersApi();
-
-    // Добавляем задержку кода
-    await delay();
-
-    if (!response) {
-      throw new Error();
-    }
-
-    return response;
-  } catch (error) {
-    // Добавляем задержку кода
-    await delay();
-
-    // Пойдет в checkAccessToken.rejected в authSlice
-    throw error;
-  }
-});
-
-export const addWorker = createAsyncThunk(
-  'auth/worker',
-  async (data: { personalNumber: number }): Promise<IUser> => {
-    try {
-      // Вызываем API функцию
-      const response = await addWorkerApi(data);
-
-      // Добавляем задержку кода
-      await delay();
-
-      return response;
-    } catch (error) {
-      // Добавляем задержку кода
-      await delay();
-
-      throw new Error('Работник не найден');
-    }
-  },
-);

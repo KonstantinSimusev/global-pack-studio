@@ -1,8 +1,12 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { createShiftApi, getShiftsApi } from '../../../utils/gpsApi';
+import {
+  createShiftApi,
+  deleteShiftApi,
+  getTeamShiftsApi,
+} from '../../../utils/gpsApi';
 import type { IShift, ISuccess } from '../../../utils/api.interface';
-import { delay } from '../../../utils/delay';
+import { delay } from '../../../utils/utils';
 
 export const createShift = createAsyncThunk(
   'shift/create',
@@ -14,6 +18,10 @@ export const createShift = createAsyncThunk(
       // Добавляем задержку кода
       await delay();
 
+      if (!response) {
+        throw new Error();
+      }
+
       return response;
     } catch (error) {
       // Добавляем задержку кода
@@ -24,9 +32,12 @@ export const createShift = createAsyncThunk(
   },
 );
 
-export const getShifts = createAsyncThunk('shifts/get', async () => {
+export const getTeamShifts = createAsyncThunk('shifts/get', async () => {
   try {
-    const response = await getShiftsApi();
+    const response = await getTeamShiftsApi();
+
+    // Добавляем задержку кода
+    // await delay();
 
     if (!response) {
       throw new Error();
@@ -34,7 +45,29 @@ export const getShifts = createAsyncThunk('shifts/get', async () => {
 
     return response;
   } catch (error) {
+    // Добавляем задержку кода
+    // await delay();
+
     // Пойдет в rejected
     throw error;
   }
 });
+
+export const deleteShift = createAsyncThunk(
+  'shift/delete',
+  async (id: string): Promise<ISuccess> => {
+    try {
+      const response = await deleteShiftApi(id);
+      await delay();
+
+      if (!response) {
+        throw new Error();
+      }
+
+      return response;
+    } catch (error) {
+      await delay();
+      throw error;
+    }
+  },
+);

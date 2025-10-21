@@ -1,12 +1,7 @@
-import { QueryFailedError, Repository } from 'typeorm';
+import { Repository, Between } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import {
-  BadRequestException,
-  ConflictException,
-  Injectable,
-  InternalServerErrorException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
 import { Shift } from './entities/shift.entity';
 import { CreateShiftDTO } from './dto/create-shift.dto';
@@ -18,106 +13,55 @@ export class ShiftRepository {
     private readonly shiftRepository: Repository<Shift>,
   ) {}
 
-  async findShifts(): Promise<Shift[]> {
-    try {
-      const shifts = await this.shiftRepository.find({
-        order: {
-          shiftNumber: 'ASC',
-          date: 'DESC', // Сортировка по убыванию
-        },
-      });
-      return shifts;
-    } catch {
-      throw new InternalServerErrorException(
-        'Произошла ошибка при получении списка смен',
-      );
-    }
+  // CRUD
+  async create(shiftData: CreateShiftDTO): Promise<Shift> {
+    const newShift = this.shiftRepository.create(shiftData);
+    return await this.shiftRepository.save(newShift);
   }
 
-  async findShiftById(id: string): Promise<Shift> {
-    try {
-      const shift = await this.shiftRepository.findOneBy({ id });
-
-      if (!shift) {
-        throw new BadRequestException('Смена не найдена');
-      }
-
-      return shift;
-    } catch {
-      throw new InternalServerErrorException('Ошибка при получении смены');
-    }
+  async findAll(): Promise<Shift[]> {
+    return await this.shiftRepository.find({});
   }
 
-  async createShift(shiftData: CreateShiftDTO): Promise<Shift> {
-    try {
-      // Проверяем существование смены с такими же параметрами
-      const shift = await this.shiftRepository.findOne({
-        where: {
-          date: shiftData.date,
-          teamNumber: shiftData.teamNumber,
-          shiftNumber: shiftData.shiftNumber,
-        },
-      });
-
-      if (shift) {
-        throw new ConflictException('Смена уже создана');
-      }
-
-      const shiftByShift = await this.shiftRepository.findOne({
-        where: {
-          date: shiftData.date,
-          shiftNumber: shiftData.shiftNumber,
-        },
-      });
-
-      if (shiftByShift) {
-        throw new ConflictException('Дата и смена уже созданы');
-      }
-
-      const shiftByTeam = await this.shiftRepository.findOne({
-        where: {
-          date: shiftData.date,
-          teamNumber: shiftData.teamNumber,
-        },
-      });
-
-      if (shiftByTeam) {
-        throw new ConflictException('Дата и бригада уже созданы');
-      }
-
-      const newShift = this.shiftRepository.create(shiftData);
-      return await this.shiftRepository.save(newShift);
-    } catch (error) {
-      if (error instanceof ConflictException) {
-        throw error; // Перебрасываем ошибку конфликта
-      }
-
-      // Для других ошибок возвращаем внутреннюю ошибку сервера
-      throw new InternalServerErrorException('Ошибка при создании смены');
-    }
+  async findById(id: string): Promise<Shift> {
+    return await this.shiftRepository.findOneBy({ id });
   }
 
-  async updateShift(id: string, updateData: Partial<Shift>): Promise<Shift> {
-    try {
-      const shift = await this.findShiftById(id);
-      Object.assign(shift, updateData);
-      return await this.shiftRepository.save(shift);
-    } catch {
-      throw new InternalServerErrorException('Ошибка при обновлении смены');
-    }
+  async update(shift: Shift, updateData: Partial<Shift>): Promise<Shift> {
+    return await this.shiftRepository.save({
+      ...shift,
+      ...updateData,
+    });
   }
 
-  async deleteShift(id: string): Promise<void> {
-    try {
-      const shift = await this.findShiftById(id);
+  async delete(id: string): Promise<void> {
+    await this.shiftRepository.delete(id);
+  }
 
-      if (!shift) {
-        throw new BadRequestException('Смена не найдена');
-      }
+  // Специфические методы поиска
+  async findShift(shiftData: CreateShiftDTO): Promise<Shift> {
+    return await this.shiftRepository.findOne({
+      where: {
+        date: shiftData.date,
+        teamNumber: shiftData.teamNumber,
+        shiftNumber: shiftData.shiftNumber,
+      },
+    });
+  }
 
-      await this.shiftRepository.delete(shift);
-    } catch {
-      throw new InternalServerErrorException('Ошибка при удалении смены');
-    }
+  async findTeamShifts(
+    teamNumber: number,
+    startOfMonth: Date,
+    endOfMonth: Date,
+  ): Promise<Shift[]> {
+    return await this.shiftRepository.find({
+      where: {
+        teamNumber,
+        date: Between(startOfMonth, endOfMonth),
+      },
+      order: {
+        date: 'DESC',
+      },
+    });
   }
 }

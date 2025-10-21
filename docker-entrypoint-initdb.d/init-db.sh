@@ -62,10 +62,10 @@ psql -v ON_ERROR_STOP=1 --username "$DB_USER" --dbname "$DB_NAME" <<-EOSQL
   -- Создание таблицы user_shifts
   CREATE TABLE IF NOT EXISTS gps.user_shifts (
     id uuid DEFAULT gps.uuid_generate_v4() NOT NULL PRIMARY KEY,
-    attendance VARCHAR(255) NOT NULL,
-    hours_worked DECIMAL(5, 2) NOT NULL,
-    section VARCHAR(255),
+    work_status VARCHAR(255) NOT NULL,
+    work_place VARCHAR(255) NOT NULL,
     shift_profession VARCHAR(255),
+    work_hours DECIMAL(5, 2) NOT NULL,
     user_id uuid NOT NULL,
     shift_id uuid NOT NULL,
     

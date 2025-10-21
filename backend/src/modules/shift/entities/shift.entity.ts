@@ -5,6 +5,7 @@ import {
   PrimaryGeneratedColumn,
   Unique,
   OneToMany,
+  ManyToMany,
 } from 'typeorm';
 
 import { UserShift } from '../../../modules/user-shift/entities/user-shift.entity';
@@ -49,6 +50,7 @@ export class Shift {
   @Max(5)
   teamNumber: number;
 
-  @OneToMany(() => UserShift, (user) => user.shift)
-  users: UserShift[];
+  // Связь со списком пользователей в смене
+  @ManyToMany(() => UserShift, (userShift) => userShift.shift)
+  userShifts: UserShift[];
 }

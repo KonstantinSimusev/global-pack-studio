@@ -5,8 +5,9 @@ import {
 } from 'react-redux';
 import { authSlice } from './slices/auth/slice';
 import { shiftSlice } from './slices/shift/slice';
+import { userSlice } from './slices/user/slice';
 
-export const rootReducer = combineSlices(authSlice, shiftSlice);
+export const rootReducer = combineSlices(authSlice, shiftSlice, userSlice);
 
 export const store = configureStore({
   reducer: rootReducer,

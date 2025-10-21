@@ -1,16 +1,24 @@
 import styles from './edit.module.css';
 
 import { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import { EditIcon } from '../../icons/edit/edit';
+
 import { LayerContext } from '../../../contexts/layer/layerContext';
 
-export const EditButton = () => {
-  const { setIsOpenOverlay, setIsAddShiftOpenModall } =
-    useContext(LayerContext);
+export const EditButton = ({ id }: { id?: string }) => {
+  if (!id) {
+    return null;
+  }
+
+  const { setSelectedId } = useContext(LayerContext);
+
+  const navigate = useNavigate();
 
   const handleClick = () => {
-    setIsOpenOverlay(true);
-    setIsAddShiftOpenModall(true);
+    setSelectedId(id);
+    navigate('/teamworkers');
   };
 
   return (

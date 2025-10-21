@@ -3,7 +3,7 @@ import styles from './timesheet.module.css';
 import { useEffect } from 'react';
 
 import { useDispatch, useSelector } from '../../../services/store';
-import { getShifts } from '../../../services/slices/shift/actions';
+import { getTeamShifts } from '../../../services/slices/shift/actions';
 import { AddButton } from '../../buttons/add/add-button';
 import { ShiftList } from '../../shift-list/shift-list';
 import { selectUser } from '../../../services/slices/auth/slice';
@@ -13,7 +13,7 @@ export const Timesheet = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getShifts());
+    dispatch(getTeamShifts());
   }, []);
 
   return (
