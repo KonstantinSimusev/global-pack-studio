@@ -14,23 +14,31 @@ import {
 import { Response, Request } from 'express';
 
 import { ShiftService } from './shift.service';
+import { UserShiftService } from '../user-shift/user-shift.service';
 
 import { CreateShiftDTO } from './dto/create-shift.dto';
-import { DeleteDTO } from './dto/delete-shift.dto';
 
-import { IList, IShift, ISuccess } from '../../shared/interfaces/api.interface';
+import {
+  IList,
+  IShift,
+  ISuccess,
+  IUserShift,
+} from '../../shared/interfaces/api.interface';
 
 @Controller('shifts')
 export class ShiftController {
-  constructor(private readonly shiftService: ShiftService) {}
+  constructor(
+    private readonly shiftService: ShiftService,
+    private readonly userShiftService: UserShiftService,
+  ) {}
 
   @Post()
   async createShift(
     @Body() dto: CreateShiftDTO,
-    // @Req() req: Request,
-    // @Res({ passthrough: true }) res: Response,
-  ): Promise<IShift> {
-    return await this.shiftService.createShift(dto);
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<ISuccess> {
+    return this.shiftService.createShift(dto, req, res);
   }
 
   @Get('team-shifts')
@@ -38,17 +46,27 @@ export class ShiftController {
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
   ): Promise<IList<IShift>> {
-    return await this.shiftService.getTeamShifts(req, res);
+    return this.shiftService.getTeamShifts(req, res);
+  }
+
+  @Get(':id')
+  async getUsersShifts(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<IList<IUserShift>> {
+    return this.userShiftService.getUsersShifts(id, req, res);
+  }
+  
+  /*
+  @Delete('delete')
+  async deleteShift(@Body() dto: DeleteDTO): Promise<ISuccess> {
+    return this.shiftService.deleteShift(dto.id);
   }
 
   @Get('all')
   async getShifts(): Promise<IList<IShift>> {
     return await this.shiftService.getShifts();
-  }
-
-  @Delete('delete')
-  async deleteShift(@Body() dto: DeleteDTO): Promise<ISuccess> {
-    return await this.shiftService.deleteShift(dto.id);
   }
 
   @Get(':id')
@@ -63,4 +81,5 @@ export class ShiftController {
   ): Promise<IShift> {
     return await this.shiftService.updateShift(id, updateShiftDTO);
   }
+  */
 }

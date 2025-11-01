@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
 
 import { Shift } from './entities/shift.entity';
+
 import { CreateShiftDTO } from './dto/create-shift.dto';
 
 @Injectable()
@@ -13,38 +14,21 @@ export class ShiftRepository {
     private readonly shiftRepository: Repository<Shift>,
   ) {}
 
-  // CRUD
-  async create(shiftData: CreateShiftDTO): Promise<Shift> {
-    const newShift = this.shiftRepository.create(shiftData);
-    return await this.shiftRepository.save(newShift);
-  }
-
-  async findAll(): Promise<Shift[]> {
-    return await this.shiftRepository.find({});
+  async create(shift: Shift): Promise<Shift> {
+    const newShift = this.shiftRepository.create(shift);
+    return this.shiftRepository.save(newShift);
   }
 
   async findById(id: string): Promise<Shift> {
-    return await this.shiftRepository.findOneBy({ id });
+    return this.shiftRepository.findOneBy({ id });
   }
 
-  async update(shift: Shift, updateData: Partial<Shift>): Promise<Shift> {
-    return await this.shiftRepository.save({
-      ...shift,
-      ...updateData,
-    });
-  }
-
-  async delete(id: string): Promise<void> {
-    await this.shiftRepository.delete(id);
-  }
-
-  // Специфические методы поиска
-  async findShift(shiftData: CreateShiftDTO): Promise<Shift> {
-    return await this.shiftRepository.findOne({
+  async findOne(shift: Shift): Promise<Shift> {
+    return this.shiftRepository.findOne({
       where: {
-        date: shiftData.date,
-        teamNumber: shiftData.teamNumber,
-        shiftNumber: shiftData.shiftNumber,
+        date: shift.date,
+        teamNumber: shift.teamNumber,
+        shiftNumber: shift.shiftNumber,
       },
     });
   }
@@ -54,14 +38,31 @@ export class ShiftRepository {
     startOfMonth: Date,
     endOfMonth: Date,
   ): Promise<Shift[]> {
-    return await this.shiftRepository.find({
+    return this.shiftRepository.find({
       where: {
         teamNumber,
-        date: Between(startOfMonth, endOfMonth),
+        // date: Between(startOfMonth, endOfMonth),
       },
       order: {
         date: 'DESC',
       },
     });
   }
+
+  /*
+  async findAll(): Promise<Shift[]> {
+    return this.shiftRepository.find({});
+  }
+
+  async update(shift: Shift, updateData: Partial<Shift>): Promise<Shift> {
+    return this.shiftRepository.save({
+      ...shift,
+      ...updateData,
+    });
+  }
+
+  async delete(id: string): Promise<void> {
+    this.shiftRepository.delete(id);
+  }
+  */
 }

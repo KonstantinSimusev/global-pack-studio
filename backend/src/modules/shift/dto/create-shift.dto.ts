@@ -1,13 +1,5 @@
 import { Type } from 'class-transformer';
-import {
-  IsDate,
-  IsNumber,
-  IsPositive,
-  IsUUID,
-  Max,
-  Min,
-} from 'class-validator';
-import { UserShift } from '../../user/entities/user-shift.entity';
+import { IsDate, IsNumber, IsPositive, Max, Min } from 'class-validator';
 
 export class CreateShiftDTO {
   @Type(() => Date)
@@ -25,6 +17,4 @@ export class CreateShiftDTO {
   @Min(1)
   @Max(5)
   teamNumber: number;
-
-  userShifts: UserShift[];
 }

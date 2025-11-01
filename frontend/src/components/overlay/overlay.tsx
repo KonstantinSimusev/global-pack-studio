@@ -3,7 +3,6 @@ import styles from './overlay.module.css';
 import { useContext } from 'react';
 import { LayerContext } from '../../contexts/layer/layerContext';
 import { useEscapeHandler } from '../../hooks/useEscapeHandler';
-
 export const Overlay = () => {
   const {
     isOpenOverlay,
@@ -65,5 +64,7 @@ export const Overlay = () => {
     }
   };
 
-  return <div className={styles.overlay} onClick={handleClick}></div>;
+  return (
+    <div className={styles.overlay} onClick={handleClick} tabIndex={-1}></div>
+  );
 };

@@ -1,7 +1,6 @@
 import styles from './add-worker.form.module.css';
 
 import { useContext, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { Spinner } from '../../spinner/spinner';
 
@@ -10,7 +9,7 @@ import {
   selectError,
   selectIsLoading,
   clearError,
-} from '../../../services/slices/auth/slice';
+} from '../../../services/slices/user-shift/slice';
 import { LayerContext } from '../../../contexts/layer/layerContext';
 
 import {
@@ -18,6 +17,11 @@ import {
   validateForm,
   validationRules,
 } from '../../../utils/validation';
+import { getCurrentShiftID } from '../../../utils/utils';
+import {
+  createUserShift,
+  getUsersShifts,
+} from '../../../services/slices/user-shift/actions';
 
 // Изменим тип IFormData на Record<string, string>
 interface IFormData extends Record<string, string> {
@@ -25,7 +29,6 @@ interface IFormData extends Record<string, string> {
 }
 
 export const AddWorkerForm = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const isLoading = useSelector(selectIsLoading);
   const error = useSelector(selectError);
@@ -40,6 +43,7 @@ export const AddWorkerForm = () => {
   // Состояние для хранения ошибок валидации
   const [errors, setErrors] = useState<{ [key: string]: string }>({
     personalNumber: '',
+    currentShift: '',
   });
 
   // Обработчик изменения поля ввода
@@ -88,19 +92,25 @@ export const AddWorkerForm = () => {
     // Если форма валидна, можно отправить данные на сервер
     if (Object.keys(formErrors).length === 0) {
       try {
+        const currentShiftId = getCurrentShiftID();
+
+        if (!currentShiftId) {
+          throw new Error();
+        }
+
         const payload = {
           personalNumber: Number(formData.personalNumber),
+          shiftId: currentShiftId,
         };
 
-        // const response = await dispatch(addWorker(payload));
+        const response = await dispatch(createUserShift(payload));
 
-        // if (response.payload) {
-        if (payload) {
+        if (response.payload) {
           setIsAddWorkerOpenModall(false);
           setIsOpenOverlay(false);
           setFormData({ personalNumber: '' });
           setErrors({ personalNumber: '' });
-          navigate('/teamworkers');
+          dispatch(getUsersShifts(currentShiftId));
         } else {
           setFormData({ personalNumber: '' });
           throw new Error();

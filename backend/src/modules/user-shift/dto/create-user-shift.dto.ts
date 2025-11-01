@@ -1,27 +1,27 @@
-import {
-  IsString,
-  IsNumber,
-  Min,
-  Max,
-  IsNotEmpty,
-  IsOptional,
-} from 'class-validator';
+import { IsString, IsNumber, Min, Max, IsNotEmpty, IsUUID } from 'class-validator';
 
 export class CreateUserShiftDTO {
   @IsString()
   @IsNotEmpty()
-  attendance: string;
+  workStatus: string;
+
+  @IsString()
+  @IsNotEmpty()
+  workPlace: string;
+
+  @IsString()
+  @IsNotEmpty()
+  shiftProfession: string;
 
   @IsNumber()
   @Min(0)
   @Max(20)
-  hoursWorked: number;
+  workHours: number;
 
-  @IsString()
-  @IsOptional()
-  section: string;
+  // Добавляем новое свойство
+  @IsUUID()
+  userId: string;
 
-  @IsString()
-  @IsOptional()
-  shiftProfession: string;
+  @IsUUID()
+  shiftId: string;
 }

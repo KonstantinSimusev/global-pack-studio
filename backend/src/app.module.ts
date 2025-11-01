@@ -16,8 +16,8 @@ import { UserShiftModule } from './modules/user-shift/user-shift.module';
       isGlobal: true,
     }),
     DatabaseModule,
-    UserModule,
     AuthModule,
+    UserModule,
     ShiftModule,
     UserShiftModule,
     // Первый статический модуль

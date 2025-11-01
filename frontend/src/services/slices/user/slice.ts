@@ -1,3 +1,4 @@
+/*
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import { getTeamUsers } from './actions';
 import type { IUser } from '../../../utils/api.interface';
@@ -68,3 +69,4 @@ export const userSlice = createSlice({
 
 export const { selectTeamUsers, selectIsLoading, selectError } =
   userSlice.selectors;
+*/

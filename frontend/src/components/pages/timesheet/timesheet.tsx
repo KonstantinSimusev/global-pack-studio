@@ -2,37 +2,64 @@ import styles from './timesheet.module.css';
 
 import { useEffect } from 'react';
 
-import { useDispatch, useSelector } from '../../../services/store';
-import { getTeamShifts } from '../../../services/slices/shift/actions';
+// import { Spinner } from '../../spinner/spinner';
 import { AddButton } from '../../buttons/add/add-button';
 import { ShiftList } from '../../shift-list/shift-list';
+
+import { useDispatch, useSelector } from '../../../services/store';
+
+import { getTeamShifts } from '../../../services/slices/shift/actions';
 import { selectUser } from '../../../services/slices/auth/slice';
+import { selectShifts } from '../../../services/slices/shift/slice';
 
 export const Timesheet = () => {
-  const user = useSelector(selectUser);
   const dispatch = useDispatch();
+  const user = useSelector(selectUser);
+  const shifts = useSelector(selectShifts);
+  // const isLoading = useSelector(selectIsLoading);
 
   useEffect(() => {
+    console.log('✅ Timesheet смонтирован');
     dispatch(getTeamShifts());
   }, []);
+
+  console.log('🔁 Timesheet отрендерен');
+  // Оптимизируем вычисление данных пользователя
+  const teamNumber = user?.currentTeamNumber ?? '-';
+  const fullName =
+    `${user?.lastName ?? ''} ${user?.firstName ?? ''} ${
+      user?.patronymic ?? ''
+    }`.trim() || '-';
+  const profession = user?.profession ?? '-';
+
+  // if (isLoading) {
+  //   return (
+  //     <div className={styles.container__spiner}>
+  //       <div className={styles.spinner}>{isLoading && <Spinner />}</div>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className={styles.container}>
       <div className={styles.shift_info}>
-        <span className={styles.team_number}>
-          Бригада {user?.teamNumber ?? '-'}
+        <span className={styles.wrapper}>
+          <span className={styles.title}>Бригада</span>
+          <span className={styles.text}>№{teamNumber}</span>
         </span>
         <div className={styles.master}>
-          <span className={styles.text}>Мастер</span>
-          <span className={styles.text}>
-            <span className={styles.text}>{user?.lastName ?? '-'} </span>
-            <span className={styles.text}>{user?.firstName ?? ''} </span>
-            <span className={styles.text}>{user?.patronymic ?? ''}</span>
+          <span className={styles.wrapper}>
+            <span className={styles.title}>Руководитель</span>
+            <span className={styles.text}>{fullName}</span>
+          </span>
+          <span className={styles.wrapper}>
+            <span className={styles.title}>Должность</span>
+            <span className={styles.text}>{profession}</span>
           </span>
         </div>
       </div>
       <AddButton actionType="shift" />
-      <ShiftList />
+      <ShiftList items={shifts} />
     </div>
   );
 };

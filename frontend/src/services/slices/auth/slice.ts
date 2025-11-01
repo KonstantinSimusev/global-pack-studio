@@ -1,15 +1,12 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import {
-  checkAccessToken,
-  loginUser,
-  logoutUser,
-} from './actions';
+import { checkAccessToken, loginUser, logoutUser } from './actions';
 
 import type { IUser } from '../../../utils/api.interface';
 
 interface IAuthState {
   isAuthenticated: boolean;
   isLoading: boolean;
+  checking: boolean;
   user: IUser | null;
   users: IUser[];
   error: string | null;
@@ -18,6 +15,7 @@ interface IAuthState {
 const initialState: IAuthState = {
   isAuthenticated: false,
   isLoading: false,
+  checking: true,
   user: null,
   users: [],
   error: null,
@@ -34,6 +32,7 @@ export const authSlice = createSlice({
   selectors: {
     selectIsAuthenticated: (state: IAuthState) => state.isAuthenticated,
     selectIsLoading: (state: IAuthState) => state.isLoading,
+    selectIsChecking: (state: IAuthState) => state.checking,
     selectUser: (state: IAuthState) => state.user,
     selectUsers: (state: IAuthState) => state.users,
     selectError: (state: IAuthState) => state.error,
@@ -60,12 +59,14 @@ export const authSlice = createSlice({
       // Обработчик для checkRefreshToken
       .addCase(checkAccessToken.pending, (state) => {
         state.isLoading = true; // Устанавливаем флаг загрузки
+        state.checking = true;
       })
       .addCase(
         checkAccessToken.fulfilled,
         (state, action: PayloadAction<IUser>) => {
           state.isAuthenticated = true;
           state.isLoading = false; // Сбрасываем флаг после успешного выполнения
+          state.checking = false;
           state.user = action.payload;
           state.error = null;
         },
@@ -73,6 +74,7 @@ export const authSlice = createSlice({
       .addCase(checkAccessToken.rejected, (state, action) => {
         state.isAuthenticated = false;
         state.isLoading = false; // Сбрасываем флаг после ошибки
+        state.checking = false;
         state.error = action.error.message ?? 'Ошибка токена';
       })
       // Обработчик для logoutUser
@@ -91,7 +93,7 @@ export const authSlice = createSlice({
         state.isAuthenticated = false;
         state.isLoading = false;
         state.error = action.error.message ?? 'Ошибка при выходе из системы';
-      })
+      });
   },
 });
 
@@ -100,6 +102,7 @@ export const { clearError } = authSlice.actions;
 export const {
   selectIsAuthenticated,
   selectIsLoading,
+  selectIsChecking,
   selectUser,
   selectUsers,
   selectError,

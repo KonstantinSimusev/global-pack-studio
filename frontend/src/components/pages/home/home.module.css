@@ -5,3 +5,26 @@
   margin: 0 20px;
   flex-grow: 1;
 }
+
+.shift_info {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.master {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.title {
+  font-size: 14px;
+  margin-bottom: 2px;
+  opacity: 0.6;
+}

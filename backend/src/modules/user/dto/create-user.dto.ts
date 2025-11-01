@@ -1,10 +1,13 @@
 import {
+  IsEnum,
   IsNotEmpty,
   IsNumber,
   IsString,
   MaxLength,
   MinLength,
 } from 'class-validator';
+
+import { EProfession, ERole } from '../../../shared/enums/enums';
 
 export class CreateUserDTO {
   @IsNumber()
@@ -29,11 +32,13 @@ export class CreateUserDTO {
   @MaxLength(100)
   patronymic: string;
 
-  @IsString()
+  @IsEnum(EProfession)
   @IsNotEmpty()
-  @MinLength(2)
-  @MaxLength(255)
-  profession: string;
+  profession: EProfession;
+
+  @IsNumber()
+  @IsNotEmpty()
+  grade: number;
 
   @IsNumber()
   @IsNotEmpty()
@@ -42,6 +47,10 @@ export class CreateUserDTO {
   @IsNumber()
   @IsNotEmpty()
   teamNumber: number;
+
+  @IsNumber()
+  @IsNotEmpty()
+  currentTeamNumber: number;
 
   @IsString()
   @IsNotEmpty()
@@ -66,4 +75,12 @@ export class CreateUserDTO {
   @MinLength(8)
   @MaxLength(512)
   password: string;
+
+  @IsEnum(ERole)
+  @IsNotEmpty()
+  role: ERole;
+
+  @IsNumber()
+  @IsNotEmpty()
+  sortOrder: number;
 }

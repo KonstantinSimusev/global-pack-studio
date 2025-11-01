@@ -1,20 +1,21 @@
-import { IsNumber, IsOptional, IsString, IsUUID, Max, Min } from 'class-validator';
+import { IsNumber, IsString, IsUUID, Max, Min } from 'class-validator';
 import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
   ManyToOne,
   JoinColumn,
-  ManyToMany,
+  Unique,
 } from 'typeorm';
 
-import { User } from './user.entity';
-import { Shift } from '../../shift/entities/shift.entity';
+import { User } from '../../user/entities/user.entity';
+import { Shift } from '../../../modules/shift/entities/shift.entity';
 
 @Entity({
   schema: 'gps',
   name: 'user_shifts',
 })
+@Unique(['user', 'shift'])
 export class UserShift {
   @PrimaryGeneratedColumn('uuid')
   @IsUUID()
@@ -62,7 +63,7 @@ export class UserShift {
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @ManyToOne(() => Shift, (shift) => shift.users)
+  @ManyToOne(() => Shift, (shift) => shift.usersShifts)
   @JoinColumn({ name: 'shift_id' })
   shift: Shift;
 }

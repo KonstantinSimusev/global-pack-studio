@@ -32,7 +32,7 @@ export class UserController {
     return this.userService.createUser(dto);
   }
 
-  @Post()
+  @Post('all')
   async createUsers(@Body() dto: CreateUserDTO[]): Promise<ISuccess> {
     return this.userService.createUsers(dto);
   }

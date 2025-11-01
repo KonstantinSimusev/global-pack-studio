@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { LayerContext } from './layerContext';
 
 interface TLayerProviderProps {
@@ -17,32 +17,45 @@ export const LayerProvider = ({ children }: TLayerProviderProps) => {
   const [isCookie, setIsCookie] = useState(false);
   const [selectedId, setSelectedId] = useState('');
 
+  // Мемоизируем значение контекста
+  const value = useMemo(
+    () => ({
+      isOpenOverlay,
+      isOpenMenu,
+      isOpenModal,
+      isLoginModalOpen,
+      isLogoutOpenModal,
+      isAddWorkerOpenModall,
+      isAddShiftOpenModall,
+      isDeleteOpenModall,
+      isCookie,
+      selectedId,
+      setIsOpenOverlay,
+      setIsOpenMenu,
+      setIsOpenModal,
+      setIsLoginModalOpen,
+      setIsLogoutOpenModal,
+      setIsAddWorkerOpenModall,
+      setIsAddShiftOpenModall,
+      setIsDeleteOpenModall,
+      setIsCookie,
+      setSelectedId,
+    }),
+    [
+      isOpenOverlay,
+      isOpenMenu,
+      isOpenModal,
+      isLoginModalOpen,
+      isLogoutOpenModal,
+      isAddWorkerOpenModall,
+      isAddShiftOpenModall,
+      isDeleteOpenModall,
+      isCookie,
+      selectedId,
+    ],
+  );
+
   return (
-    <LayerContext.Provider
-      value={{
-        isOpenOverlay,
-        isOpenMenu,
-        isOpenModal,
-        isLoginModalOpen,
-        isLogoutOpenModal,
-        isAddWorkerOpenModall,
-        isAddShiftOpenModall,
-        isDeleteOpenModall,
-        isCookie,
-        selectedId,
-        setIsOpenOverlay,
-        setIsOpenMenu,
-        setIsOpenModal,
-        setIsLoginModalOpen,
-        setIsLogoutOpenModal,
-        setIsAddWorkerOpenModall,
-        setIsAddShiftOpenModall,
-        setIsDeleteOpenModall,
-        setIsCookie,
-        setSelectedId,
-      }}
-    >
-      {children}
-    </LayerContext.Provider>
+    <LayerContext.Provider value={value}>{children}</LayerContext.Provider>
   );
 };

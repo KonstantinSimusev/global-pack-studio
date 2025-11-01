@@ -10,22 +10,14 @@ export interface IUser {
   firstName?: string;
   patronymic?: string;
   profession?: string;
+  grade?: number;
   personalNumber?: number;
   teamNumber?: number;
+  currentTeamNumber?: number;
   workSchedule?: string;
   workshopCode?: string;
-}
-
-export interface ISuccess {
-  message?: string;
-  accessToken?: string;
-  user?: IUser;
-}
-
-export interface IWorker {
-  name: string;
-  teamNumber: number;
-  count: number;
+  role?: string;
+  sortOrder?: number;
 }
 
 export interface IShift {
@@ -37,16 +29,20 @@ export interface IShift {
 
 export interface IUserShift {
   id: string;
-  attendance: string;
-  hoursWorked: number;
-  section: string | null;
-  shiftProfession: string | null;
-  userId?: string;
-  shiftId?: string;
+  workStatus: string;
+  workPlace: string;
+  shiftProfession: string;
+  workHours: number;
 }
 
 export interface SheduleEntry {
   date: Date;
   shiftNumber: number;
   teamNumber: number;
+}
+
+export interface ISuccess {
+  message?: string;
+  accessToken?: string;
+  user?: IUser;
 }

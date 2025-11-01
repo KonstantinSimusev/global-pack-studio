@@ -43,7 +43,7 @@ export const checkAccessToken = createAsyncThunk(
       return response;
     } catch (error) {
       // Добавляем задержку кода
-      await delay();
+      // await delay();
 
       // Пойдет в checkAccessToken.rejected в authSlice
       throw error;

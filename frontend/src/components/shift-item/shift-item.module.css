@@ -17,11 +17,18 @@
   flex-direction: column;
   margin: 0 20px;
   flex-grow: 1;
-  gap: 20px;
+  gap: 30px;
 }
 
 .container > :nth-child(1) {
   margin-right: auto;
+}
+
+.profession__list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 равные колонки */
+  gap: 10px; /* Отступы между элементами */
+  grid-auto-rows: auto;
 }
 
 .list {
@@ -43,6 +50,12 @@
   gap: 20px;
 }
 
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
 .wrapper__header {
   display: flex;
   justify-content: space-between;
@@ -51,8 +64,10 @@
 
 .wrapper__button {
   display: flex;
-  align-items: start;
-  gap: 10px;
+  flex-direction: column;
+  justify-content: space-between;
+  /* align-items: start; */
+  /* gap: 10px; */
 }
 
 .wrapper__user {
@@ -63,10 +78,12 @@
 
 .text {
   font-size: 16px;
+  margin-left: 1px;
 }
 
-.opacity {
+.title {
   opacity: 0.4;
+  font-size: 14px;
 }
 
 .index {

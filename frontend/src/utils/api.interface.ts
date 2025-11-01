@@ -15,16 +15,14 @@ export interface IUser {
   firstName: string;
   patronymic: string;
   profession: string;
+  grade: number;
   personalNumber: number;
   teamNumber: number;
+  currentTeamNumber: number;
   workSchedule: string;
   workshopCode: string;
-}
-
-export interface ISuccess {
-  success: boolean;
-  message: string;
-  id?: string;
+  role: string;
+  sortOrder: number;
 }
 
 export interface IShift {
@@ -32,4 +30,25 @@ export interface IShift {
   date: Date;
   shiftNumber: number;
   teamNumber: number;
+}
+
+export interface IUserShift {
+  id: string;
+  workStatus: string;
+  workPlace: string;
+  shiftProfession: string;
+  workHours: number;
+  user: IUser;
+  shift: IShift;
+}
+
+export interface ICreateUserShift {
+  personalNumber: number;
+  shiftId: string;
+}
+
+export interface ISuccess {
+  success: boolean;
+  message: string;
+  id?: string;
 }

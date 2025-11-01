@@ -15,6 +15,7 @@ import {
   selectIsAuthenticated,
   selectUser,
 } from '../../services/slices/auth/slice';
+import { type TRole } from '../../utils/types';
 
 export const Sidebar = () => {
   const { isLightTheme } = useContext(ThemeContext);
@@ -29,6 +30,8 @@ export const Sidebar = () => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const user = useSelector(selectUser);
   const location = useLocation(); // Получаем текущий путь
+
+  const master: TRole = 'MASTER';
 
   const hanldeClick = () => {
     setIsOpenOverlay(false);
@@ -76,7 +79,7 @@ export const Sidebar = () => {
             </li>
           )}
 
-          {isAuthenticated && user?.profession === 'мастер участка' && (
+          {isAuthenticated && user?.role === master && (
             <>
               <li
                 className={clsx(
@@ -107,7 +110,10 @@ export const Sidebar = () => {
           )}
 
           {!isAuthenticated && (
-            <li className={clsx(styles.link, styles.link__active, styles.top)} onClick={hanldeClickLogin}>
+            <li
+              className={clsx(styles.link, styles.link__active, styles.top)}
+              onClick={hanldeClickLogin}
+            >
               Войти
             </li>
           )}

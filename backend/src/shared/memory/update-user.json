@@ -1,0 +1,15 @@
+{
+    "positionCode": 643984,
+    "lastName": "Белинский",
+    "firstName": "Максим",
+    "patronymic": "Викторович",
+    "profession": "Бригадир на ОСП",
+    "grade": 4,
+    "personalNumber": 132239,
+    "teamNumber": 3,
+    "currentTeamNumber": 4,
+    "workSchedule": "2-А",
+    "workshopCode": "ЛПЦ-11",
+    "login": "Worker_203",
+    "role": "MASTER"
+}

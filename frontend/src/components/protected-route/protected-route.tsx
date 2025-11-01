@@ -1,50 +1,40 @@
 import styles from './protected-route.module.css';
 
-import { useContext, useEffect, useState } from 'react';
-import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { memo, useContext, useEffect } from 'react';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 
 import { Spinner } from '../spinner/spinner';
 
 import { useSelector } from '../../services/store';
 import {
   selectIsAuthenticated,
-  selectIsLoading,
+  selectIsChecking,
 } from '../../services/slices/auth/slice';
 import { LayerContext } from '../../contexts/layer/layerContext';
 
-export const ProtectedRoute = () => {
+export const ProtectedRoute = memo(() => {
   const { setIsCookie } = useContext(LayerContext);
   const isAuthenticated = useSelector(selectIsAuthenticated);
-  const isLoading = useSelector(selectIsLoading);
+  const checking = useSelector(selectIsChecking);
   const location = useLocation();
-  const navigate = useNavigate();
-
-  const [currentPath, setCurrentPath] = useState('');
-
+  
   useEffect(() => {
     setIsCookie(true);
-    // Сохраняем текущий путь при загрузке
-    setCurrentPath(location.pathname);
+  }, []);
 
-    // Обновляем состояние истории браузера
-    if (!window.history.state?.path) {
-      window.history.replaceState(
-        { path: location.pathname },
-        '',
-        location.pathname,
-      );
-    }
-
-    navigate(currentPath, { replace: true });
-  }, [isAuthenticated, currentPath, location.pathname, navigate]);
-
-  if (isLoading) {
-    return <div className={styles.spinner}>{isLoading && <Spinner />}</div>;
+  // Пока идёт проверка — показываем спиннер
+  if (checking) {
+    return (
+      <div className={styles.spinner}>
+        <Spinner />
+      </div>
+    );
   }
 
+  // Если не авторизован и проверка завершена — редирект
   if (!isAuthenticated) {
     return <Navigate to="/" state={{ from: location }} replace />;
   }
 
-  return <Outlet />; // Используем Outlet для отображения вложенных маршрутов
-};
+  return <Outlet />;
+});

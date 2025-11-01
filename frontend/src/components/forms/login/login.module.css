@@ -89,3 +89,7 @@
   transition: transform 0.2s ease;
   transform: scale(0.97);
 }
+
+.input__password::-webkit-password-picker-indicator {
+  filter: invert(100%);
+}

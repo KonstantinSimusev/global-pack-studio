@@ -1,14 +1,14 @@
-import { Max, Min } from 'class-validator';
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToMany } from 'typeorm';
+import { IsNumber, IsPositive, Max, Min } from 'class-validator';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
-import { UserShift } from './user-shift.entity';
+import { UserShift } from '../../user-shift/entities/user-shift.entity';
+import { EProfession, ERole } from '../../../shared/enums/enums';
 
 @Entity({
   schema: 'gps',
   name: 'users',
 })
 export class User {
-  // Используем PrimaryGeneratedColumn для автоматического создания UUID
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -17,6 +17,8 @@ export class User {
     type: 'integer',
     nullable: false,
   })
+  @IsNumber()
+  @IsPositive()
   @Min(1)
   @Max(9999999999)
   positionCode: number;
@@ -47,11 +49,22 @@ export class User {
 
   @Column({
     name: 'profession',
-    type: 'varchar',
-    length: 255,
+    type: 'enum',
+    enum: EProfession,
     nullable: false,
   })
-  profession: string;
+  profession: EProfession;
+
+  @Column({
+    name: 'grade',
+    type: 'integer',
+    nullable: false,
+  })
+  @IsNumber()
+  @IsPositive()
+  @Min(1)
+  @Max(20)
+  grade: number;
 
   @Column({
     name: 'personal_number',
@@ -59,6 +72,8 @@ export class User {
     nullable: false,
     unique: true,
   })
+  @IsNumber()
+  @IsPositive()
   @Min(1)
   @Max(9999999999)
   personalNumber: number;
@@ -70,7 +85,20 @@ export class User {
   })
   @Min(1)
   @Max(5)
+  @IsNumber()
+  @IsPositive()
   teamNumber: number;
+
+  @Column({
+    name: 'current_team_number',
+    type: 'integer',
+    nullable: false,
+  })
+  @IsNumber()
+  @IsPositive()
+  @Min(1)
+  @Max(5)
+  currentTeamNumber: number;
 
   @Column({
     name: 'work_schedule',
@@ -112,6 +140,25 @@ export class User {
     nullable: true,
   })
   refreshToken: string | null;
+
+  @Column({
+    name: 'role',
+    type: 'enum',
+    enum: ERole,
+    nullable: false,
+  })
+  role: ERole;
+
+  @Column({
+    name: 'sort_order',
+    type: 'integer',
+    nullable: false,
+  })
+  @IsNumber()
+  @IsPositive()
+  @Min(1)
+  @Max(20)
+  sortOrder: number;
 
   @OneToMany(() => UserShift, (userShift) => userShift.user)
   shifts: UserShift[];

@@ -4,7 +4,7 @@ import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 
 import { User } from '../modules/user/entities/user.entity';
 import { Shift } from '../modules/shift/entities/shift.entity';
-import { UserShift } from '../modules/user/entities/user-shift.entity';
+import { UserShift } from '../modules/user-shift/entities/user-shift.entity';
 
 @Module({
   imports: [

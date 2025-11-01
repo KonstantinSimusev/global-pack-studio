@@ -6,11 +6,10 @@
 
 .item {
   display: flex;
-  flex-direction: column;
   justify-content: space-between;
   padding: 20px;
   background-color: var(--bg-color-shift);
-  gap: 30px;
+  /* gap: 30px; */
   color: var(--color-shift);
   border-radius: 14px;
   transition: opacity 0.3s ease;
@@ -18,14 +17,14 @@
 
 .wrapper__header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  gap: 30px;
 }
 
 .wrapper__button {
   display: flex;
-  align-items: start;
-  gap: 10px;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .wrapper__info {

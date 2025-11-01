@@ -28,6 +28,29 @@ psql -v ON_ERROR_STOP=1 --username "$DB_USER" --dbname "$DB_NAME" <<-EOSQL
   -- Создание расширения для работы с UUID
   CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA gps;
 
+  -- Создание типа enum для ролей
+  CREATE TYPE gps.role_type AS ENUM (
+    'MANAGER',
+    'MASTER',
+    'ADMIN',
+    'USER'
+  );
+
+  -- Создание типа enum для профессий
+  CREATE TYPE gps.profession_type AS ENUM (
+    'Бригадир ОСП',
+    'Бригадир УОП',
+    'Ведущий инженер АМПП',
+    'Водитель погрузчика',
+    'Мастер участка',
+    'Начальник участка',
+    'Оператор ПУ',
+    'Резчик холодного металла',
+    'Укладчик-упаковщик',
+    'Укладчик-упаковщик ЛУМ',
+    'Штабелировщик металла'
+  );
+
   -- Создание таблицы users
   CREATE TABLE IF NOT EXISTS gps.users (
     id uuid DEFAULT gps.uuid_generate_v4() NOT NULL PRIMARY KEY,
@@ -35,14 +58,18 @@ psql -v ON_ERROR_STOP=1 --username "$DB_USER" --dbname "$DB_NAME" <<-EOSQL
     last_name VARCHAR(100) NOT NULL,
     first_name VARCHAR(100) NOT NULL,
     patronymic VARCHAR(100) NOT NULL,
-    profession VARCHAR(255) NOT NULL,
+    profession gps.profession_type NOT NULL,
+    grade INTEGER NOT NULL,
     personal_number INTEGER NOT NULL UNIQUE,
     team_number INTEGER NOT NULL,
+    current_team_number INTEGER NOT NULL,
     work_schedule VARCHAR(10) NOT NULL,
     workshop_code VARCHAR(20) NOT NULL,
     login VARCHAR(255) NOT NULL UNIQUE,
     hashed_password VARCHAR(512) NOT NULL,
-    refresh_token VARCHAR(512)
+    refresh_token VARCHAR(512),
+    role gps.role_type NOT NULL,
+    sort_order INTEGER NOT NULL
   );
 
   -- Создание таблицы shifts
@@ -52,10 +79,7 @@ psql -v ON_ERROR_STOP=1 --username "$DB_USER" --dbname "$DB_NAME" <<-EOSQL
     shift_number INTEGER NOT NULL,
     team_number INTEGER NOT NULL,
     
-    -- Уникальность по дате и бригаде
     UNIQUE (date, team_number),
-    
-    -- Уникальность по дате и смене
     UNIQUE (date, shift_number)
   );
 
@@ -68,6 +92,8 @@ psql -v ON_ERROR_STOP=1 --username "$DB_USER" --dbname "$DB_NAME" <<-EOSQL
     work_hours DECIMAL(5, 2) NOT NULL,
     user_id uuid NOT NULL,
     shift_id uuid NOT NULL,
+
+    UNIQUE (user_id, shift_id),
     
     FOREIGN KEY (user_id) REFERENCES gps.users(id),
     FOREIGN KEY (shift_id) REFERENCES gps.shifts(id)

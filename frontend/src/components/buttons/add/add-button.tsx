@@ -4,20 +4,23 @@ import { useContext } from 'react';
 import { LayerContext } from '../../../contexts/layer/layerContext';
 import { AddIcon } from '../../icons/add/add';
 
-interface AddButtonProps {
+interface IAddButtonProps {
   label?: string;
   actionType: 'worker' | 'shift' | 'other'; // можно добавить другие типы
   onOpen?: () => void; // кастомный обработчик
 }
 
-export const AddButton = ({ label, actionType, onOpen }: AddButtonProps) => {
+export const AddButton = ({ label, actionType, onOpen }: IAddButtonProps) => {
   const {
     setIsOpenOverlay,
     setIsAddWorkerOpenModall,
     setIsAddShiftOpenModall,
   } = useContext(LayerContext);
 
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
     setIsOpenOverlay(true);
 
     switch (actionType) {

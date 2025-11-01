@@ -22,12 +22,14 @@ import { ShiftForm } from '../forms/shift/shift';
 import { AddWorkerForm } from '../forms/add-worker/add-worker.form';
 import { Logout } from '../loguot/logout';
 import { Delete } from '../delete/delete';
-import { TeamWorkerList } from '../pages/team-worker-list/team-worker-list';
+import { ShiftItem } from '../shift-item/shift-item';
 
 import { ProtectedRoute } from '../protected-route/protected-route';
 
 import { checkAccessToken } from '../../services/slices/auth/actions';
 import { useDispatch } from '../../services/store';
+import { getCurrentShiftID } from '../../utils/utils';
+import { getUsersShifts } from '../../services/slices/user-shift/actions';
 
 const App = () => {
   const { isLightTheme } = useContext(ThemeContext);
@@ -42,10 +44,18 @@ const App = () => {
   // const location = useLocation();
   // const navigate = useNavigate();
   const dispatch = useDispatch();
+  const currentShiftId = getCurrentShiftID();
 
   useEffect(() => {
+    console.log('✅ App смонтирован');
     dispatch(checkAccessToken());
+
+    if (currentShiftId) {
+      dispatch(getUsersShifts(currentShiftId));
+    }
   }, []);
+
+  console.log('🔁 App отрендерен');
 
   return (
     <div
@@ -53,6 +63,7 @@ const App = () => {
         styles.container,
         isLightTheme ? 'theme-light' : 'theme-dark',
         isOpenOverlay && styles.container__fixed,
+        isOpenOverlay && styles.no_scroll,
       )}
     >
       <Header />
@@ -62,8 +73,8 @@ const App = () => {
         <Route element={<ProtectedRoute />}>
           <Route path="/home" element={<Home />} />
           <Route path="/timesheet" element={<Timesheet />} />
+          <Route path="/timesheet/shifts/:id" element={<ShiftItem />} />
           <Route path="/production" element={<Production />} />
-          <Route path="/teamworkers" element={<TeamWorkerList />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

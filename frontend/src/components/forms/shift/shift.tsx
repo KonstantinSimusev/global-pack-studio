@@ -1,7 +1,7 @@
 import styles from './shift.module.css';
 
 import { useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 
 import { Spinner } from '../../spinner/spinner';
 
@@ -28,7 +28,7 @@ interface IFormData extends Record<string, string> {
 }
 
 export const ShiftForm = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
   const isLoading = useSelector(selectIsLoading);
@@ -98,16 +98,15 @@ export const ShiftForm = () => {
         const data: IShift = {
           date: new Date(),
           shiftNumber: parseInt(formData.shiftNumber ?? '0', 10),
-          teamNumber: user?.teamNumber ?? 0,
+          teamNumber: user?.currentTeamNumber ?? 0,
         };
 
         const response = await dispatch(createShift(data));
 
         if (response.payload) {
-          navigate('/timesheet');
+          dispatch(getTeamShifts());
           setIsAddShiftOpenModall(false);
           setIsOpenOverlay(false);
-          dispatch(getTeamShifts());
         } else {
           throw new Error();
         }

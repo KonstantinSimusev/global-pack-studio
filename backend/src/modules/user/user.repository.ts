@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
 
 import { User } from './entities/user.entity';
+import { EProfession } from '../../shared/enums/enums';
 
 @Injectable()
 export class UserRepository {
@@ -12,7 +13,6 @@ export class UserRepository {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  // CRUD
   async create(user: User): Promise<User> {
     const newUser = this.userRepository.create(user);
     return await this.userRepository.save(newUser);
@@ -37,7 +37,6 @@ export class UserRepository {
     await this.userRepository.delete(id);
   }
 
-  // Специфические методы поиска
   async findByLogin(login: string): Promise<User> {
     return await this.userRepository.findOne({
       where: { login },
@@ -48,29 +47,21 @@ export class UserRepository {
     const teamUsers = await this.userRepository.find({
       where: {
         teamNumber,
-        profession: Not('мастер участка'),
+        profession: Not(EProfession.MASTER),
       },
     });
 
     return teamUsers;
   }
 
-  // async findWorkers(): Promise<IWorker[]> {
-  //   const workers = await this.userRepository
-  //     .createQueryBuilder('user')
-  //     .select('user.profession', 'name')
-  //     .addSelect('user.team_number', 'teamNumber')
-  //     .addSelect('COUNT(user.id)', 'count')
-  //     .groupBy('user.profession, user.team_number')
-  //     .where('user.profession NOT IN (:manager, :master, :chief)', {
-  //       manager: Profession.MANAGER,
-  //       master: Profession.MASTER,
-  //       chief: Profession.CHIEF,
-  //     })
-  //     .orderBy('user.profession', 'ASC') // Сначала сортировка по профессии
-  //     .addOrderBy('user.team_number', 'ASC') // Затем по номеру команды
-  //     .getRawMany();
+  async findUserByPersonalNumber(personalNumber: number): Promise<User> {
+    const user = await this.userRepository.findOne({
+      where: {
+        personalNumber,
+        profession: Not(EProfession.MASTER),
+      },
+    });
 
-  //   return workers;
-  // }
+    return user;
+  }
 }

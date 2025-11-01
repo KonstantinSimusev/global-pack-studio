@@ -72,6 +72,7 @@ export class UserService {
         message: 'Пользователи успешно созданы',
       };
     } catch (error) {
+      console.error(error)
       throw new InternalServerErrorException(
         'Произошла ошибка при создании пользователей',
       );

@@ -1,9 +1,11 @@
 import type {
+  ICreateUserShift,
   IList,
   ILoginData,
   IShift,
   ISuccess,
   IUser,
+  IUserShift,
 } from './api.interface';
 
 // Используем переменную окружения
@@ -145,10 +147,64 @@ export const deleteShiftApi = async (id: string): Promise<ISuccess> => {
   }
 };
 
-export const getTeamUsersApi = async (): Promise<IUser[]> => {
+export const createUsersShiftsApi = async (id: string): Promise<ISuccess> => {
   try {
     // Здесь происходит запрос к серверу
-    const response = await fetch(`${URL}/users/team`, {
+    const response = await fetch(`${URL}/users-shifts`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+      },
+      credentials: 'include', // Важно для работы с cookie
+      body: JSON.stringify({ id }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message);
+    }
+
+    // Если все хорошо, возвращаем данные
+    return await response.json();
+  } catch (error) {
+    // Сюда попадаем при любом throw new Error()
+    throw error;
+  }
+};
+
+export const createUserShiftApi = async (
+  payload: ICreateUserShift,
+): Promise<ISuccess> => {
+  try {
+    // Здесь происходит запрос к серверу
+    const response = await fetch(`${URL}/users-shifts/create-shift`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+      },
+      credentials: 'include', // Важно для работы с cookie
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message);
+    }
+
+    // Если все хорошо, возвращаем данные
+    return await response.json();
+  } catch (error) {
+    // Сюда попадаем при любом throw new Error()
+    throw error;
+  }
+};
+
+export const getUsersShiftsApi = async (
+  id: string,
+): Promise<IList<IUserShift>> => {
+  try {
+    // Здесь происходит запрос к серверу
+    const response = await fetch(`${URL}/shifts/${id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json;charset=utf-8',
@@ -165,30 +221,6 @@ export const getTeamUsersApi = async (): Promise<IUser[]> => {
     return await response.json();
   } catch (error) {
     // Сюда попадаем при любом throw new Error()
-    throw new Error();
-  }
-};
-
-export const addWorkerApi = async (data: {
-  personalNumber: number;
-}): Promise<IUser> => {
-  try {
-    const response = await fetch(`${URL}/users/worker`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include', // Важно добавить эту строку
-      body: JSON.stringify(data.personalNumber),
-    });
-
-    if (!response.ok) {
-      throw new Error();
-    }
-
-    // Правильно парсим JSON и возвращаем объект
-    return await response.json();
-  } catch (error) {
-    throw new Error();
+    throw error;
   }
 };

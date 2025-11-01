@@ -1,10 +1,10 @@
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
-import { UserShift } from '../user/entities/user-shift.entity';
-import { CreateUserShiftDTO } from './dto/create-user-shift.dto';
+import { UserShift } from './entities/user-shift.entity';
+import { EProfession, ERole } from '../../shared/enums/enums';
 
 @Injectable()
 export class UserShiftRepository {
@@ -13,36 +13,39 @@ export class UserShiftRepository {
     private readonly userShiftRepository: Repository<UserShift>,
   ) {}
 
-  async findUserShifts(): Promise<UserShift[]> {
-    try {
-      const userShifts = await this.userShiftRepository.find({
-        relations: ['user', 'shift'],
-      });
-      return userShifts;
-    } catch (error) {
-      // Логируем полную информацию об ошибке
-      console.error('Ошибка в findUsers():', {
-        message: error.message,
-        stack: error.stack,
-        name: error.name,
-        code: error.code,
-        sql: error.sql,
-        parameters: error.parameters,
-      });
-      throw new InternalServerErrorException(
-        'Произошла ошибка при получении списка пользователей',
-      );
-    }
+  async create(userShift: UserShift): Promise<UserShift> {
+    const newUserShift = this.userShiftRepository.create(userShift);
+    return await this.userShiftRepository.save(newUserShift);
   }
 
-  async create(userData: CreateUserShiftDTO): Promise<UserShift> {
-    try {
-      const newUserShift = this.userShiftRepository.create(userData);
-      return await this.userShiftRepository.save(newUserShift);
-    } catch {
-      throw new InternalServerErrorException(
-        'Ошибка при создании пользовательской смены',
-      );
-    }
+  async findUsersShiftsByShiftId(id: string): Promise<UserShift[]> {
+    return await this.userShiftRepository
+      .createQueryBuilder('userShift')
+      .leftJoinAndSelect('userShift.user', 'user')
+      .leftJoinAndSelect('userShift.shift', 'shift')
+      .where('userShift.shift.id = :id', { id })
+      .andWhere('user.profession != :profession', {
+        profession: EProfession.MASTER,
+      })
+      .andWhere('user.sortOrder != :sortOrder', { sortOrder: 0 })
+      .addOrderBy('user.sortOrder', 'ASC')
+      .addOrderBy('user.lastName', 'ASC')
+      .addOrderBy('user.firstName', 'ASC')
+      .addOrderBy('user.patronymic', 'ASC')
+      .getMany();
+  }
+
+  async existsByUserAndShift(
+    userId: string,
+    shiftId: string,
+  ): Promise<boolean> {
+    const count = await this.userShiftRepository.count({
+      where: {
+        user: { id: userId },
+        shift: { id: shiftId },
+      },
+    });
+
+    return count > 0;
   }
 }

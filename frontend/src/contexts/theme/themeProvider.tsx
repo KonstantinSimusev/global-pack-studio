@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ThemeContext } from './themeContext';
 
 interface TThemeProvider {
@@ -36,9 +36,16 @@ export const ThemeProvider = ({ children }: TThemeProvider) => {
     }
   }, [isLightTheme]);
 
+  // Мемоизируем значение контекста
+  const value = useMemo(
+    () => ({
+      isLightTheme,
+      setIsLightTheme,
+    }),
+    [isLightTheme, setIsLightTheme],
+  );
+
   return (
-    <ThemeContext.Provider value={{ isLightTheme, setIsLightTheme }}>
-      {children}
-    </ThemeContext.Provider>
+    <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
   );
 };

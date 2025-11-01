@@ -7,6 +7,7 @@ interface IModalProps {
 }
 
 export const Modal = ({ children }: IModalProps) => {
+
   return (
     <div className={styles.container}>
       <CloseButton />

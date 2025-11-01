@@ -5,10 +5,9 @@ import {
   PrimaryGeneratedColumn,
   Unique,
   OneToMany,
-  ManyToMany,
 } from 'typeorm';
 
-import { UserShift } from '../../user/entities/user-shift.entity';
+import { UserShift } from '../../../modules/user-shift/entities/user-shift.entity';
 
 @Entity({
   schema: 'gps',
@@ -51,5 +50,5 @@ export class Shift {
   teamNumber: number;
 
   @OneToMany(() => UserShift, (userShift) => userShift.shift)
-  users: UserShift[];
+  usersShifts: UserShift[];
 }

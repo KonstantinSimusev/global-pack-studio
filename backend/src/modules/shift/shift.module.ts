@@ -1,17 +1,25 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { Shift } from './entities/shift.entity';
-import { ShiftController } from './shift.controller';
-import { ShiftRepository } from './shift.repository';
-import { ShiftService } from './shift.service';
-import { AuthModule } from '../auth/auth.module';
+
 import { UserModule } from '../user/user.module';
+import { AuthModule } from '../auth/auth.module';
+import { UserShiftModule } from '../user-shift/user-shift.module';
+
+import { ShiftController } from './shift.controller';
+import { ShiftService } from './shift.service';
+import { ShiftRepository } from './shift.repository';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Shift]), UserModule, AuthModule],
+  imports: [
+    TypeOrmModule.forFeature([Shift]),
+    UserModule,
+    AuthModule,
+    forwardRef(() => UserShiftModule),
+  ],
   controllers: [ShiftController],
   providers: [ShiftRepository, ShiftService],
-  exports: [ShiftService],
+  exports: [ShiftRepository, ShiftService],
 })
 export class ShiftModule {}

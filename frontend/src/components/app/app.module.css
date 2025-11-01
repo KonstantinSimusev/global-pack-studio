@@ -8,6 +8,6 @@
 }
 
 .container__fixed {
-  position: fixed;
+  /* position: fixed; */
   overflow: hidden;
 }
