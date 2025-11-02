@@ -1,8 +1,6 @@
 import styles from './shift.module.css';
 
 import { useContext, useEffect, useState } from 'react';
-// import { useNavigate } from 'react-router-dom';
-
 import { Spinner } from '../../spinner/spinner';
 
 import { useDispatch, useSelector } from '../../../services/store';
@@ -19,7 +17,6 @@ import {
   getTeamShifts,
 } from '../../../services/slices/shift/actions';
 import type { IShift } from '../../../utils/api.interface';
-import { checkAccessToken } from '../../../services/slices/auth/actions';
 import { selectUser } from '../../../services/slices/auth/slice';
 
 // Обновляем тип IFormData для работы с number | null
@@ -28,7 +25,6 @@ interface IFormData extends Record<string, string> {
 }
 
 export const ShiftForm = () => {
-  // const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
   const isLoading = useSelector(selectIsLoading);
@@ -48,15 +44,6 @@ export const ShiftForm = () => {
   const [errors, setErrors] = useState<{ [key: string]: string }>({
     shiftNumber: '',
   });
-
-  useEffect(() => {
-    if (serverError === 'Ошибка при создании смены') {
-      setIsAddShiftOpenModall(false);
-      setIsOpenOverlay(false);
-      dispatch(checkAccessToken());
-      return;
-    }
-  }, [serverError]);
 
   useEffect(() => {
     if (isAddShiftOpenModall) {
@@ -159,7 +146,13 @@ export const ShiftForm = () => {
           </div>
         }
 
-        <button className={styles.button__shift}>Создать</button>
+        <button
+          className={styles.button__shift}
+          disabled={selectedShift === null}
+          style={{ opacity: selectedShift === null ? 0.4 : 0.9 }}
+        >
+          Создать
+        </button>
       </form>
     </div>
   );

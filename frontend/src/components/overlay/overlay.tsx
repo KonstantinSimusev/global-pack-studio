@@ -10,6 +10,7 @@ export const Overlay = () => {
     isLoginModalOpen,
     isLogoutOpenModal,
     isAddWorkerOpenModall,
+    isUpdateWorkerOpenModall,
     isAddShiftOpenModall,
     isDeleteOpenModall,
     setIsOpenOverlay,
@@ -17,6 +18,7 @@ export const Overlay = () => {
     setIsLoginModalOpen,
     setIsLogoutOpenModal,
     setIsAddWorkerOpenModall,
+    setIsUpdateWorkerOpenModall,
     setIsAddShiftOpenModall,
     setIsDeleteOpenModall,
   } = useContext(LayerContext);
@@ -42,6 +44,10 @@ export const Overlay = () => {
       setIsAddWorkerOpenModall(false);
     }
 
+    if (isUpdateWorkerOpenModall) {
+      setIsUpdateWorkerOpenModall(false);
+    }
+
     if (isAddShiftOpenModall) {
       setIsAddShiftOpenModall(false);
     }
@@ -59,6 +65,7 @@ export const Overlay = () => {
       setIsLoginModalOpen(false);
       setIsLogoutOpenModal(false);
       setIsAddWorkerOpenModall(false);
+      setIsUpdateWorkerOpenModall(false);
       setIsAddShiftOpenModall(false);
       setIsDeleteOpenModall(false);
     }

@@ -33,6 +33,18 @@ export class ShiftRepository {
     });
   }
 
+  async findLastShift(teamNumber: number): Promise<Shift[]> {
+    return this.shiftRepository.find({
+      where: {
+        teamNumber,
+      },
+      order: {
+        date: 'DESC',
+      },
+      take: 1,  // нам нужна только последняя смена
+    });
+  }
+
   async findTeamShifts(
     teamNumber: number,
     startOfMonth: Date,
@@ -41,7 +53,7 @@ export class ShiftRepository {
     return this.shiftRepository.find({
       where: {
         teamNumber,
-        // date: Between(startOfMonth, endOfMonth),
+        date: Between(startOfMonth, endOfMonth),
       },
       order: {
         date: 'DESC',

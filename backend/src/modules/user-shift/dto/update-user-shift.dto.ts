@@ -1,6 +1,18 @@
-import { IsString, IsNumber, Min, Max, IsNotEmpty, IsUUID } from 'class-validator';
+import {
+  IsString,
+  IsNumber,
+  Min,
+  Max,
+  IsNotEmpty,
+  IsUUID,
+} from 'class-validator';
 
-export class CreateUserShiftDTO {
+export class UpdateUserShiftDTO {
+  @IsString()
+  @IsNotEmpty()
+  @IsUUID()
+  id: string;
+
   @IsString()
   @IsNotEmpty()
   workStatus: string;
@@ -17,10 +29,4 @@ export class CreateUserShiftDTO {
   @Min(0)
   @Max(20)
   workHours: number;
-
-  @IsUUID()
-  userId: string;
-
-  @IsUUID()
-  shiftId: string;
 }

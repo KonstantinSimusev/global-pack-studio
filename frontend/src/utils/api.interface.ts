@@ -38,8 +38,8 @@ export interface IUserShift {
   workPlace: string;
   shiftProfession: string;
   workHours: number;
-  user: IUser;
-  shift: IShift;
+  user?: IUser;
+  shift?: IShift;
 }
 
 export interface ICreateUserShift {

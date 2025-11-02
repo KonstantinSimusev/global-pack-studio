@@ -12,6 +12,7 @@ export const LayerProvider = ({ children }: TLayerProviderProps) => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isLogoutOpenModal, setIsLogoutOpenModal] = useState(false);
   const [isAddWorkerOpenModall, setIsAddWorkerOpenModall] = useState(false);
+  const [isUpdateWorkerOpenModall, setIsUpdateWorkerOpenModall] = useState(false);
   const [isAddShiftOpenModall, setIsAddShiftOpenModall] = useState(false);
   const [isDeleteOpenModall, setIsDeleteOpenModall] = useState(false);
   const [isCookie, setIsCookie] = useState(false);
@@ -26,6 +27,7 @@ export const LayerProvider = ({ children }: TLayerProviderProps) => {
       isLoginModalOpen,
       isLogoutOpenModal,
       isAddWorkerOpenModall,
+      isUpdateWorkerOpenModall,
       isAddShiftOpenModall,
       isDeleteOpenModall,
       isCookie,
@@ -36,6 +38,7 @@ export const LayerProvider = ({ children }: TLayerProviderProps) => {
       setIsLoginModalOpen,
       setIsLogoutOpenModal,
       setIsAddWorkerOpenModall,
+      setIsUpdateWorkerOpenModall,
       setIsAddShiftOpenModall,
       setIsDeleteOpenModall,
       setIsCookie,
@@ -48,6 +51,7 @@ export const LayerProvider = ({ children }: TLayerProviderProps) => {
       isLoginModalOpen,
       isLogoutOpenModal,
       isAddWorkerOpenModall,
+      isUpdateWorkerOpenModall,
       isAddShiftOpenModall,
       isDeleteOpenModall,
       isCookie,

@@ -18,3 +18,13 @@ export enum EProfession {
   PACKER_LUM = 'Укладчик-упаковщик ЛУМ',
   STACKER = 'Штабелировщик металла',
 }
+
+export enum ETeamProfession {
+  BRIGADIR_OSP = 'Бригадир ОСП',
+  DRIVER = 'Водитель погрузчика',
+  OPERATOR = 'Оператор ПУ',
+  CUTTER = 'Резчик холодного металла',
+  PACKER = 'Укладчик-упаковщик',
+  PACKER_LUM = 'Укладчик-упаковщик ЛУМ',
+  STACKER = 'Штабелировщик металла',
+}

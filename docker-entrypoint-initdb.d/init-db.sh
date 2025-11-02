@@ -89,7 +89,7 @@ psql -v ON_ERROR_STOP=1 --username "$DB_USER" --dbname "$DB_NAME" <<-EOSQL
     work_status VARCHAR(255) NOT NULL,
     work_place VARCHAR(255) NOT NULL,
     shift_profession VARCHAR(255),
-    work_hours DECIMAL(5, 2) NOT NULL,
+    work_hours DECIMAL(4, 1) NOT NULL,
     user_id uuid NOT NULL,
     shift_id uuid NOT NULL,
 

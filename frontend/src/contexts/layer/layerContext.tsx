@@ -7,6 +7,7 @@ interface ILayerContextValue {
   isLoginModalOpen: boolean;
   isLogoutOpenModal: boolean;
   isAddWorkerOpenModall: boolean;
+  isUpdateWorkerOpenModall: boolean;
   isAddShiftOpenModall: boolean;
   isDeleteOpenModall: boolean;
   isCookie: boolean;
@@ -17,6 +18,7 @@ interface ILayerContextValue {
   setIsLoginModalOpen: (value: boolean) => void;
   setIsLogoutOpenModal: (value: boolean) => void;
   setIsAddWorkerOpenModall: (value: boolean) => void;
+  setIsUpdateWorkerOpenModall: (value: boolean) => void;
   setIsAddShiftOpenModall: (value: boolean) => void;
   setIsDeleteOpenModall: (value: boolean) => void;
   setIsCookie: (value: boolean) => void;
@@ -30,6 +32,7 @@ export const LayerContext = createContext<ILayerContextValue>({
   isLoginModalOpen: false,
   isLogoutOpenModal: false,
   isAddWorkerOpenModall: false,
+  isUpdateWorkerOpenModall: false,
   isAddShiftOpenModall: false,
   isDeleteOpenModall: false,
   isCookie: false,
@@ -40,6 +43,7 @@ export const LayerContext = createContext<ILayerContextValue>({
   setIsLoginModalOpen: () => {},
   setIsLogoutOpenModal: () => {},
   setIsAddWorkerOpenModall: () => {},
+  setIsUpdateWorkerOpenModall: () => {},
   setIsAddShiftOpenModall: () => {},
   setIsDeleteOpenModall: () => {},
   setIsCookie: () => {},

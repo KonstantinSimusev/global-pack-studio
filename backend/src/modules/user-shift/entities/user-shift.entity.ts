@@ -50,8 +50,8 @@ export class UserShift {
   @Column({
     name: 'work_hours',
     type: 'decimal',
-    precision: 5,
-    scale: 2,
+    precision: 4,
+    scale: 1,
     nullable: false,
   })
   @IsNumber()

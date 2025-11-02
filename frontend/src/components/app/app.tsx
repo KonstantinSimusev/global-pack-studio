@@ -30,6 +30,7 @@ import { checkAccessToken } from '../../services/slices/auth/actions';
 import { useDispatch } from '../../services/store';
 import { getCurrentShiftID } from '../../utils/utils';
 import { getUsersShifts } from '../../services/slices/user-shift/actions';
+import { UpdateWorkerForm } from '../forms/update-worker/update-worker.form';
 
 const App = () => {
   const { isLightTheme } = useContext(ThemeContext);
@@ -38,6 +39,7 @@ const App = () => {
     isLoginModalOpen,
     isLogoutOpenModal,
     isAddWorkerOpenModall,
+    isUpdateWorkerOpenModall,
     isAddShiftOpenModall,
     isDeleteOpenModall,
   } = useContext(LayerContext);
@@ -91,6 +93,12 @@ const App = () => {
       {isAddWorkerOpenModall && (
         <Modal>
           <AddWorkerForm />
+        </Modal>
+      )}
+
+      {isUpdateWorkerOpenModall && (
+        <Modal>
+          <UpdateWorkerForm />
         </Modal>
       )}
 

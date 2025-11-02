@@ -188,6 +188,51 @@ export const validationRules: IValidationRules = {
       },
     ],
   },
+  workStatus: {
+    required: true,
+    validators: [
+      {
+        type: 'required',
+        pattern: /^.+$/,
+        message: 'Выберите статус',
+      },
+      {
+        type: 'notDefault',
+        pattern: /^(?!Не определен$).+/,
+        message: 'Выберите статус',
+      },
+    ],
+  },
+  workPlace: {
+    required: true,
+    validators: [
+      {
+        type: 'required',
+        pattern: /^.+$/,
+        message: 'Выберите место',
+      },
+      {
+        type: 'notDefault',
+        pattern: /^(?!Не выбрано$).+/,
+        message: 'Выберите место',
+      },
+    ],
+  },
+  workHours: {
+    required: true,
+    validators: [
+      {
+        type: 'number',
+        pattern: /^\d+$/,
+        message: 'Введите только цифры',
+      },
+      {
+        type: 'maxLength',
+        pattern: /^\d{1,4}$/,
+        message: 'Введите не более 4 цифр',
+      },
+    ],
+  },
 };
 
 // Функция для валидации одного поля

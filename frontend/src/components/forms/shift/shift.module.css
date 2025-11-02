@@ -38,7 +38,7 @@
   content: '';
   position: absolute; /* Добавляем абсолютное позиционирование */
   top: 50%;
-  left: 50%; 
+  left: 50%;
   width: 14px;
   height: 14px;
   border-radius: 50%;
@@ -100,6 +100,7 @@ input[type='radio']:checked ~ .input__custom::before {
   font-weight: 400;
   background-color: var(--bg-color-button);
   cursor: pointer;
+  transition: opacity 0.6s ease;
 }
 
 .button__shift:active {

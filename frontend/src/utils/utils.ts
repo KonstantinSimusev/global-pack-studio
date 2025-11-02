@@ -35,8 +35,8 @@ export function getProfessionsWithCounts(
 
   // Проходим по данным и обновляем счётчики для подходящих записей
   for (const userShift of [...userShifts]) {
-    if (userShift.workPlace === 'ЛПЦ-11') {
-      continue; // пропускаем записи для ЛПЦ-11
+    if (userShift.workStatus === 'Не определен') {
+      continue; // пропускаем записи для 'Не определен'
     }
 
     const profession = userShift.shiftProfession as TProfession;

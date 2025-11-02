@@ -1,5 +1,11 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import { createUserShift, createUsersShifts, getUsersShifts } from './actions';
+import {
+  createUserShift,
+  createUsersShifts,
+  deleteUserShift,
+  getUsersShifts,
+  updateUserShift,
+} from './actions';
 import type { IList, IUserShift } from '../../../utils/api.interface';
 
 interface IUserShiftState {
@@ -26,6 +32,8 @@ export const userShiftSlice = createSlice({
     selectUsersShifts: (state: IUserShiftState) => state.usersShifts,
     selectIsLoading: (state: IUserShiftState) => state.isLoading,
     selectError: (state: IUserShiftState) => state.error,
+    selectUserShiftById: (state: IUserShiftState, id: string) =>
+      state.usersShifts.find((shift) => shift.id === id) || null,
   },
   extraReducers: (builder) => {
     builder
@@ -70,12 +78,42 @@ export const userShiftSlice = createSlice({
       )
       .addCase(getUsersShifts.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error.message ?? 'Ошибка создания смены';
+        state.error = action.error.message ?? 'Ошибка получения смены';
+      })
+      // Обработчик для updateUserShift
+      .addCase(updateUserShift.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(updateUserShift.fulfilled, (state) => {
+        state.isLoading = false;
+        state.error = null;
+      })
+      .addCase(updateUserShift.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message ?? 'Ошибка обновления смены';
+      })
+      // Обработчик для deleteUserShift
+      .addCase(deleteUserShift.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(deleteUserShift.fulfilled, (state) => {
+        state.isLoading = false;
+        state.error = null;
+      })
+      .addCase(deleteUserShift.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message ?? 'Ошибка удаления смены';
       });
   },
 });
 
 export const { clearError } = userShiftSlice.actions;
 
-export const { selectUsersShifts, selectIsLoading, selectError } =
-  userShiftSlice.selectors;
+export const {
+  selectUsersShifts,
+  selectUserShiftById,
+  selectIsLoading,
+  selectError,
+} = userShiftSlice.selectors;

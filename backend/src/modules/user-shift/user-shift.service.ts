@@ -23,13 +23,16 @@ import { Shift } from '../shift/entities/shift.entity';
 import { UserShift } from './entities/user-shift.entity';
 import { User } from '../user/entities/user.entity';
 
-import { RequestDTO } from './dto/request.dto';
+import { RequestDTO } from './dto/user-request.dto';
 
 import {
   IList,
   ISuccess,
   IUserShift,
 } from '../../shared/interfaces/api.interface';
+
+import { ETeamProfession } from '../../shared/enums/enums';
+import { UpdateUserShiftDTO } from './dto/update-user-shift.dto';
 
 @Injectable()
 export class UserShiftService {
@@ -62,6 +65,18 @@ export class UserShiftService {
         throw new NotFoundException('Работник не найден');
       }
 
+      // Получаем все допустимые профессии из enum
+      const validProfessions: string[] = Object.values(ETeamProfession);
+
+      // Проверяем, указана ли профессия пользователя в допустимом списке
+      if (!user.profession) {
+        throw new Error('Профессия пользователя не указана');
+      }
+
+      if (!validProfessions.includes(user.profession)) {
+        throw new ConflictException('Профессия недоступна');
+      }
+
       // Проверяем, существует ли уже запись "пользователь + смена"
       const isExisting = await this.userShiftRepository.existsByUserAndShift(
         user.id,
@@ -69,16 +84,10 @@ export class UserShiftService {
       );
 
       if (isExisting) {
-        throw new ConflictException('Смена уже создана');
+        throw new ConflictException('Работник уже создан');
       }
 
-      const createdUserShift = new UserShift();
-      createdUserShift.workStatus = 'Явка';
-      createdUserShift.workPlace = 'ЛПЦ-11';
-      createdUserShift.shiftProfession = user.profession;
-      createdUserShift.workHours = 11.5;
-      createdUserShift.user = user;
-      createdUserShift.shift = shift;
+      const createdUserShift = this.createUserShiftEntity(user, shift);
 
       await this.userShiftRepository.create(createdUserShift);
 
@@ -103,14 +112,7 @@ export class UserShiftService {
     try {
       return await Promise.all(
         users.map((user) => {
-          const createdUserShift = new UserShift();
-          createdUserShift.workStatus = 'Явка';
-          createdUserShift.workPlace = 'ЛПЦ-11';
-          createdUserShift.shiftProfession = user.profession;
-          createdUserShift.workHours = 11.5;
-          createdUserShift.user = user;
-          createdUserShift.shift = shift;
-
+          const createdUserShift = this.createUserShiftEntity(user, shift);
           return this.userShiftRepository.create(createdUserShift);
         }),
       );
@@ -139,5 +141,80 @@ export class UserShiftService {
         'Ошибка при получении списка смен',
       );
     }
+  }
+
+  async updateUserShift(
+    @Body() dto: UpdateUserShiftDTO,
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<ISuccess> {
+    try {
+      await this.authService.validateAccessToken(req, res);
+
+      const userShift = await this.userShiftRepository.findById(dto.id);
+
+      if (!userShift) {
+        throw new NotFoundException('Смена не найдена');
+      }
+
+      const updateUserShift = await this.userShiftRepository.update(
+        userShift,
+        dto,
+      );
+
+      if (!updateUserShift) {
+        throw new NotFoundException('Смена не обновлена');
+      }
+
+      return {
+        message: 'Смена пользователя успешно обновлена',
+      };
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Произошла ошибка при обновлении смены',
+      );
+    }
+  }
+
+  async deleteUserShift(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<ISuccess> {
+    try {
+      await this.authService.validateAccessToken(req, res);
+
+      const userShift = await this.userShiftRepository.findById(id);
+
+      if (!userShift) {
+        throw new NotFoundException('Смена не найдена');
+      }
+
+      await this.userShiftRepository.delete(id);
+
+      return {
+        message: 'Смена успешно удалена',
+      };
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Произошла ошибка при удалении смены',
+      );
+    }
+  }
+
+  private createUserShiftEntity(
+    user: User,
+    shift: Shift,
+    workStatus: string = 'Не определен',
+    workPlace: string = 'Не выбрано',
+  ): UserShift {
+    const userShift = new UserShift();
+    userShift.workStatus = workStatus;
+    userShift.workPlace = workPlace;
+    userShift.shiftProfession = user.profession;
+    userShift.workHours = 0;
+    userShift.user = user;
+    userShift.shift = shift;
+    return userShift;
   }
 }

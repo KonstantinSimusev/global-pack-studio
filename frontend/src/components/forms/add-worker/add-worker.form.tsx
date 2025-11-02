@@ -1,6 +1,6 @@
 import styles from './add-worker.form.module.css';
 
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import { Spinner } from '../../spinner/spinner';
 
@@ -32,7 +32,7 @@ export const AddWorkerForm = () => {
   const dispatch = useDispatch();
   const isLoading = useSelector(selectIsLoading);
   const error = useSelector(selectError);
-  const { setIsOpenOverlay, setIsAddWorkerOpenModall } =
+  const { isAddWorkerOpenModall, setIsOpenOverlay, setIsAddWorkerOpenModall } =
     useContext(LayerContext);
 
   // Состояние для хранения значений полей формы
@@ -45,6 +45,12 @@ export const AddWorkerForm = () => {
     personalNumber: '',
     currentShift: '',
   });
+
+  useEffect(() => {
+      if (isAddWorkerOpenModall) {
+        dispatch(clearError());
+      }
+    }, [isAddWorkerOpenModall, dispatch]);
 
   // Обработчик изменения поля ввода
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -109,13 +115,14 @@ export const AddWorkerForm = () => {
           setIsAddWorkerOpenModall(false);
           setIsOpenOverlay(false);
           setFormData({ personalNumber: '' });
-          setErrors({ personalNumber: '' });
+          setErrors({ personalNumber: '', currentShift: '' });
           dispatch(getUsersShifts(currentShiftId));
         } else {
           setFormData({ personalNumber: '' });
           throw new Error();
         }
       } catch (error) {
+        // dispatch(clearError())
         throw new Error();
       }
     }

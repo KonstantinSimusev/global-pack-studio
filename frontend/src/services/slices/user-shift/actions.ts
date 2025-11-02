@@ -3,7 +3,9 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
   createUserShiftApi,
   createUsersShiftsApi,
+  deleteUserShiftApi,
   getUsersShiftsApi,
+  updateUserShiftApi,
 } from '../../../utils/gpsApi';
 
 import type {
@@ -80,6 +82,54 @@ export const getUsersShifts = createAsyncThunk(
     } catch (error) {
       // Добавляем задержку кода
       // await delay();
+
+      // Пойдет в rejected
+      throw error;
+    }
+  },
+);
+
+export const updateUserShift = createAsyncThunk(
+  'users-shifts/update-shift',
+  async (payload: IUserShift): Promise<ISuccess> => {
+    try {
+      // Вызываем API функцию
+      const response = await updateUserShiftApi(payload);
+
+      // Добавляем задержку кода
+      await delay();
+
+      if (!response) {
+        throw new Error();
+      }
+
+      return response;
+    } catch (error) {
+      // Добавляем задержку кода
+      await delay();
+
+      throw error;
+    }
+  },
+);
+
+export const deleteUserShift = createAsyncThunk(
+  'users-shifts/delete',
+  async (id: string): Promise<ISuccess> => {
+    try {
+      const response = await deleteUserShiftApi(id);
+
+      // Добавляем задержку кода
+      await delay();
+
+      if (!response) {
+        throw new Error();
+      }
+
+      return response;
+    } catch (error) {
+      // Добавляем задержку кода
+      await delay();
 
       // Пойдет в rejected
       throw error;

@@ -101,10 +101,26 @@ export class ShiftService {
         res,
       );
 
-      const now = new Date();
-      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-      const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+      const lastShifts =
+        await this.shiftRepository.findLastShift(currentTeamNumber);
 
+      if (lastShifts.length === 0) {
+        return {
+          total: lastShifts.length,
+          items: lastShifts,
+        };
+      }
+
+      // Берём дату последней смены
+      const lastShiftDate = new Date(lastShifts[0].date);
+      const targetMonth = lastShiftDate.getMonth();
+      const targetYear = lastShiftDate.getFullYear();
+
+      // Формируем границы месяца последней смены
+      const startOfMonth = new Date(targetYear, targetMonth, 1);
+      const endOfMonth = new Date(targetYear, targetMonth + 1, 0);
+
+      // Получаем все смены бригады за этот месяц
       const shifts = await this.shiftRepository.findTeamShifts(
         currentTeamNumber,
         startOfMonth,
@@ -116,6 +132,7 @@ export class ShiftService {
         items: shifts,
       };
     } catch (error) {
+      console.log(error)
       throw new InternalServerErrorException(
         'Произошла ошибка при получении списка пользователей',
       );

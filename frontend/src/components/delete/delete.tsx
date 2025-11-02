@@ -1,40 +1,43 @@
 import styles from './delete.module.css';
 
 import { useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { LayerContext } from '../../contexts/layer/layerContext';
 import { useDispatch, useSelector } from '../../services/store';
 
-import {
-  getTeamShifts,
-  deleteShift,
-} from '../../services/slices/shift/actions';
 import { Spinner } from '../spinner/spinner';
-import { selectIsLoading } from '../../services/slices/shift/slice';
+import { selectIsLoading } from '../../services/slices/user-shift/slice';
+import {
+  deleteUserShift,
+  getUsersShifts,
+} from '../../services/slices/user-shift/actions';
+import { getCurrentShiftID } from '../../utils/utils';
 
 export const Delete = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const isLoading = useSelector(selectIsLoading);
   const { setIsOpenOverlay, setIsDeleteOpenModall, selectedId } =
     useContext(LayerContext);
 
   const handleClickDelete = async () => {
     try {
-      await dispatch(deleteShift(selectedId));
-      dispatch(getTeamShifts());
+      await dispatch(deleteUserShift(selectedId));
+
+      const currentShiftId = getCurrentShiftID();
+      if (currentShiftId) {
+        await dispatch(getUsersShifts(currentShiftId));
+      }
 
       // Очищаем состояние оверлеев и модальных окон
       setIsDeleteOpenModall(false);
       setIsOpenOverlay(false);
 
       // После удаления
-      navigate('/timesheet');
+      // navigate('/timesheet');
     } catch (error) {
       setIsDeleteOpenModall(false);
       setIsOpenOverlay(false);
-      navigate('/timesheet');
+      // navigate('/timesheet');
     }
   };
 

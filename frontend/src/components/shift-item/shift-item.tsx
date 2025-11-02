@@ -7,23 +7,14 @@ import { useParams } from 'react-router-dom';
 import { BackButton } from '../buttons/back/back';
 import { AddButton } from '../buttons/add/add-button';
 import { EditButton } from '../buttons/edit/edit';
+import { DeleteButton } from '../buttons/delete/delete';
+import { SuccessIcon } from '../icons/success/success';
+import { TeamProfessionList } from '../profession-list/profession-list';
 
 import { useDispatch, useSelector } from '../../services/store';
 import { getUsersShifts } from '../../services/slices/user-shift/actions';
-import {
-  // selectIsLoading,
-  selectUsersShifts,
-} from '../../services/slices/user-shift/slice';
-import { TeamProfessionList } from '../profession-list/profession-list';
-import type { TProfession } from '../../utils/types';
-import { DeleteButton } from '../buttons/delete/delete';
-
-// Список специальных профессий
-const SPECIAL_PROFESSIONS: TProfession[] = [
-  'Бригадир ОСП',
-  'Водитель погрузчика',
-  'Резчик холодного металла',
-];
+import { selectUsersShifts } from '../../services/slices/user-shift/slice';
+import { SPECIAL_PROFESSIONS } from '../../utils/types';
 
 export const ShiftItem = () => {
   const { id } = useParams();
@@ -108,46 +99,66 @@ export const ShiftItem = () => {
                 <span className={styles.index}>
                   {String(userShift.position).padStart(2, '0')}
                 </span>
-                <div className={styles.wrapper__button}>
-                  <EditButton id={userShift.id} actionType="worker" />
-                  {userShift.user.teamNumber !== userShift.shift.teamNumber && (
-                    <DeleteButton id={userShift.id} />
-                  )}
+
+                <div className={styles.wrapper__info}>
+                  <span className={styles.wrapper}>
+                    <span className={styles.title}>ФИО</span>
+                    <span className={styles.text}>
+                      {userShift.user.lastName}&nbsp;{userShift.user.firstName}{' '}
+                      {userShift.user.patronymic}
+                    </span>
+                  </span>
+
+                  <span className={styles.wrapper}>
+                    <span className={styles.title}>Статус работы</span>
+                    <span className={styles.text}>{userShift.workStatus}</span>
+                  </span>
+
+                  <span className={styles.wrapper}>
+                    <span className={styles.title}>Профессия в смене</span>
+                    <span className={styles.text}>
+                      {userShift.user.profession}
+                    </span>
+                  </span>
+
+                  <span className={styles.wrapper}>
+                    <span className={styles.title}>Рабочее место</span>
+                    <span className={styles.text}>{userShift.workPlace}</span>
+                  </span>
+
+                  <span className={styles.wrapper}>
+                    <span className={styles.title}>Отработано чаосв</span>
+                    <span className={styles.text}>{userShift.workHours}</span>
+                  </span>
                 </div>
               </div>
 
-              <span className={styles.wrapper__user}>
-                <span className={styles.title}>ФИО</span>
-                <span className={styles.text}>
-                  {userShift.user.lastName} {}
-                  {userShift.user.firstName} {userShift.user.patronymic}
-                </span>
-              </span>
-
-              {/* <span className={styles.wrapper}>
-                <span className={styles.title}>Разряд</span>
-                <span className={styles.text}>{userShift.user.grade}</span>
-              </span> */}
-
-              <span className={styles.wrapper}>
-                <span className={styles.title}>Профессия в смене</span>
-                <span className={styles.text}>{userShift.user.profession}</span>
-              </span>
-
-              <span className={styles.wrapper}>
-                <span className={styles.title}>Рабочее место</span>
-                <span className={styles.text}>{userShift.workPlace}</span>
-              </span>
-
-              {/* <span className={styles.wrapper}>
-                <span className={styles.title}>Отработано часов</span>
-                <span className={styles.text}>{userShift.workHours}</span>
-              </span> */}
+              <div className={styles.wrapper__success}>
+                {userShift.workStatus !== 'Не определен' && (
+                  <SuccessIcon width={30} height={30} />
+                )}
+                <div className={styles.wrapper__button}>
+                  <EditButton
+                    id={userShift.id}
+                    actionType="worker"
+                    iconWidth={30}
+                    iconHeight={30}
+                  />
+                  {userShift.user.teamNumber !== userShift.shift.teamNumber && (
+                    <DeleteButton
+                      id={userShift.id}
+                      actionType="worker"
+                      iconWidth={30}
+                      iconHeight={30}
+                    />
+                  )}
+                </div>
+              </div>
             </li>
           ))}
         </ul>
       ) : (
-        <div>Работники не найдены</div>
+        <div>Смены работников не найдены</div>
       )}
     </div>
   );

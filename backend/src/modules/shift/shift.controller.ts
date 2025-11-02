@@ -57,7 +57,7 @@ export class ShiftController {
   ): Promise<IList<IUserShift>> {
     return this.userShiftService.getUsersShifts(id, req, res);
   }
-  
+
   /*
   @Delete('delete')
   async deleteShift(@Body() dto: DeleteDTO): Promise<ISuccess> {

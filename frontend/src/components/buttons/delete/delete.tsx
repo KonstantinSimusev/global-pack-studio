@@ -4,7 +4,23 @@ import { useContext } from 'react';
 import { DeleteIcon } from '../../icons/delete/delete';
 import { LayerContext } from '../../../contexts/layer/layerContext';
 
-export const DeleteButton = ({ id }: { id?: string }) => {
+interface IDeleteButtonProps {
+  id?: string;
+  label?: string;
+  iconWidth?: number | string;
+  iconHeight?: number | string;
+  actionType: 'worker'; // можно добавить другие типы
+  onOpen?: () => void; // кастомный обработчик
+}
+
+export const DeleteButton = ({
+  id,
+  label,
+  iconWidth,
+  iconHeight,
+  actionType,
+  onOpen,
+}: IDeleteButtonProps) => {
   if (!id) {
     return null;
   }
@@ -13,14 +29,22 @@ export const DeleteButton = ({ id }: { id?: string }) => {
     useContext(LayerContext);
 
   const handleClick = () => {
-    setIsOpenOverlay(true);
-    setIsDeleteOpenModall(true);
-    setSelectedId(id);
+    switch (actionType) {
+      case 'worker':
+        setIsOpenOverlay(true);
+        setIsDeleteOpenModall(true);
+        setSelectedId(id);
+        break;
+      default:
+        // кастомное действие
+        onOpen?.();
+    }
   };
 
   return (
     <button className={styles.container} type="button" onClick={handleClick}>
-      <DeleteIcon />
+      {label}
+      <DeleteIcon width={iconWidth} height={iconHeight} />
     </button>
   );
 };

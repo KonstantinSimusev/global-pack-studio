@@ -30,7 +30,7 @@ export const ShiftList = ({ items }: TShiftListProps) => {
                 </div>
               </div>
               <div className={styles.wrapper__button}>
-                <EditButton id={item.id} actionType="shift" />
+                <EditButton id={item.id} actionType="shift" iconWidth={30} iconHeight={30} />
               </div>
             </li>
           ))}

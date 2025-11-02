@@ -9,7 +9,6 @@
   justify-content: space-between;
   padding: 20px;
   background-color: var(--bg-color-shift);
-  /* gap: 30px; */
   color: var(--color-shift);
   border-radius: 14px;
   transition: opacity 0.3s ease;

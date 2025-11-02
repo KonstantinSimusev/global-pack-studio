@@ -18,6 +18,24 @@ export class UserShiftRepository {
     return await this.userShiftRepository.save(newUserShift);
   }
 
+  async findById(id: string): Promise<UserShift> {
+    return await this.userShiftRepository.findOneBy({ id });
+  }
+
+  async update(
+    userShift: UserShift,
+    updateData: Partial<UserShift>,
+  ): Promise<UserShift> {
+    return await this.userShiftRepository.save({
+      ...userShift,
+      ...updateData,
+    });
+  }
+
+  async delete(id: string): Promise<void> {
+    await this.userShiftRepository.delete(id);
+  }
+
   async findUsersShiftsByShiftId(id: string): Promise<UserShift[]> {
     return await this.userShiftRepository
       .createQueryBuilder('userShift')
