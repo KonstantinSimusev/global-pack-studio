@@ -1,7 +1,7 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { checkAccessToken, loginUser, logoutUser } from './actions';
 
-import type { IUser } from '../../../utils/api.interface';
+import { IUser } from '../../../utils/api.interface';
 
 interface IAuthState {
   isAuthenticated: boolean;

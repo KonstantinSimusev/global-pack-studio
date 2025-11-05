@@ -5,7 +5,7 @@ import {
   deleteShiftApi,
   getTeamShiftsApi,
 } from '../../../utils/gpsApi';
-import type { IShift, ISuccess } from '../../../utils/api.interface';
+import { IShift, ISuccess } from '../../../utils/api.interface';
 import { delay } from '../../../utils/utils';
 
 export const createShift = createAsyncThunk(

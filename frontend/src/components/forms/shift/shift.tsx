@@ -103,6 +103,9 @@ export const ShiftForm = () => {
     }
   };
 
+  // Определяем, заблокирована ли кнопка
+  const isButtonDisabled = isLoading || !formData.shiftNumber;
+
   return (
     <div className={styles.container}>
       <h3 className={styles.title}>Выберите смену</h3>
@@ -147,9 +150,12 @@ export const ShiftForm = () => {
         }
 
         <button
+          type="submit"
           className={styles.button__shift}
-          disabled={selectedShift === null}
-          style={{ opacity: selectedShift === null ? 0.4 : 0.9 }}
+          disabled={isButtonDisabled}
+          style={{
+            opacity: isButtonDisabled ? 0.4 : 0.9,
+          }}
         >
           Создать
         </button>

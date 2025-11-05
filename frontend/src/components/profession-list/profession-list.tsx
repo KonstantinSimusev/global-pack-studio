@@ -17,20 +17,9 @@ export const TeamProfessionList = () => {
       {list.length > 0 ? (
         <ul className={styles.list}>
           <div className={styles.header}>
-            <span>Профессия</span>
-            <span>Факт</span>
+            <span>Фактическая численность</span>
+            <span>{usersShifts.length}</span>
           </div>
-          {list.map((item, index) => (
-            <li
-              key={index}
-              className={styles.item}
-              style={index === 1 || index === 3 ? { marginBottom: '20px' } : {}}
-            >
-              {/* <span>{String(index + 1).padStart(2, '0')}</span> */}
-              <span>{item.profession}</span>
-              <span>{item.count}</span>
-            </li>
-          ))}
           <div className={styles.footer}>
             <span className={styles.success}>
               <span>Отмечено работников</span>
@@ -43,10 +32,19 @@ export const TeamProfessionList = () => {
             </span>
             <span className={styles.wrapper__total}>
               <span className={styles.number}>{total}</span>
-              <span className={styles.text}>из</span>
-              <span className={styles.number}>{usersShifts.length}</span>
             </span>
           </div>
+          {list.map((item, index) => (
+            <li
+              key={index}
+              className={styles.item}
+              style={index === 1 || index === 3 ? { marginBottom: '20px' } : {}}
+            >
+              {/* <span>{String(index + 1).padStart(2, '0')}</span> */}
+              <span>{item.profession}</span>
+              <span>{item.count}</span>
+            </li>
+          ))}
         </ul>
       ) : (
         <div>Данных нет</div>

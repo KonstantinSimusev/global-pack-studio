@@ -8,7 +8,7 @@ import {
   updateUserShiftApi,
 } from '../../../utils/gpsApi';
 
-import type {
+import {
   ICreateUserShift,
   IList,
   ISuccess,

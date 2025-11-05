@@ -109,6 +109,9 @@ export const RegisterForm = () => {
     // setIsRegisterModalOpen(false);
   };
 
+  // Определяем, заблокирована ли кнопка
+  // const isButtonDisabled = isLoading || !formData.personalNumber;
+
   return (
     <div className={styles.container}>
       <h3 className={styles.title}>Регистрация</h3>
@@ -157,7 +160,14 @@ export const RegisterForm = () => {
         <div className={styles.spinner}>
           {/* {isLoading && <Spinner />} */}
         </div>
-        <button className={styles.button__register} type="submit">
+        <button
+          type="submit"
+          className={styles.button__register}
+          // disabled={isButtonDisabled}
+          // style={{
+          //   opacity: isButtonDisabled ? 0.4 : 0.9,
+          // }}
+        >
           Создать
         </button>
       </form>

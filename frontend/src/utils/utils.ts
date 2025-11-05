@@ -35,7 +35,7 @@ export function getProfessionsWithCounts(
 
   // Проходим по данным и обновляем счётчики для подходящих записей
   for (const userShift of [...userShifts]) {
-    if (userShift.workStatus === 'Не определен') {
+    if (userShift.workPlace === 'Не выбрано') {
       continue; // пропускаем записи для 'Не определен'
     }
 

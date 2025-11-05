@@ -99,60 +99,56 @@ export const ShiftItem = () => {
                 <span className={styles.index}>
                   {String(userShift.position).padStart(2, '0')}
                 </span>
-
-                <div className={styles.wrapper__info}>
-                  <span className={styles.wrapper}>
-                    <span className={styles.title}>ФИО</span>
-                    <span className={styles.text}>
-                      {userShift.user.lastName}&nbsp;{userShift.user.firstName}{' '}
-                      {userShift.user.patronymic}
-                    </span>
-                  </span>
-
-                  <span className={styles.wrapper}>
-                    <span className={styles.title}>Статус работы</span>
-                    <span className={styles.text}>{userShift.workStatus}</span>
-                  </span>
-
-                  <span className={styles.wrapper}>
-                    <span className={styles.title}>Профессия в смене</span>
-                    <span className={styles.text}>
-                      {userShift.user.profession}
-                    </span>
-                  </span>
-
-                  <span className={styles.wrapper}>
-                    <span className={styles.title}>Рабочее место</span>
-                    <span className={styles.text}>{userShift.workPlace}</span>
-                  </span>
-
-                  <span className={styles.wrapper}>
-                    <span className={styles.title}>Отработано чаосв</span>
-                    <span className={styles.text}>{userShift.workHours}</span>
-                  </span>
-                </div>
-              </div>
-
-              <div className={styles.wrapper__success}>
-                {userShift.workStatus !== 'Не определен' && (
-                  <SuccessIcon width={30} height={30} />
-                )}
-                <div className={styles.wrapper__button}>
+                <div className={styles.wrapper__edit}>
+                  {userShift.workPlace !== 'Не выбрано' && (
+                    <SuccessIcon width={30} height={30} />
+                  )}
                   <EditButton
                     id={userShift.id}
                     actionType="worker"
                     iconWidth={30}
                     iconHeight={30}
                   />
-                  {userShift.user.teamNumber !== userShift.shift.teamNumber && (
-                    <DeleteButton
-                      id={userShift.id}
-                      actionType="worker"
-                      iconWidth={30}
-                      iconHeight={30}
-                    />
-                  )}
                 </div>
+              </div>
+
+              <span className={styles.wrapper}>
+                <span className={styles.title}>ФИО</span>
+                <span className={styles.text}>
+                  {userShift.user.lastName}&nbsp;{userShift.user.firstName}{' '}
+                  {userShift.user.patronymic}
+                </span>
+              </span>
+
+              <span className={styles.wrapper}>
+                <span className={styles.title}>Статус работы</span>
+                <span className={styles.text}>{userShift.workStatus}</span>
+              </span>
+
+              <span className={styles.wrapper}>
+                <span className={styles.title}>Профессия в смене</span>
+                <span className={styles.text}>{userShift.shiftProfession}</span>
+              </span>
+
+              <span className={styles.wrapper}>
+                <span className={styles.title}>Рабочее место</span>
+                <span className={styles.text}>{userShift.workPlace}</span>
+              </span>
+
+              <div className={styles.wrapper__delete}>
+                <span className={styles.wrapper}>
+                  <span className={styles.title}>Отработано чаосв</span>
+                  <span className={styles.text}>{userShift.workHours}</span>
+                </span>
+
+                {userShift.user.teamNumber !== userShift.shift.teamNumber && (
+                  <DeleteButton
+                    id={userShift.id}
+                    actionType="worker"
+                    iconWidth={30}
+                    iconHeight={30}
+                  />
+                )}
               </div>
             </li>
           ))}

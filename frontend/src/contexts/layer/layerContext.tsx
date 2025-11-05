@@ -12,6 +12,7 @@ interface ILayerContextValue {
   isDeleteOpenModall: boolean;
   isCookie: boolean;
   selectedId: string;
+  selectedScrollPosition: number;
   setIsOpenOverlay: (value: boolean) => void;
   setIsOpenMenu: (value: boolean) => void;
   setIsOpenModal: (value: boolean) => void;
@@ -23,6 +24,7 @@ interface ILayerContextValue {
   setIsDeleteOpenModall: (value: boolean) => void;
   setIsCookie: (value: boolean) => void;
   setSelectedId: (value: string) => void;
+  setSelectedScrollPosition: (value: number) => void;
 }
 
 export const LayerContext = createContext<ILayerContextValue>({
@@ -37,6 +39,7 @@ export const LayerContext = createContext<ILayerContextValue>({
   isDeleteOpenModall: false,
   isCookie: false,
   selectedId: '',
+  selectedScrollPosition: 0,
   setIsOpenOverlay: () => {},
   setIsOpenMenu: () => {},
   setIsOpenModal: () => {},
@@ -48,4 +51,5 @@ export const LayerContext = createContext<ILayerContextValue>({
   setIsDeleteOpenModall: () => {},
   setIsCookie: () => {},
   setSelectedId: () => {},
+  setSelectedScrollPosition: () => {},
 });

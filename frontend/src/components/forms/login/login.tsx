@@ -19,6 +19,8 @@ import {
   validateForm,
   validationRules,
 } from '../../../utils/validation';
+import { IUser } from '../../../utils/api.interface';
+import { TRole } from '../../../utils/types';
 
 // Изменим тип ILoginData на Record<string, string>
 interface ILoginData extends Record<string, string> {
@@ -100,8 +102,13 @@ export const LoginForm = () => {
       try {
         const response = await dispatch(loginUser(formData));
 
-        if (response.payload) {
-          navigate('/home');
+        // Проверяем, было ли действие успешно выполнено
+        if (loginUser.fulfilled.match(response)) {
+          const user: IUser = response.payload;
+          const master: TRole = 'MASTER';
+
+          navigate(user.role === master ? '/timesheet' : '/home');
+
           setIsLoginModalOpen(false);
           setIsOpenOverlay(false);
           setFormData({ login: '', password: '' });
@@ -115,6 +122,9 @@ export const LoginForm = () => {
       }
     }
   };
+
+  // Определяем, заблокирована ли кнопка
+  const isButtonDisabled = isLoading || !formData.login || !formData.password;
 
   return (
     <div className={styles.container}>
@@ -151,7 +161,16 @@ export const LoginForm = () => {
         <div className={styles.spinner}>{isLoading && <Spinner />}</div>
         {<div className={styles.errors__server}>{error}</div>}
 
-        <button className={styles.button__login}>Войти</button>
+        <button
+          type="submit"
+          className={styles.button__login}
+          disabled={isButtonDisabled}
+          style={{
+            opacity: isButtonDisabled ? 0.4 : 0.9,
+          }}
+        >
+          Войти
+        </button>
       </form>
     </div>
   );

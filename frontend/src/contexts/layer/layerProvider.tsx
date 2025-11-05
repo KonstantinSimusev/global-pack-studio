@@ -12,11 +12,13 @@ export const LayerProvider = ({ children }: TLayerProviderProps) => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isLogoutOpenModal, setIsLogoutOpenModal] = useState(false);
   const [isAddWorkerOpenModall, setIsAddWorkerOpenModall] = useState(false);
-  const [isUpdateWorkerOpenModall, setIsUpdateWorkerOpenModall] = useState(false);
+  const [isUpdateWorkerOpenModall, setIsUpdateWorkerOpenModall] =
+    useState(false);
   const [isAddShiftOpenModall, setIsAddShiftOpenModall] = useState(false);
   const [isDeleteOpenModall, setIsDeleteOpenModall] = useState(false);
   const [isCookie, setIsCookie] = useState(false);
   const [selectedId, setSelectedId] = useState('');
+  const [selectedScrollPosition, setSelectedScrollPosition] = useState(0);
 
   // Мемоизируем значение контекста
   const value = useMemo(
@@ -32,6 +34,7 @@ export const LayerProvider = ({ children }: TLayerProviderProps) => {
       isDeleteOpenModall,
       isCookie,
       selectedId,
+      selectedScrollPosition,
       setIsOpenOverlay,
       setIsOpenMenu,
       setIsOpenModal,
@@ -43,6 +46,7 @@ export const LayerProvider = ({ children }: TLayerProviderProps) => {
       setIsDeleteOpenModall,
       setIsCookie,
       setSelectedId,
+      setSelectedScrollPosition,
     }),
     [
       isOpenOverlay,
@@ -56,6 +60,7 @@ export const LayerProvider = ({ children }: TLayerProviderProps) => {
       isDeleteOpenModall,
       isCookie,
       selectedId,
+      selectedScrollPosition,
     ],
   );
 

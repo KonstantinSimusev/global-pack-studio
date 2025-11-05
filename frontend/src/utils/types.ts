@@ -16,7 +16,6 @@ export const SPECIAL_PROFESSIONS: TProfession[] = [
 ];
 
 export type TWorkStatus =
-  | 'Не определен'
   | 'Явка'
   | 'День без содержания'
   | 'Отпуск'
@@ -26,7 +25,6 @@ export type TWorkStatus =
   | 'Невыясненные причины';
 
 export const WORK_STATUS_OPTIONS: TWorkStatus[] = [
-  'Не определен',
   'Явка',
   'День без содержания',
   'Отпуск',
@@ -55,10 +53,11 @@ export const TEAM_PROFESSION_OPTIONS: TTeamProfession[] = [
   'Штабелировщик металла',
 ];
 
-export type TWorkPlace = 'Не выбрано' | '1 очередь' | '2 очередь' | '3 очередь';
+export type TWorkPlace = 'Не выбрано' | 'Не работает' | '1 очередь' | '2 очередь' | '3 очередь';
 
 export const WORK_PLACE_OPTIONS: TWorkPlace[] = [
   'Не выбрано',
+  'Не работает',
   '1 очередь',
   '2 очередь',
   '3 очередь',

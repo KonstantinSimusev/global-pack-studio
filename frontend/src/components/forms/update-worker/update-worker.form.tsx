@@ -27,10 +27,12 @@ import {
   WORK_PLACE_OPTIONS,
   WORK_STATUS_OPTIONS,
 } from '../../../utils/types';
+
 import {
   getUsersShifts,
   updateUserShift,
 } from '../../../services/slices/user-shift/actions';
+
 import { getCurrentShiftID } from '../../../utils/utils';
 
 // Изменим тип IFormData на Record<string, string>
@@ -64,9 +66,11 @@ export const UpdateWorkerForm = () => {
   // Состояние для хранения значений полей формы
   const [formData, setFormData] = useState<IFormData>({
     workStatus: userShift.workStatus,
-    shiftProfession: userShift?.user.profession,
-    workPlace: userShift.workPlace,
-    workHours: '',
+    shiftProfession: userShift.shiftProfession,
+    workPlace:
+      userShift.workStatus === 'Явка' ? userShift.workPlace : 'Не работает',
+    workHours:
+      userShift.workStatus === 'Явка' ? String(userShift.workHours) : '0.0',
   });
 
   // Состояние для хранения ошибок валидации
@@ -83,84 +87,71 @@ export const UpdateWorkerForm = () => {
     }
   }, [isUpdateWorkerOpenModall, dispatch]);
 
-  // Обработчик изменения поля ввода
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  // Единый обработчик изменений для всех полей
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
     const { name, value } = e.target;
+    let newValue = value;
 
-    // Обновляем данные формы
-    setFormData({
-      ...formData,
-      [name]: value,
+    // Нормализация чисел для workHours
+    if (name === 'workHours') {
+      newValue = value.replace(/,/g, '.');
+      if (!/^-?\d*\.?\d*$/.test(newValue) && newValue !== '') return;
+    }
+
+    setFormData((prev) => {
+      const updated = { ...prev, [name]: newValue };
+
+      // Логика для workStatus
+      if (name === 'workStatus') {
+        if (newValue !== 'Явка') {
+          updated.workPlace = 'Не работает';
+          updated.workHours = '0.0';
+        } else if (prev.workPlace === 'Не работает') {
+          updated.workPlace = WORK_PLACE_OPTIONS[0];
+        }
+      }
+
+      return updated;
     });
 
-    // Сбрасываем ошибку при начале ввода
-    setErrors({
-      ...errors,
+    // Сброс ошибок
+    setErrors((prev) => ({
+      ...prev,
       [name]: '',
-    });
+      ...(name === 'workStatus' && { workPlace: '', workHours: '' }),
+    }));
 
-    // Очищаем ошибки с сервера
     dispatch(clearError());
   };
 
-  // Обработчик потери фокуса для валидации
-  const handleBlur = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  // Валидация при потере фокуса
+  const handleBlur = (
+    e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
     const { name, value } = e.target;
-
-    // Получаем ошибку валидации для поля
-    const validationError = validateField(name, value, validationRules);
-
-    // Обновляем состояние ошибок
-    setErrors({
-      ...errors,
-      [name]: validationError || '',
-    });
+    const error = validateField(name, value, validationRules);
+    setErrors((prev) => ({ ...prev, [name]: error || '' }));
   };
 
-  // Обработчик изменения поля ввода
-  const handleTextInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-
-    // Обновляем данные формы
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-
-    // Сбрасываем ошибку при начале ввода
-    setErrors({
-      ...errors,
-      [name]: '',
-    });
-
-    // Очищаем ошибки с сервера
-    dispatch(clearError());
+  const clearWorkHoursField = () => {
+    setFormData((prev) => ({
+      ...prev,
+      workHours: '',
+    }));
+    setErrors((prev) => ({
+      ...prev,
+      workHours: '',
+    }));
   };
 
-  // Обработчик потери фокуса для валидации
-  const handleTextInputBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-
-    // Получаем ошибку валидации для поля
-    const validationError = validateField(name, value, validationRules);
-
-    // Обновляем состояние ошибок
-    setErrors({
-      ...errors,
-      [name]: validationError || '',
-    });
-  };
-
-  const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Валидируем всю форму
     const formErrors = validateForm(formData, validationRules);
-
-    // Сохраняем все ошибки в состояние
     setErrors(formErrors);
 
-    // Если форма валидна, можно отправить данные на сервер
     if (Object.keys(formErrors).length === 0) {
       try {
         const payload = {
@@ -171,29 +162,40 @@ export const UpdateWorkerForm = () => {
           workHours: Number(formData.workHours),
         };
 
-        const currentShiftId = getCurrentShiftID();
-
         const response = await dispatch(updateUserShift(payload));
-
         if (response.payload) {
           setIsUpdateWorkerOpenModall(false);
           setIsOpenOverlay(false);
-          setErrors({ workStatus: '' });
-          if (currentShiftId) {
-            dispatch(getUsersShifts(currentShiftId));
+
+          const shiftID = getCurrentShiftID();
+
+          if (shiftID) {
+            // если shiftID не null
+            dispatch(getUsersShifts(shiftID)); // shiftID гарантированно string
           }
-        } else {
-          throw new Error();
         }
-      } catch (error) {
-        throw new Error();
+      } catch (err) {
+        // Обработка ошибок (можно расширить)
       }
     }
   };
 
+  const isButtonDisabled =
+    isLoading ||
+    formData.workPlace === 'Не выбрано' ||
+    (formData.workStatus === 'Явка' && formData.workPlace === 'Не работает') ||
+    (formData.workStatus === 'Явка' && Number(formData.workHours) === 0) ||
+    (formData.workStatus !== 'Явка' && formData.workPlace !== 'Не работает') ||
+    (formData.workPlace === 'Не работает' && Number(formData.workHours) !== 0);
+
   return (
     <div className={styles.container}>
-      <h3 className={styles.title}>Параметры смены</h3>
+      <h5 className={styles.title}>
+        <span>
+          {userShift.user.lastName} {userShift.user.firstName}
+        </span>
+        <span>{userShift.user.patronymic}</span>
+      </h5>
       <form className={styles.form__worker} onSubmit={handleSubmit}>
         <label className={styles.input__name}>Статус работы</label>
         <div className={styles.container__select}>
@@ -203,9 +205,6 @@ export const UpdateWorkerForm = () => {
             value={formData.workStatus}
             onChange={handleChange}
             onBlur={handleBlur}
-            style={{
-              opacity: formData.workStatus === 'Не определен' ? 0.4 : 0.9,
-            }}
           >
             {WORK_STATUS_OPTIONS.map((status) => (
               <option key={status} value={status}>
@@ -276,9 +275,10 @@ export const UpdateWorkerForm = () => {
           type="text"
           name="workHours"
           value={formData.workHours}
-          onChange={handleTextInputChange}
-          onBlur={handleTextInputBlur}
-          placeholder="0"
+          onChange={handleChange}
+          onBlur={handleBlur}
+          onFocus={clearWorkHoursField}
+          placeholder="Введите часы"
         />
         <div className={styles.errors}>
           {errors.workHours && (
@@ -289,7 +289,16 @@ export const UpdateWorkerForm = () => {
         <div className={styles.spinner}>{isLoading && <Spinner />}</div>
         {<div className={styles.errors__server}>{error}</div>}
 
-        <button className={styles.button__worker}>Сохранить</button>
+        <button
+          type="submit"
+          className={styles.button__worker}
+          disabled={isButtonDisabled}
+          style={{
+            opacity: isButtonDisabled ? 0.4 : 0.9,
+          }}
+        >
+          Сохранить
+        </button>
       </form>
     </div>
   );

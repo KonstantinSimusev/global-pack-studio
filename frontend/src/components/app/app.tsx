@@ -42,11 +42,36 @@ const App = () => {
     isUpdateWorkerOpenModall,
     isAddShiftOpenModall,
     isDeleteOpenModall,
+    selectedScrollPosition,
+    setSelectedScrollPosition,
   } = useContext(LayerContext);
-  // const location = useLocation();
-  // const navigate = useNavigate();
+
   const dispatch = useDispatch();
+
   const currentShiftId = getCurrentShiftID();
+
+  // Текущая позициция на странице
+  const scrollPosition = window.scrollY;
+
+  useEffect(() => {
+    if (isOpenOverlay) {
+      // Устанвливаем в контекст значение
+      setSelectedScrollPosition(scrollPosition);
+      // Фиксируем контент
+      document.body.style.position = 'fixed';
+      // Смещаем от верха страницы на это расстояние
+      document.body.style.top = `-${scrollPosition}px`;
+      // Запрещаем прокрутку
+      document.body.style.overflow = 'hidden';
+    } else {
+      // Снимаем фиксацию
+      document.body.style.position = '';
+      // Разрешаем прокрутку
+      document.body.style.overflow = '';
+      // Скролим до этой точки где находились
+      window.scrollTo(0, selectedScrollPosition);
+    }
+  }, [isOpenOverlay]);
 
   useEffect(() => {
     console.log('✅ App смонтирован');
@@ -65,7 +90,6 @@ const App = () => {
         styles.container,
         isLightTheme ? 'theme-light' : 'theme-dark',
         isOpenOverlay && styles.container__fixed,
-        isOpenOverlay && styles.no_scroll,
       )}
     >
       <Header />

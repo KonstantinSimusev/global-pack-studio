@@ -3,6 +3,8 @@ interface IValidationRule {
   type: string;
   pattern: RegExp;
   message: string;
+  min?: number;
+  max?: number;
 }
 
 // Определяем тип для поля валидации
@@ -222,15 +224,17 @@ export const validationRules: IValidationRules = {
     required: true,
     validators: [
       {
-        type: 'number',
-        pattern: /^\d+$/,
-        message: 'Введите только цифры',
+        type: 'decimal',
+        // 1–2 цифры до точки, 0–1 цифра после; допускает , и .
+        pattern: /^\d{1,2}(?:[,.]\d)?$/,
+        message: 'Введите число от 0 до 11.5',
       },
-      {
-        type: 'maxLength',
-        pattern: /^\d{1,4}$/,
-        message: 'Введите не более 4 цифр',
-      },
+      // {
+      //   type: 'range',
+      //   min: 0,
+      //   max: 11.5,
+      //   message: 'Значение должно быть от 0 до 11,5',
+      // },
     ],
   },
 };
@@ -251,6 +255,22 @@ export const validateField = (
   for (const validator of fieldRules.validators) {
     if (fieldName === 'date' && !value) {
       return validator.message;
+    }
+
+    if (validator.type === 'decimal') {
+      // 1. Синтаксическая проверка (формат)
+      if (!validator.pattern?.test(value)) {
+        return validator.message;
+      }
+
+      // 2. Числовая проверка диапазона (0–11.5)
+      const numValue = parseFloat(value.replace(',', '.'));
+      if (isNaN(numValue)) {
+        return validator.message;
+      }
+      if (numValue < 0 || numValue > 11.5) {
+        return 'Введите число от 0 до 11,5';
+      }
     }
 
     // Если значение не соответствует регулярному выражению

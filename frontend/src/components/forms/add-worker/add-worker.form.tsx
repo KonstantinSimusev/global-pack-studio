@@ -47,10 +47,10 @@ export const AddWorkerForm = () => {
   });
 
   useEffect(() => {
-      if (isAddWorkerOpenModall) {
-        dispatch(clearError());
-      }
-    }, [isAddWorkerOpenModall, dispatch]);
+    if (isAddWorkerOpenModall) {
+      dispatch(clearError());
+    }
+  }, [isAddWorkerOpenModall, dispatch]);
 
   // Обработчик изменения поля ввода
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -128,6 +128,9 @@ export const AddWorkerForm = () => {
     }
   };
 
+  // Определяем, заблокирована ли кнопка
+  const isButtonDisabled = isLoading || !formData.personalNumber;
+
   return (
     <div className={styles.container}>
       <h3 className={styles.title}>Новый работник</h3>
@@ -150,7 +153,16 @@ export const AddWorkerForm = () => {
         <div className={styles.spinner}>{isLoading && <Spinner />}</div>
         {<div className={styles.errors__server}>{error}</div>}
 
-        <button className={styles.button__worker}>Добавить</button>
+        <button
+          type="submit"
+          className={styles.button__worker}
+          disabled={isButtonDisabled}
+          style={{
+            opacity: isButtonDisabled ? 0.4 : 0.9,
+          }}
+        >
+          Добавить
+        </button>
       </form>
     </div>
   );

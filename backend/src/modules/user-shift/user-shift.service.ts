@@ -205,14 +205,15 @@ export class UserShiftService {
   private createUserShiftEntity(
     user: User,
     shift: Shift,
-    workStatus: string = 'Не определен',
+    workStatus: string = 'Явка',
     workPlace: string = 'Не выбрано',
+    workHours: number = 11.5,
   ): UserShift {
     const userShift = new UserShift();
     userShift.workStatus = workStatus;
     userShift.workPlace = workPlace;
     userShift.shiftProfession = user.profession;
-    userShift.workHours = 0;
+    userShift.workHours = workHours;
     userShift.user = user;
     userShift.shift = shift;
     return userShift;

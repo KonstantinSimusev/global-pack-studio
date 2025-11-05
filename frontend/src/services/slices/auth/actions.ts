@@ -5,7 +5,7 @@ import {
   logoutUserApi,
 } from '../../../utils/gpsApi';
 import { delay } from '../../../utils/utils';
-import type { ILoginData, IUser } from '../../../utils/api.interface';
+import { ILoginData, IUser } from '../../../utils/api.interface';
 
 export const loginUser = createAsyncThunk(
   'auth/login',

@@ -1,4 +1,4 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { createShift, deleteShift, getTeamShifts } from './actions';
 import type { IList, IShift } from '../../../utils/api.interface';
 
