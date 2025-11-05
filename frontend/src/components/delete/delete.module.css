@@ -44,7 +44,7 @@
 .button__logout,
 .button__return {
   min-width: 110px;
-  border-radius: 10px;
+  border-radius: 16px;
   padding: 12px 0;
   font-weight: 400;
   cursor: pointer;
