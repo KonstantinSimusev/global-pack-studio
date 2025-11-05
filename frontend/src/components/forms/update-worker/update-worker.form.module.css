@@ -11,7 +11,7 @@
 .title {
   display: flex;
   flex-direction: column;
-  margin-bottom: 20px;
+  margin: 20px 0 40px;
   font-weight: 400;
   text-align: center;
   gap: 2px;
@@ -62,7 +62,7 @@
 
 .errors {
   height: 30px;
-  /* line-height: 0.8; */
+  margin-top: 10px;
 }
 
 .error,
@@ -82,15 +82,16 @@
 
 .spinner {
   position: relative;
-  justify-self: center;
-  /* margin-bottom: 10px; */
+  top: 14px;
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: 40px;
   height: 40px;
 }
 
 .button__worker {
   width: 100%;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
   border-radius: 10px;
   padding: 12px 0;
   color: var(--color-button);

@@ -14,6 +14,7 @@ export const CloseButton = () => {
     setIsUpdateWorkerOpenModall,
     setIsAddShiftOpenModall,
     setIsDeleteOpenModall,
+    setIsUserShiftInfoOpenModal,
   } = useContext(LayerContext);
 
   const handleClick = () => {
@@ -22,9 +23,10 @@ export const CloseButton = () => {
     setIsLoginModalOpen(false);
     setIsLogoutOpenModal(false);
     setIsAddWorkerOpenModall(false);
-    setIsUpdateWorkerOpenModall(false),
+    setIsUpdateWorkerOpenModall(false);
     setIsAddShiftOpenModall(false);
     setIsDeleteOpenModall(false);
+    setIsUserShiftInfoOpenModal(false);
   };
 
   return (

@@ -32,8 +32,11 @@ export const AddWorkerForm = () => {
   const dispatch = useDispatch();
   const isLoading = useSelector(selectIsLoading);
   const error = useSelector(selectError);
-  const { isAddWorkerOpenModall, setIsOpenOverlay, setIsAddWorkerOpenModall } =
-    useContext(LayerContext);
+  const {
+    isAddWorkerOpenModall,
+    setIsAddWorkerOpenModall,
+    setIsUserShiftInfoOpenModal,
+  } = useContext(LayerContext);
 
   // Состояние для хранения значений полей формы
   const [formData, setFormData] = useState<IFormData>({
@@ -113,7 +116,9 @@ export const AddWorkerForm = () => {
 
         if (response.payload) {
           setIsAddWorkerOpenModall(false);
-          setIsOpenOverlay(false);
+          // setIsOpenOverlay(true);
+          setIsUserShiftInfoOpenModal(true);
+
           setFormData({ personalNumber: '' });
           setErrors({ personalNumber: '', currentShift: '' });
           dispatch(getUsersShifts(currentShiftId));

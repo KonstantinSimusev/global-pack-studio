@@ -9,12 +9,14 @@ import {
 import type { IList, IUserShift } from '../../../utils/api.interface';
 
 interface IUserShiftState {
+  userShift: IUserShift | null,
   usersShifts: IUserShift[];
   isLoading: boolean;
   error: string | null;
 }
 
 const initialState: IUserShiftState = {
+  userShift: null,
   usersShifts: [],
   isLoading: false,
   error: null,
@@ -29,6 +31,7 @@ export const userShiftSlice = createSlice({
     },
   },
   selectors: {
+    selectCurrentUserShift: (state: IUserShiftState) => state.userShift,
     selectUsersShifts: (state: IUserShiftState) => state.usersShifts,
     selectIsLoading: (state: IUserShiftState) => state.isLoading,
     selectError: (state: IUserShiftState) => state.error,
@@ -42,7 +45,8 @@ export const userShiftSlice = createSlice({
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(createUserShift.fulfilled, (state) => {
+      .addCase(createUserShift.fulfilled, (state, action: PayloadAction<IUserShift>) => {
+        state.userShift = action.payload;
         state.isLoading = false;
         state.error = null;
       })
@@ -112,6 +116,7 @@ export const userShiftSlice = createSlice({
 export const { clearError } = userShiftSlice.actions;
 
 export const {
+  selectCurrentUserShift,
   selectUsersShifts,
   selectUserShiftById,
   selectIsLoading,

@@ -19,7 +19,7 @@ import { delay } from '../../../utils/utils';
 
 export const createUserShift = createAsyncThunk(
   'users-shifts/create-shift',
-  async (payload: ICreateUserShift): Promise<ISuccess> => {
+  async (payload: ICreateUserShift): Promise<IUserShift> => {
     try {
       // Вызываем API функцию
       const response = await createUserShiftApi(payload);

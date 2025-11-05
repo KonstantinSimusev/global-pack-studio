@@ -195,7 +195,7 @@ export const createUsersShiftsApi = async (id: string): Promise<ISuccess> => {
 
 export const createUserShiftApi = async (
   payload: ICreateUserShift,
-): Promise<ISuccess> => {
+): Promise<IUserShift> => {
   try {
     // Здесь происходит запрос к серверу
     const response = await fetch(`${URL}/users-shifts/create-user-shift`, {

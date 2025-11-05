@@ -191,10 +191,8 @@ export const UpdateWorkerForm = () => {
   return (
     <div className={styles.container}>
       <h5 className={styles.title}>
-        <span>
-          {userShift.user.lastName} {userShift.user.firstName}
-        </span>
-        <span>{userShift.user.patronymic}</span>
+        {userShift.user.lastName} {userShift.user.firstName}{' '}
+        {userShift.user.patronymic}
       </h5>
       <form className={styles.form__worker} onSubmit={handleSubmit}>
         <label className={styles.input__name}>Статус работы</label>

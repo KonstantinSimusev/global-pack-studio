@@ -16,6 +16,8 @@ export const LayerProvider = ({ children }: TLayerProviderProps) => {
     useState(false);
   const [isAddShiftOpenModall, setIsAddShiftOpenModall] = useState(false);
   const [isDeleteOpenModall, setIsDeleteOpenModall] = useState(false);
+  const [isUserShiftInfoOpenModal, setIsUserShiftInfoOpenModal] =
+    useState(false);
   const [isCookie, setIsCookie] = useState(false);
   const [selectedId, setSelectedId] = useState('');
   const [selectedScrollPosition, setSelectedScrollPosition] = useState(0);
@@ -32,6 +34,7 @@ export const LayerProvider = ({ children }: TLayerProviderProps) => {
       isUpdateWorkerOpenModall,
       isAddShiftOpenModall,
       isDeleteOpenModall,
+      isUserShiftInfoOpenModal,
       isCookie,
       selectedId,
       selectedScrollPosition,
@@ -44,6 +47,7 @@ export const LayerProvider = ({ children }: TLayerProviderProps) => {
       setIsUpdateWorkerOpenModall,
       setIsAddShiftOpenModall,
       setIsDeleteOpenModall,
+      setIsUserShiftInfoOpenModal,
       setIsCookie,
       setSelectedId,
       setSelectedScrollPosition,

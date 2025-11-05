@@ -47,7 +47,7 @@ export class UserShiftService {
     @Body() dto: RequestDTO,
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
-  ): Promise<ISuccess> {
+  ): Promise<IUserShift> {
     try {
       await this.authService.validateAccessToken(req, res);
 
@@ -89,11 +89,9 @@ export class UserShiftService {
 
       const createdUserShift = this.createUserShiftEntity(user, shift);
 
-      await this.userShiftRepository.create(createdUserShift);
+      const userShift = await this.userShiftRepository.create(createdUserShift);
 
-      return {
-        message: 'Смена пользователя успешно создана',
-      };
+      return userShift;
     } catch (error) {
       if (
         error instanceof NotFoundException ||

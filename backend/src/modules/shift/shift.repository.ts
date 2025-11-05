@@ -5,8 +5,6 @@ import { Injectable } from '@nestjs/common';
 
 import { Shift } from './entities/shift.entity';
 
-import { CreateShiftDTO } from './dto/create-shift.dto';
-
 @Injectable()
 export class ShiftRepository {
   constructor(
