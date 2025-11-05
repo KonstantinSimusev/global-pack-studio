@@ -27,11 +27,10 @@ import { ShiftItem } from '../shift-item/shift-item';
 import { ProtectedRoute } from '../protected-route/protected-route';
 
 import { checkAccessToken } from '../../services/slices/auth/actions';
-import { useDispatch, useSelector } from '../../services/store';
+import { useDispatch } from '../../services/store';
 import { getCurrentShiftID } from '../../utils/utils';
 import { getUsersShifts } from '../../services/slices/user-shift/actions';
 import { UpdateWorkerForm } from '../forms/update-worker/update-worker.form';
-import { selectCurrentUserShift } from '../../services/slices/user-shift/slice';
 import { InfoBlock } from '../info-block/info-block';
 
 const App = () => {
