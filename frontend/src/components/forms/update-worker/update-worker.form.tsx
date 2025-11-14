@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from '../../../services/store';
 import {
   selectUserShiftById,
   selectError,
-  selectIsLoading,
+  selectIsLoadingUserShift,
   clearError,
 } from '../../../services/slices/user-shift/slice';
 
@@ -24,6 +24,9 @@ import {
 
 import {
   TEAM_PROFESSION_OPTIONS,
+  TProfession,
+  TWorkPlace,
+  TWorkStatus,
   WORK_PLACE_OPTIONS,
   WORK_STATUS_OPTIONS,
 } from '../../../utils/types';
@@ -52,7 +55,7 @@ export const UpdateWorkerForm = () => {
   } = useContext(LayerContext);
 
   const dispatch = useDispatch();
-  const isLoading = useSelector(selectIsLoading);
+  const isLoading = useSelector(selectIsLoadingUserShift);
   const error = useSelector(selectError);
 
   const userShift = useSelector((state) =>
@@ -63,14 +66,20 @@ export const UpdateWorkerForm = () => {
     return null;
   }
 
+  const attendance: TWorkStatus = 'Явка';
+  const offline: TWorkPlace = 'Не работает';
+  const empty: TWorkPlace = 'Не выбрано';
+  const operator: TProfession = 'Оператор ПУ';
+  const lumPacker: TProfession = 'Укладчик-упаковщик ЛУМ';
+
   // Состояние для хранения значений полей формы
   const [formData, setFormData] = useState<IFormData>({
     workStatus: userShift.workStatus,
     shiftProfession: userShift.shiftProfession,
     workPlace:
-      userShift.workStatus === 'Явка' ? userShift.workPlace : 'Не работает',
+      userShift.workStatus === attendance ? userShift.workPlace : offline,
     workHours:
-      userShift.workStatus === 'Явка' ? String(userShift.workHours) : '0.0',
+      userShift.workStatus === attendance ? String(userShift.workHours) : '0.0',
   });
 
   // Состояние для хранения ошибок валидации
@@ -105,11 +114,23 @@ export const UpdateWorkerForm = () => {
 
       // Логика для workStatus
       if (name === 'workStatus') {
-        if (newValue !== 'Явка') {
-          updated.workPlace = 'Не работает';
+        if (newValue !== attendance) {
+          updated.workPlace = offline;
           updated.workHours = '0.0';
-        } else if (prev.workPlace === 'Не работает') {
+        } else if (prev.workPlace === offline) {
           updated.workPlace = WORK_PLACE_OPTIONS[0];
+        }
+      }
+
+      // Логика для shiftProfession: установка workHours в зависимости от профессии
+      if (name === 'shiftProfession') {
+        // Если статус работы — "Явка", применяем правила по профессии
+        if (updated.workStatus === 'Явка') {
+          if (newValue === operator || newValue === lumPacker) {
+            updated.workHours = '12';
+          } else {
+            updated.workHours = '11.5'; // Для всех остальных профессий
+          }
         }
       }
 
@@ -182,18 +203,23 @@ export const UpdateWorkerForm = () => {
 
   const isButtonDisabled =
     isLoading ||
-    formData.workPlace === 'Не выбрано' ||
-    (formData.workStatus === 'Явка' && formData.workPlace === 'Не работает') ||
-    (formData.workStatus === 'Явка' && Number(formData.workHours) === 0) ||
-    (formData.workStatus !== 'Явка' && formData.workPlace !== 'Не работает') ||
-    (formData.workPlace === 'Не работает' && Number(formData.workHours) !== 0);
+    formData.workPlace === empty ||
+    (formData.workStatus === attendance && formData.workPlace === offline) ||
+    (formData.workStatus === attendance && Number(formData.workHours) === 0) ||
+    (formData.workStatus !== attendance && formData.workPlace !== offline) ||
+    (formData.workPlace === offline && Number(formData.workHours) !== 0) ||
+    (formData.shiftProfession !== operator &&
+      formData.shiftProfession !== lumPacker &&
+      Number(formData.workHours) > 11.5);
 
   return (
     <div className={styles.container}>
-      <h5 className={styles.title}>
-        {userShift.user.lastName} {userShift.user.firstName}{' '}
-        {userShift.user.patronymic}
-      </h5>
+      <h3 className={styles.title}>
+        <span>
+          {userShift.user.lastName} {userShift.user.firstName}
+        </span>
+        <span>{userShift.user.patronymic}</span>
+      </h3>
       <form className={styles.form__worker} onSubmit={handleSubmit}>
         <label className={styles.input__name}>Статус работы</label>
         <div className={styles.container__select}>

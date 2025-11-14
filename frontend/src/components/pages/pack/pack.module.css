@@ -1,0 +1,43 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  margin: 0 30px;
+  flex-grow: 1;
+  gap: 30px;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
+  background-color: var(--bg-color-shift);
+  color: var(--color-shift);
+  border-radius: 26px;
+  gap: 18px;
+}
+
+.wrapper__header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.header__title {
+  letter-spacing: 0.4px;
+  opacity: 0.44;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.text {
+  font-size: 16px;
+  margin-left: 1px;
+}
+
+.title {
+  opacity: 0.4;
+  font-size: 14px;
+}

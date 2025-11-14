@@ -11,8 +11,14 @@ interface IEditButtonProps {
   label?: string;
   iconWidth?: number | string;
   iconHeight?: number | string;
-  actionType: 'worker' | 'shift'; // можно добавить другие типы
-  onOpen?: () => void; // кастомный обработчик
+  actionType:
+    | 'home'
+    | 'timesheet'
+    | 'production'
+    | 'shipment'
+    | 'pack'
+    | 'fix'
+    | 'worker';
 }
 
 export const EditButton = ({
@@ -21,7 +27,6 @@ export const EditButton = ({
   iconWidth,
   iconHeight,
   actionType,
-  onOpen,
 }: IEditButtonProps) => {
   if (!id) {
     return null;
@@ -33,8 +38,21 @@ export const EditButton = ({
 
   const handleClick = () => {
     switch (actionType) {
-      case 'shift':
+      case 'timesheet':
         navigate(`/timesheet/shifts/${id}`);
+        window.scrollTo(0, 0);
+        break;
+      case 'production':
+        setIsOpenOverlay(true);
+        break;
+      case 'shipment':
+        setIsOpenOverlay(true);
+        break;
+      case 'pack':
+        setIsOpenOverlay(true);
+        break;
+      case 'fix':
+        setIsOpenOverlay(true);
         break;
       case 'worker':
         setIsOpenOverlay(true);
@@ -42,8 +60,8 @@ export const EditButton = ({
         setSelectedId(id);
         break;
       default:
-        // кастомное действие
-        onOpen?.();
+        console.warn(`Неизвестный actionType: ${actionType}`, { id });
+        break;
     }
   };
 

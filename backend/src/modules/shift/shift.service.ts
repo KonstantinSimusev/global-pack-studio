@@ -21,7 +21,7 @@ import { UserShiftService } from '../user-shift/user-shift.service';
 import { CreateShiftDTO } from './dto/create-shift.dto';
 
 import { IList, IShift, ISuccess } from '../../shared/interfaces/api.interface';
-import { getNextShift, compareShifts } from '../../shared/utils/utils';
+import { compareShifts, getNextShift } from '../../shared/utils/utils';
 
 @Injectable()
 export class ShiftService {
@@ -91,6 +91,35 @@ export class ShiftService {
     }
   }
 
+  async deleteShift(
+    id: string,
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<ISuccess> {
+    try {
+      // Проверяем токен
+      await this.authService.validateAccessToken(req, res);
+
+      if (!id) {
+        throw new BadRequestException('ID смены обязателен для удаления');
+      }
+
+      const shift = await this.shiftRepository.findById(id);
+
+      if (!shift) {
+        throw new NotFoundException('Смена не найдена');
+      }
+
+      await this.shiftRepository.delete(id);
+
+      return {
+        message: 'Смена успешно удалена',
+      };
+    } catch {
+      throw new InternalServerErrorException('Ошибка при удалении смены');
+    }
+  }
+
   async getTeamShifts(
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
@@ -104,35 +133,12 @@ export class ShiftService {
       const lastShifts =
         await this.shiftRepository.findLastShift(currentTeamNumber);
 
-      if (lastShifts.length === 0) {
-        return {
-          total: lastShifts.length,
-          items: lastShifts,
-        };
-      }
-
-      // Берём дату последней смены
-      const lastShiftDate = new Date(lastShifts[0].date);
-      const targetMonth = lastShiftDate.getMonth();
-      const targetYear = lastShiftDate.getFullYear();
-
-      // Формируем границы месяца последней смены
-      const startOfMonth = new Date(targetYear, targetMonth, 1);
-      const endOfMonth = new Date(targetYear, targetMonth + 1, 0);
-
-      // Получаем все смены бригады за этот месяц
-      const shifts = await this.shiftRepository.findTeamShifts(
-        currentTeamNumber,
-        startOfMonth,
-        endOfMonth,
-      );
-
       return {
-        total: shifts.length,
-        items: shifts,
+        total: lastShifts.length,
+        items: lastShifts,
       };
     } catch (error) {
-      console.log(error)
+      console.log(error);
       throw new InternalServerErrorException(
         'Произошла ошибка при получении списка пользователей',
       );
@@ -180,22 +186,6 @@ export class ShiftService {
       return await this.shiftRepository.update(shift, updateData);
     } catch (error) {
       throw new InternalServerErrorException('Ошибка при обновлении смены');
-    }
-  }
-
-  async deleteShift(id: string): Promise<ISuccess> {
-    try {
-      if (!id) {
-        throw new BadRequestException('ID смены обязателен для удаления');
-      }
-
-      await this.shiftRepository.delete(id);
-
-      return {
-        message: 'Смена успешно удалена',
-      };
-    } catch {
-      throw new InternalServerErrorException('Ошибка при удалении смены');
     }
   }
   */

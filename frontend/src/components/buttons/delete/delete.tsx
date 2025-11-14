@@ -9,8 +9,7 @@ interface IDeleteButtonProps {
   label?: string;
   iconWidth?: number | string;
   iconHeight?: number | string;
-  actionType: 'worker'; // можно добавить другие типы
-  onOpen?: () => void; // кастомный обработчик
+  actionType: 'shift' | 'userShift';
 }
 
 export const DeleteButton = ({
@@ -19,26 +18,23 @@ export const DeleteButton = ({
   iconWidth,
   iconHeight,
   actionType,
-  onOpen,
 }: IDeleteButtonProps) => {
   if (!id) {
     return null;
   }
 
-  const { setIsOpenOverlay, setIsDeleteOpenModall, setSelectedId } =
-    useContext(LayerContext);
+  const {
+    setIsOpenOverlay,
+    setIsDeleteOpenModall,
+    setSelectedId,
+    setSelectedButtonActionType,
+  } = useContext(LayerContext);
 
   const handleClick = () => {
-    switch (actionType) {
-      case 'worker':
-        setIsOpenOverlay(true);
-        setIsDeleteOpenModall(true);
-        setSelectedId(id);
-        break;
-      default:
-        // кастомное действие
-        onOpen?.();
-    }
+    setIsOpenOverlay(true);
+    setIsDeleteOpenModall(true);
+    setSelectedId(id);
+    setSelectedButtonActionType(actionType);
   };
 
   return (

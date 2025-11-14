@@ -27,8 +27,10 @@ export const shiftSlice = createSlice({
   },
   selectors: {
     selectShifts: (state: IShiftState) => state.shifts,
-    selectIsLoading: (state: IShiftState) => state.isLoading,
+    selectIsLoadingShift: (state: IShiftState) => state.isLoading,
     selectError: (state: IShiftState) => state.error,
+    selectShiftById: (state: IShiftState, shiftId: string) =>
+      state.shifts.find((shift) => shift.id === shiftId),
   },
   extraReducers: (builder) => {
     builder
@@ -79,5 +81,5 @@ export const shiftSlice = createSlice({
 });
 
 export const { clearShifts, clearError } = shiftSlice.actions;
-export const { selectShifts, selectIsLoading, selectError } =
+export const { selectShifts, selectShiftById, selectIsLoadingShift, selectError } =
   shiftSlice.selectors;

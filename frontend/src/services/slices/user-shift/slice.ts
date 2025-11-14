@@ -9,7 +9,7 @@ import {
 import type { IList, IUserShift } from '../../../utils/api.interface';
 
 interface IUserShiftState {
-  userShift: IUserShift | null,
+  userShift: IUserShift | null;
   usersShifts: IUserShift[];
   isLoading: boolean;
   error: string | null;
@@ -33,7 +33,7 @@ export const userShiftSlice = createSlice({
   selectors: {
     selectCurrentUserShift: (state: IUserShiftState) => state.userShift,
     selectUsersShifts: (state: IUserShiftState) => state.usersShifts,
-    selectIsLoading: (state: IUserShiftState) => state.isLoading,
+    selectIsLoadingUserShift: (state: IUserShiftState) => state.isLoading,
     selectError: (state: IUserShiftState) => state.error,
     selectUserShiftById: (state: IUserShiftState, id: string) =>
       state.usersShifts.find((shift) => shift.id === id) || null,
@@ -45,11 +45,14 @@ export const userShiftSlice = createSlice({
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(createUserShift.fulfilled, (state, action: PayloadAction<IUserShift>) => {
-        state.userShift = action.payload;
-        state.isLoading = false;
-        state.error = null;
-      })
+      .addCase(
+        createUserShift.fulfilled,
+        (state, action: PayloadAction<IUserShift>) => {
+          state.userShift = action.payload;
+          state.isLoading = false;
+          state.error = null;
+        },
+      )
       .addCase(createUserShift.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message ?? 'Ошибка создания смены';
@@ -119,6 +122,6 @@ export const {
   selectCurrentUserShift,
   selectUsersShifts,
   selectUserShiftById,
-  selectIsLoading,
+  selectIsLoadingUserShift,
   selectError,
 } = userShiftSlice.selectors;

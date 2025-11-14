@@ -147,9 +147,30 @@ export const deleteShiftApi = async (id: string): Promise<ISuccess> => {
   }
 };
 
+// export const getUserShiftApi = async (id: string): Promise<ISuccess> => {
+//   try {
+//     const response = await fetch(`${URL}/users-shifts/${id}`, {
+//       method: 'GET',
+//       headers: {
+//         'Content-Type': 'application/json;charset=utf-8',
+//       },
+//       credentials: 'include',
+//       body: JSON.stringify({ id }),
+//     });
+
+//     if (!response.ok) {
+//       throw new Error();
+//     }
+
+//     return await response.json();
+//   } catch (error) {
+//     throw error;
+//   }
+// };
+
 export const deleteUserShiftApi = async (id: string): Promise<ISuccess> => {
   try {
-    const response = await fetch(`${URL}/users-shifts/delete-user-shift`, {
+    const response = await fetch(`${URL}/users-shifts/delete`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json;charset=utf-8',
@@ -198,7 +219,7 @@ export const createUserShiftApi = async (
 ): Promise<IUserShift> => {
   try {
     // Здесь происходит запрос к серверу
-    const response = await fetch(`${URL}/users-shifts/create-user-shift`, {
+    const response = await fetch(`${URL}/users-shifts/create`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json;charset=utf-8',
@@ -251,7 +272,7 @@ export const updateUserShiftApi = async (
 ): Promise<ISuccess> => {
   try {
     // Здесь происходит запрос к серверу
-    const response = await fetch(`${URL}/users-shifts/update-user-shift`, {
+    const response = await fetch(`${URL}/users-shifts/update`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json;charset=utf-8',

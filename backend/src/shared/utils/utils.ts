@@ -1,6 +1,6 @@
-import { SheduleEntry } from '../interfaces/api.interface';
+import { ISchedule } from '../interfaces/api.interface';
 
-export function getNextShift(teamNumber: number): SheduleEntry {
+export function getNextShift(teamNumber: number): ISchedule {
   const shifts = [
     {
       date: new Date('2025-10-15'),
@@ -38,7 +38,7 @@ export function getNextShift(teamNumber: number): SheduleEntry {
   const startShiftNumber = shift.shiftNumber;
 
   // Создаем объект для результата
-  let result: SheduleEntry = {
+  let result: ISchedule = {
     date: new Date(startDate),
     shiftNumber: startShiftNumber,
     teamNumber: shift.teamNumber,
@@ -63,7 +63,7 @@ export function getNextShift(teamNumber: number): SheduleEntry {
   return result;
 }
 
-export function compareShifts(obj1: SheduleEntry, obj2: SheduleEntry): boolean {
+export function compareShifts(obj1: ISchedule, obj2: ISchedule): boolean {
   // Нормализация дат (убираем время)
   const normalizeDate = (date: Date): Date => {
     const d = new Date(date);

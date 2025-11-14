@@ -8,9 +8,11 @@
   border-radius: 30px;
 }
 
-/* .header {
-  margin-bottom: 20px;
-} */
+.header__title {
+  letter-spacing: 0.4px;
+  opacity: 0.44;
+  margin-bottom: 26px;
+}
 
 .header,
 .footer,
@@ -42,7 +44,7 @@
 
 .footer {
   align-items: center;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
 .footer > span:first-child {

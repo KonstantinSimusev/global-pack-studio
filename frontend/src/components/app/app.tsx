@@ -12,8 +12,8 @@ import { Banner } from '../banner/banner';
 import { Home } from '../pages/home/home';
 import { Timesheet } from '../pages/timesheet/timesheet';
 import { Production } from '../pages/production/production';
-import { Footer } from '../footer/footer';
 import { DefaultPage } from '../pages/default/default';
+import { Footer } from '../footer/footer';
 import { NotFound } from '../pages/not-found/not-found';
 import { Overlay } from '../overlay/overlay';
 import { Modal } from '../modal/modal';
@@ -22,16 +22,18 @@ import { ShiftForm } from '../forms/shift/shift';
 import { AddWorkerForm } from '../forms/add-worker/add-worker.form';
 import { Logout } from '../loguot/logout';
 import { Delete } from '../delete/delete';
-import { ShiftItem } from '../shift-item/shift-item';
+import { TimesheetShift } from '../pages/timesheet-shift/timesheet-shift';
 
 import { ProtectedRoute } from '../protected-route/protected-route';
 
 import { checkAccessToken } from '../../services/slices/auth/actions';
 import { useDispatch } from '../../services/store';
-import { getCurrentShiftID } from '../../utils/utils';
-import { getUsersShifts } from '../../services/slices/user-shift/actions';
 import { UpdateWorkerForm } from '../forms/update-worker/update-worker.form';
 import { InfoBlock } from '../info-block/info-block';
+import { HomeShift } from '../pages/home-shift/home-shift';
+import { Shipment } from '../pages/shipment/shipment';
+import { Pack } from '../pages/pack/pack';
+import { Fix } from '../pages/fix/fix';
 
 const App = () => {
   const { isLightTheme } = useContext(ThemeContext);
@@ -49,8 +51,6 @@ const App = () => {
   } = useContext(LayerContext);
 
   const dispatch = useDispatch();
-
-  const currentShiftId = getCurrentShiftID();
 
   // Текущая позициция на странице
   const scrollPosition = window.scrollY;
@@ -78,10 +78,6 @@ const App = () => {
   useEffect(() => {
     console.log('✅ App смонтирован');
     dispatch(checkAccessToken());
-
-    if (currentShiftId) {
-      dispatch(getUsersShifts(currentShiftId));
-    }
   }, []);
 
   console.log('🔁 App отрендерен');
@@ -100,9 +96,13 @@ const App = () => {
         <Route path="/" element={<DefaultPage />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/home" element={<Home />} />
+          <Route path="/home/shifts/:id" element={<HomeShift />} />
           <Route path="/timesheet" element={<Timesheet />} />
-          <Route path="/timesheet/shifts/:id" element={<ShiftItem />} />
+          <Route path="/timesheet/shifts/:id" element={<TimesheetShift />} />
           <Route path="/production" element={<Production />} />
+          <Route path="/shipment" element={<Shipment />} />
+          <Route path="/pack" element={<Pack />} />
+          <Route path="/fix" element={<Fix />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

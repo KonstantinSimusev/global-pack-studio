@@ -6,7 +6,7 @@ import { Spinner } from '../../spinner/spinner';
 import { useDispatch, useSelector } from '../../../services/store';
 import {
   selectError,
-  selectIsLoading,
+  selectIsLoadingShift,
   clearError,
 } from '../../../services/slices/shift/slice';
 import { LayerContext } from '../../../contexts/layer/layerContext';
@@ -27,7 +27,7 @@ interface IFormData extends Record<string, string> {
 export const ShiftForm = () => {
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
-  const isLoading = useSelector(selectIsLoading);
+  const isLoading = useSelector(selectIsLoadingShift);
   const serverError = useSelector(selectError);
   const { isAddShiftOpenModall, setIsOpenOverlay, setIsAddShiftOpenModall } =
     useContext(LayerContext);

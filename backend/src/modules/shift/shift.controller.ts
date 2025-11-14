@@ -24,6 +24,7 @@ import {
   ISuccess,
   IUserShift,
 } from '../../shared/interfaces/api.interface';
+import { DeleteShiftDTO } from './dto/delete-shift.dto';
 
 @Controller('shifts')
 export class ShiftController {
@@ -58,12 +59,16 @@ export class ShiftController {
     return this.userShiftService.getUsersShifts(id, req, res);
   }
 
-  /*
   @Delete('delete')
-  async deleteShift(@Body() dto: DeleteDTO): Promise<ISuccess> {
-    return this.shiftService.deleteShift(dto.id);
+  async deleteShift(
+    @Body() dto: DeleteShiftDTO,
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<ISuccess> {
+    return this.shiftService.deleteShift(dto.id, req, res);
   }
 
+  /*
   @Get('all')
   async getShifts(): Promise<IList<IShift>> {
     return await this.shiftService.getShifts();

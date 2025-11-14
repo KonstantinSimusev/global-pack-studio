@@ -21,6 +21,10 @@ export class ShiftRepository {
     return this.shiftRepository.findOneBy({ id });
   }
 
+  async delete(id: string): Promise<void> {
+    this.shiftRepository.delete(id);
+  }
+
   async findOne(shift: Shift): Promise<Shift> {
     return this.shiftRepository.findOne({
       where: {
@@ -39,7 +43,7 @@ export class ShiftRepository {
       order: {
         date: 'DESC',
       },
-      take: 1,  // нам нужна только последняя смена
+      take: 1, // нам нужна только последняя смена
     });
   }
 
@@ -69,10 +73,6 @@ export class ShiftRepository {
       ...shift,
       ...updateData,
     });
-  }
-
-  async delete(id: string): Promise<void> {
-    this.shiftRepository.delete(id);
   }
   */
 }

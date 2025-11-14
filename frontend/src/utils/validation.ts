@@ -227,7 +227,7 @@ export const validationRules: IValidationRules = {
         type: 'decimal',
         // 1–2 цифры до точки, 0–1 цифра после; допускает , и .
         pattern: /^\d{1,2}(?:[,.]\d)?$/,
-        message: 'Введите число от 0 до 11.5',
+        message: 'Введите число от 0 до 12',
       },
       // {
       //   type: 'range',
@@ -268,8 +268,8 @@ export const validateField = (
       if (isNaN(numValue)) {
         return validator.message;
       }
-      if (numValue < 0 || numValue > 11.5) {
-        return 'Введите число от 0 до 11,5';
+      if (numValue < 0 || numValue > 12) {
+        return 'Введите число от 0 до 12';
       }
     }
 

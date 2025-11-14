@@ -14,6 +14,7 @@ interface ILayerContextValue {
   isCookie: boolean;
   selectedId: string;
   selectedScrollPosition: number;
+  selectedButtonActionType: string;
   setIsOpenOverlay: (value: boolean) => void;
   setIsOpenMenu: (value: boolean) => void;
   setIsOpenModal: (value: boolean) => void;
@@ -27,6 +28,7 @@ interface ILayerContextValue {
   setIsCookie: (value: boolean) => void;
   setSelectedId: (value: string) => void;
   setSelectedScrollPosition: (value: number) => void;
+  setSelectedButtonActionType: (value: string) => void;
 }
 
 export const LayerContext = createContext<ILayerContextValue>({
@@ -43,6 +45,7 @@ export const LayerContext = createContext<ILayerContextValue>({
   isCookie: false,
   selectedId: '',
   selectedScrollPosition: 0,
+  selectedButtonActionType: '',
   setIsOpenOverlay: () => {},
   setIsOpenMenu: () => {},
   setIsOpenModal: () => {},
@@ -56,4 +59,5 @@ export const LayerContext = createContext<ILayerContextValue>({
   setIsCookie: () => {},
   setSelectedId: () => {},
   setSelectedScrollPosition: () => {},
+  setSelectedButtonActionType: () => {},
 });

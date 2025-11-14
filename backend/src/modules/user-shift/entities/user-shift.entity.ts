@@ -13,7 +13,7 @@ import { Shift } from '../../../modules/shift/entities/shift.entity';
 
 @Entity({
   schema: 'gps',
-  name: 'user_shifts',
+  name: 'users_shifts',
 })
 @Unique(['user', 'shift'])
 export class UserShift {

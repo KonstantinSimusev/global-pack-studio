@@ -1,0 +1,17 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  margin: 0 30px;
+  gap: 30px;
+  flex-grow: 1;
+}
+
+.container > :nth-child(1) {
+  margin-right: auto;
+}
+
+.wrapper {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}

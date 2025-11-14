@@ -49,6 +49,8 @@ export class Shift {
   @Max(5)
   teamNumber: number;
 
-  @OneToMany(() => UserShift, (userShift) => userShift.shift)
+  @OneToMany(() => UserShift, (userShift) => userShift.shift, {
+    cascade: ['remove'], // Автоматически удалит UserShift при удалении Shift
+  })
   usersShifts: UserShift[];
 }

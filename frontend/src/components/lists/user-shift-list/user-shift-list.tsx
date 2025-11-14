@@ -1,22 +1,19 @@
-import styles from './shift-item.module.css';
+import styles from './user-shift-list.module.css';
 
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-// import { Spinner } from '../spinner/spinner';
-import { BackButton } from '../buttons/back/back';
-import { AddButton } from '../buttons/add/add-button';
-import { EditButton } from '../buttons/edit/edit';
-import { DeleteButton } from '../buttons/delete/delete';
-import { SuccessIcon } from '../icons/success/success';
-import { TeamProfessionList } from '../profession-list/profession-list';
+import { EditButton } from '../../buttons/edit/edit';
+import { DeleteButton } from '../../buttons/delete/delete';
+import { SuccessIcon } from '../../icons/success/success';
 
-import { useDispatch, useSelector } from '../../services/store';
-import { getUsersShifts } from '../../services/slices/user-shift/actions';
-import { selectUsersShifts } from '../../services/slices/user-shift/slice';
-import { SPECIAL_PROFESSIONS } from '../../utils/types';
+import { useDispatch, useSelector } from '../../../services/store';
+import { getUsersShifts } from '../../../services/slices/user-shift/actions';
+import { selectUsersShifts } from '../../../services/slices/user-shift/slice';
+import { SPECIAL_PROFESSIONS } from '../../../utils/types';
+import { formatDate } from '../../../utils/utils';
 
-export const ShiftItem = () => {
+export const UserShiftList = () => {
   const { id } = useParams();
 
   if (!id) {
@@ -24,10 +21,7 @@ export const ShiftItem = () => {
   }
 
   const dispatch = useDispatch();
-  // const isLoading = useSelector(selectIsLoading);
-
   const usersShifts = useSelector(selectUsersShifts);
-  // const isTeamNumber = false;
 
   useEffect(() => {
     dispatch(getUsersShifts(id));
@@ -78,19 +72,8 @@ export const ShiftItem = () => {
   const positionUsersShifts =
     usersShifts.length > 0 ? addPositionByProfession(usersShifts) : [];
 
-  // if (isLoading) {
-  //   return (
-  //     <div className={styles.container__spiner}>
-  //       <div className={styles.spinner}>{isLoading && <Spinner />}</div>
-  //     </div>
-  //   );
-  // }
-
   return (
-    <div className={styles.container}>
-      <BackButton />
-      <TeamProfessionList />
-      <AddButton actionType="worker" />
+    <>
       {positionUsersShifts.length > 0 ? (
         <ul className={styles.list}>
           {positionUsersShifts.map((userShift) => (
@@ -112,39 +95,60 @@ export const ShiftItem = () => {
                 </div>
               </div>
 
-              <span className={styles.wrapper}>
+              <div className={styles.wrapper}>
                 <span className={styles.title}>ФИО</span>
                 <span className={styles.text}>
                   {userShift.user.lastName}&nbsp;{userShift.user.firstName}{' '}
                   {userShift.user.patronymic}
                 </span>
-              </span>
+              </div>
 
-              <span className={styles.wrapper}>
+              <div className={styles.wrapper}>
                 <span className={styles.title}>Статус работы</span>
                 <span className={styles.text}>{userShift.workStatus}</span>
-              </span>
+              </div>
 
-              <span className={styles.wrapper}>
+              <div className={styles.wrapper}>
                 <span className={styles.title}>Профессия в смене</span>
                 <span className={styles.text}>{userShift.shiftProfession}</span>
-              </span>
+              </div>
 
-              <span className={styles.wrapper}>
+              <div className={styles.wrapper}>
                 <span className={styles.title}>Рабочее место</span>
                 <span className={styles.text}>{userShift.workPlace}</span>
-              </span>
+              </div>
+
+              <div className={styles.wrapper}>
+                <span className={styles.title}>Отработано часов</span>
+                <span className={styles.text}>{userShift.workHours}</span>
+              </div>
+
+              <div className={styles.wrapper}>
+                <span className={styles.title}>№ смены</span>
+                <span className={styles.text}>
+                  Смена {userShift.shift.shiftNumber}
+                </span>
+              </div>
+
+              <div className={styles.wrapper}>
+                <span className={styles.title}>№ бригады</span>
+                <span className={styles.text}>
+                  Бригада {userShift.shift.teamNumber}
+                </span>
+              </div>
 
               <div className={styles.wrapper__delete}>
-                <span className={styles.wrapper}>
-                  <span className={styles.title}>Отработано чаосв</span>
-                  <span className={styles.text}>{userShift.workHours}</span>
-                </span>
+                <div className={styles.wrapper}>
+                  <span className={styles.title}>Дата</span>
+                  <span className={styles.text}>
+                    {formatDate(userShift.shift.date)}
+                  </span>
+                </div>
 
                 {userShift.user.teamNumber !== userShift.shift.teamNumber && (
                   <DeleteButton
                     id={userShift.id}
-                    actionType="worker"
+                    actionType="userShift"
                     iconWidth={30}
                     iconHeight={30}
                   />
@@ -156,6 +160,6 @@ export const ShiftItem = () => {
       ) : (
         <div>Смены работников не найдены</div>
       )}
-    </div>
+    </>
   );
 };

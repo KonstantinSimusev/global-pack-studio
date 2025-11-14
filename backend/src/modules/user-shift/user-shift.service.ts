@@ -31,7 +31,7 @@ import {
   IUserShift,
 } from '../../shared/interfaces/api.interface';
 
-import { ETeamProfession } from '../../shared/enums/enums';
+import { EProfession, ETeamProfession } from '../../shared/enums/enums';
 import { UpdateUserShiftDTO } from './dto/update-user-shift.dto';
 
 @Injectable()
@@ -118,6 +118,28 @@ export class UserShiftService {
       throw new InternalServerErrorException('Ошибка при создании смены');
     }
   }
+
+  // async getUserShiftById(
+  //   @Param('id', ParseUUIDPipe) id: string,
+  //   @Req() req: Request,
+  //   @Res({ passthrough: true }) res: Response,
+  // ): Promise<IUserShift> {
+  //   try {
+  //     await this.authService.validateAccessToken(req, res);
+
+  //     const userShift = await this.userShiftRepository.findById(id);
+
+  //     if (!userShift) {
+  //       throw new NotFoundException('Смена не найдена');
+  //     }
+
+  //     return userShift;
+  //   } catch (error) {
+  //     throw new InternalServerErrorException(
+  //       'Ошибка при получении списка смен',
+  //     );
+  //   }
+  // }
 
   async getUsersShifts(
     @Param('id', ParseUUIDPipe) id: string,
@@ -211,7 +233,17 @@ export class UserShiftService {
     userShift.workStatus = workStatus;
     userShift.workPlace = workPlace;
     userShift.shiftProfession = user.profession;
-    userShift.workHours = workHours;
+
+    // Проверяем, содержит ли профессия подстроку 'ЛУМ'
+    if (
+      user.profession === EProfession.OPERATOR ||
+      user.profession === EProfession.PACKER_LUM
+    ) {
+      userShift.workHours = 12;
+    } else {
+      userShift.workHours = workHours; // Используем значение по умолчанию (11.5) или переданное в параметре
+    }
+
     userShift.user = user;
     userShift.shift = shift;
     return userShift;

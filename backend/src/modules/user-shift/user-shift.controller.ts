@@ -24,7 +24,7 @@ import { UpdateUserShiftDTO } from './dto/update-user-shift.dto';
 export class UserShiftController {
   constructor(private readonly userShiftService: UserShiftService) {}
 
-  @Post('create-user-shift')
+  @Post('create')
   async createUserShift(
     @Body() dto: RequestDTO,
     @Req() req: Request,
@@ -33,16 +33,16 @@ export class UserShiftController {
     return this.userShiftService.creatUserShift(dto, req, res);
   }
 
-  @Delete('delete-user-shift')
-  async deleteUserShift(
-    @Body() dto: DeleteUserShiftDTO,
-    @Req() req: Request,
-    @Res({ passthrough: true }) res: Response,
-  ): Promise<ISuccess> {
-    return this.userShiftService.deleteUserShift(dto.id, req, res);
-  }
+  // @Get(':id')
+  // async getUserShiftById(
+  //   @Param('id', ParseUUIDPipe) id: string,
+  //   @Req() req: Request,
+  //   @Res({ passthrough: true }) res: Response,
+  // ): Promise<IUserShift> {
+  //   return this.userShiftService.getUserShiftById(id, req, res);
+  // }
 
-  @Put('update-user-shift')
+  @Put('update')
   async updateUserShift(
     @Body() dto: UpdateUserShiftDTO,
     @Req() req: Request,
@@ -51,12 +51,12 @@ export class UserShiftController {
     return this.userShiftService.updateUserShift(dto, req, res);
   }
 
-  // @Get(':id')
-  // async get(
-  //   @Param('id', ParseUUIDPipe) id: string,
-  //   @Req() req: Request,
-  //   @Res({ passthrough: true }) res: Response,
-  // ): Promise<IList<IProfession>> {
-  //   return this.userShiftService.get(id, req, res);
-  // }
+  @Delete('delete')
+  async deleteUserShift(
+    @Body() dto: DeleteUserShiftDTO,
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<ISuccess> {
+    return this.userShiftService.deleteUserShift(dto.id, req, res);
+  }
 }

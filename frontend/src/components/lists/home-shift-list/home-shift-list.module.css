@@ -1,0 +1,31 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 22px;
+  background-color: var(--bg-color-shift);
+  color: var(--color-shift);
+  border-radius: 26px;
+  cursor: pointer;
+  width: 100%;
+  gap: 6px;
+}
+
+.item > :nth-child(2),
+.item > :nth-child(3) {
+  margin-left: auto;
+}
+
+/* .date {
+  font-size: 20px;
+}
+
+.text {
+  font-size: 16px;
+} */

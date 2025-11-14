@@ -100,6 +100,36 @@ export const Sidebar = () => {
               >
                 <Link to="/production">Производство</Link>
               </li>
+
+              <li
+                className={clsx(
+                  styles.link,
+                  location.pathname === '/shipment' && styles.link__active,
+                )}
+                onClick={hanldeClick}
+              >
+                <Link to="/shipment">Отгрузка</Link>
+              </li>
+
+              <li
+                className={clsx(
+                  styles.link,
+                  location.pathname === '/pack' && styles.link__active,
+                )}
+                onClick={hanldeClick}
+              >
+                <Link to="/pack">Упаковка</Link>
+              </li>
+
+              <li
+                className={clsx(
+                  styles.link,
+                  location.pathname === '/fix' && styles.link__active,
+                )}
+                onClick={hanldeClick}
+              >
+                <Link to="/fix">Раскрепление</Link>
+              </li>
             </>
           )}
 

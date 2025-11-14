@@ -33,7 +33,8 @@ export type TWorkStatus =
   | 'ПМП (СБ)'
   | 'ПМП (ЮБ)'
   | 'ЛПЦ-5'
-  | 'ЛПЦ-10';
+  | 'ЛПЦ-10'
+  | 'ПТД';
 
 export const WORK_STATUS_OPTIONS: TWorkStatus[] = [
   'Явка',
@@ -54,6 +55,7 @@ export const WORK_STATUS_OPTIONS: TWorkStatus[] = [
   'ПМП (ЮБ)',
   'ЛПЦ-5',
   'ЛПЦ-10',
+  'ПТД',
 ];
 
 export type TTeamProfession =
@@ -85,7 +87,8 @@ export type TWorkPlace =
   | 'Тупик 6'
   | 'Тупик 7'
   | 'Тупик 8'
-  | 'Тупик 10';
+  | 'Тупик 10'
+  | 'Бригада по реквизитам';
 
 export const WORK_PLACE_OPTIONS: TWorkPlace[] = [
   'Не выбрано',
@@ -98,4 +101,7 @@ export const WORK_PLACE_OPTIONS: TWorkPlace[] = [
   'Тупик 7',
   'Тупик 8',
   'Тупик 10',
+  'Бригада по реквизитам',
 ];
+
+export type TArea = '';

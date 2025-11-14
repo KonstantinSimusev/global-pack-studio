@@ -25,6 +25,13 @@ export interface IShift {
   date: Date;
   shiftNumber: number;
   teamNumber: number;
+  usersShifts?: IUserShift[]
+}
+
+export interface ISchedule {
+  date: Date;
+  shiftNumber: number;
+  teamNumber: number;
 }
 
 export interface IUserShift {
@@ -33,12 +40,6 @@ export interface IUserShift {
   workPlace: string;
   shiftProfession: string;
   workHours: number;
-}
-
-export interface SheduleEntry {
-  date: Date;
-  shiftNumber: number;
-  teamNumber: number;
 }
 
 export interface ISuccess {

@@ -6,7 +6,7 @@ import { AddIcon } from '../../icons/add/add';
 
 interface IAddButtonProps {
   label?: string;
-  actionType: 'worker' | 'shift' | 'other'; // можно добавить другие типы
+  actionType: 'worker' | 'shift' | 'area'; // можно добавить другие типы
   onOpen?: () => void; // кастомный обработчик
 }
 
@@ -20,7 +20,7 @@ export const AddButton = ({ label, actionType, onOpen }: IAddButtonProps) => {
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
-    
+
     setIsOpenOverlay(true);
 
     switch (actionType) {
@@ -29,6 +29,9 @@ export const AddButton = ({ label, actionType, onOpen }: IAddButtonProps) => {
         break;
       case 'shift':
         setIsAddShiftOpenModall(true);
+        break;
+      case 'area':
+        // setIsAddShiftOpenModall(true);
         break;
       default:
         // кастомное действие

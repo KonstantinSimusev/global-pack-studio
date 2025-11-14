@@ -1,51 +1,25 @@
+import { useEffect } from 'react';
+import { selectShifts } from '../../../services/slices/shift/slice';
+import { useDispatch, useSelector } from '../../../services/store';
 import styles from './home.module.css';
-
-// import { useEffect } from 'react';
-
-import { useSelector } from '../../../services/store';
-import { selectUser } from '../../../services/slices/auth/slice';
-// import { selectWorkers } from '../../../services/slices/user/slice';
-// import { getWorkers } from '../../../services/slices/user/actions';
+import { getTeamShifts } from '../../../services/slices/shift/actions';
+import { HomeShiftList } from '../../lists/home-shift-list/home-shift-list';
 
 export const Home = () => {
-  const user = useSelector(selectUser);
-  // const dispatch = useDispatch();
-  // const workers = useSelector(selectWorkers);
+  const dispatch = useDispatch();
+  const shifts = useSelector(selectShifts);
 
-  // useEffect(() => {
-  // dispatch(getWorkers());
-  // }, []);
-
+  useEffect(() => {
+    dispatch(getTeamShifts());
+  }, []);
+  
   return (
-    <main className={styles.container}>
-      <div className={styles.shift_info}>
-        <span className={styles.wrapper}>
-          <span className={styles.title}>Бригада</span>
-          <span className={styles.text}>№{user?.currentTeamNumber ?? '-'}</span>
-        </span>
-        <div className={styles.master}>
-          <span className={styles.wrapper}>
-            <span className={styles.title}>Руководитель</span>
-            <span className={styles.text}>
-              <span className={styles.text}>{user?.lastName ?? '-'} </span>
-              <span className={styles.text}>{user?.firstName ?? ''} </span>
-              <span className={styles.text}>{user?.patronymic ?? ''}</span>
-            </span>
-          </span>
-          <span className={styles.wrapper}>
-            <span className={styles.title}>Должность</span>
-            <span className={styles.text}>{user?.profession ?? '-'}</span>
-          </span>
-        </div>
+    <div className={styles.container}>
+      <div className={styles.wrapper}>
+        <span className={styles.title}>Структурное подразделение</span>
+        <span className={styles.text}>ЛПЦ-11 ПАО "ММК"</span>
       </div>
-
-      <div>
-        {/* {workers.map((worker, index) => (
-          <div key={index}>
-            {index + 1}. {worker.name} - {worker.teamNumber} - {worker.count}
-          </div>
-        ))} */}
-      </div>
-    </main>
+      <HomeShiftList items={shifts} />
+    </div>
   );
 };

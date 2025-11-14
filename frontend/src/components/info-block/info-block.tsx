@@ -8,19 +8,22 @@ export const InfoBlock = () => {
   return (
     <span className={styles.container}>
       <span className={styles.wrapper}>
-        <span className={styles.text}>
-          Работник из бригады №{currentUserShift?.user?.currentTeamNumber}
-        </span>
         <span className={styles.wrapper__fio}>
           <span className={styles.text}>
             {currentUserShift?.user?.lastName}{' '}
-            {currentUserShift?.user?.firstName}{' '}
+            {currentUserShift?.user?.firstName}
+          </span>
+          <span className={styles.text}>
             {currentUserShift?.user?.patronymic}
           </span>
         </span>
-        <span>добавлен в категорию:</span>
+        <span className={styles.text}>
+          Бригада №{currentUserShift?.user?.currentTeamNumber}
+        </span>
+
+        <span className={styles.text}>Добавлен в категорию:</span>
+        <span className={styles.text}>{currentUserShift?.shiftProfession}</span>
       </span>
-      <span className={styles.text}>{currentUserShift?.shiftProfession}</span>
     </span>
   );
 };

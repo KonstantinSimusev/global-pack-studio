@@ -3,7 +3,7 @@ set -e
 
 # Часть 1: Суперпользователь создает пользователя и БД
 psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL
-  CREATE USER "$DB_USER" PASSWORD '$DB_PASSWORD';
+  CREATE USER "$DB_USER" WITH PASSWORD '$DB_PASSWORD';
   CREATE DATABASE "$DB_NAME";
   GRANT ALL PRIVILEGES ON DATABASE "$DB_NAME" TO "$DB_USER";
 EOSQL
@@ -79,12 +79,12 @@ psql -v ON_ERROR_STOP=1 --username "$DB_USER" --dbname "$DB_NAME" <<-EOSQL
     shift_number INTEGER NOT NULL,
     team_number INTEGER NOT NULL,
     
-    UNIQUE (date, team_number),
-    UNIQUE (date, shift_number)
+    CONSTRAINT unique_date_team UNIQUE (date, team_number),
+    CONSTRAINT unique_date_shift UNIQUE (date, shift_number)
   );
 
   -- Создание таблицы user_shifts
-  CREATE TABLE IF NOT EXISTS gps.user_shifts (
+  CREATE TABLE IF NOT EXISTS gps.users_shifts (
     id uuid DEFAULT gps.uuid_generate_v4() NOT NULL PRIMARY KEY,
     work_status VARCHAR(255) NOT NULL,
     work_place VARCHAR(255) NOT NULL,
@@ -93,9 +93,9 @@ psql -v ON_ERROR_STOP=1 --username "$DB_USER" --dbname "$DB_NAME" <<-EOSQL
     user_id uuid NOT NULL,
     shift_id uuid NOT NULL,
 
-    UNIQUE (user_id, shift_id),
-    
-    FOREIGN KEY (user_id) REFERENCES gps.users(id),
-    FOREIGN KEY (shift_id) REFERENCES gps.shifts(id)
+    CONSTRAINT unique_user_shift UNIQUE (user_id, shift_id),
+
+    CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES gps.users(id),
+    CONSTRAINT fk_shift FOREIGN KEY (shift_id) REFERENCES gps.shifts(id) ON DELETE CASCADE
   );
 EOSQL

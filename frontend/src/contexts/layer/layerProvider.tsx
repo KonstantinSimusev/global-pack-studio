@@ -21,6 +21,7 @@ export const LayerProvider = ({ children }: TLayerProviderProps) => {
   const [isCookie, setIsCookie] = useState(false);
   const [selectedId, setSelectedId] = useState('');
   const [selectedScrollPosition, setSelectedScrollPosition] = useState(0);
+  const [selectedButtonActionType, setSelectedButtonActionType] = useState('');
 
   // Мемоизируем значение контекста
   const value = useMemo(
@@ -38,6 +39,7 @@ export const LayerProvider = ({ children }: TLayerProviderProps) => {
       isCookie,
       selectedId,
       selectedScrollPosition,
+      selectedButtonActionType,
       setIsOpenOverlay,
       setIsOpenMenu,
       setIsOpenModal,
@@ -51,6 +53,7 @@ export const LayerProvider = ({ children }: TLayerProviderProps) => {
       setIsCookie,
       setSelectedId,
       setSelectedScrollPosition,
+      setSelectedButtonActionType,
     }),
     [
       isOpenOverlay,
@@ -65,6 +68,7 @@ export const LayerProvider = ({ children }: TLayerProviderProps) => {
       isCookie,
       selectedId,
       selectedScrollPosition,
+      selectedButtonActionType,
     ],
   );
 

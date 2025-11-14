@@ -4,11 +4,25 @@ import { BackIcon } from '../../icons/back/back';
 
 import { useNavigate } from 'react-router-dom';
 
-export const BackButton = () => {
+interface IBackButtonProps {
+  actionType: 'home' | 'timesheet' | 'production' | 'shipment' | 'pack' | 'fix';
+}
+
+export const BackButton = ({ actionType }: IBackButtonProps) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate('/timesheet');
+    switch (actionType) {
+      case 'home':
+        navigate('/home');
+        break;
+      case 'timesheet':
+        navigate('/timesheet');
+        break;
+      default:
+        console.warn(`Неизвестный actionType: ${actionType}`);
+        break;
+    }
   };
 
   return (
