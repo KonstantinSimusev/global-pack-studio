@@ -30,8 +30,8 @@ export interface IShift {
   date: Date;
   shiftNumber: number;
   teamNumber: number;
-  usersShifts: IUserShift[];
-  productions: IProduction[];
+  usersShifts?: IUserShift[];
+  productions?: IProduction[];
 }
 
 export interface IUserShift {
