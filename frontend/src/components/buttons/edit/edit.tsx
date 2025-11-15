@@ -18,6 +18,7 @@ interface IEditButtonProps {
     | 'shipment'
     | 'pack'
     | 'fix'
+    | 'residue'
     | 'worker';
 }
 
@@ -33,7 +34,7 @@ export const EditButton = ({
   }
 
   const navigate = useNavigate();
-  const { setIsOpenOverlay, setIsUpdateWorkerOpenModall, setSelectedId } =
+  const { setIsOpenOverlay, setIsUpdateWorkerOpenModall, setIsProductionOpenMdal, setSelectedId } =
     useContext(LayerContext);
 
   const handleClick = () => {
@@ -44,15 +45,24 @@ export const EditButton = ({
         break;
       case 'production':
         setIsOpenOverlay(true);
+        setIsProductionOpenMdal(true);
+        setSelectedId(id);
         break;
       case 'shipment':
         setIsOpenOverlay(true);
+        setSelectedId(id);
         break;
       case 'pack':
         setIsOpenOverlay(true);
+        setSelectedId(id);
         break;
       case 'fix':
         setIsOpenOverlay(true);
+        setSelectedId(id);
+        break;
+      case 'residue':
+        setIsOpenOverlay(true);
+        setSelectedId(id);
         break;
       case 'worker':
         setIsOpenOverlay(true);

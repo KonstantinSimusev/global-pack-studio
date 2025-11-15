@@ -1,9 +1,16 @@
 .container {
   display: flex;
   flex-direction: column;
-  margin: 0 30px;
+  margin: 0 clamp(0rem, -6.375rem + 31.875vw, 31.875rem);
   flex-grow: 1;
   gap: 30px;
+}
+
+.wrapper__margin {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  margin-left: 10px;
 }
 
 .wrapper__info {
@@ -40,4 +47,5 @@
 
 .text__info {
   font-size: 16px;
+  opacity: 0.6;
 }

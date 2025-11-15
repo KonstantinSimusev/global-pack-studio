@@ -15,8 +15,8 @@ import {
 import { Response, Request } from 'express';
 
 import { UserShiftService } from './user-shift.service';
-import { ISuccess, IUserShift } from 'src/shared/interfaces/api.interface';
-import { RequestDTO } from './dto/user-request.dto';
+import { ISuccess, IUserShift } from '../../shared/interfaces/api.interface';
+import { AddUserShiftDTO } from './dto/add-user-shift.dto';
 import { DeleteUserShiftDTO } from './dto/delete-user-shift.dto';
 import { UpdateUserShiftDTO } from './dto/update-user-shift.dto';
 
@@ -26,7 +26,7 @@ export class UserShiftController {
 
   @Post('create')
   async createUserShift(
-    @Body() dto: RequestDTO,
+    @Body() dto: AddUserShiftDTO,
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
   ): Promise<IUserShift> {

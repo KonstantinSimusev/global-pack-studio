@@ -11,6 +11,11 @@ interface ILayerContextValue {
   isAddShiftOpenModall: boolean;
   isDeleteOpenModall: boolean;
   isUserShiftInfoOpenModal: boolean;
+  isProductionOpenMdal: boolean;
+  isShipmentOpenMdal: boolean;
+  isPackOpenMdal: boolean;
+  isFixOpenMdal: boolean;
+  isResidueOpenMdal: boolean;
   isCookie: boolean;
   selectedId: string;
   selectedScrollPosition: number;
@@ -25,6 +30,11 @@ interface ILayerContextValue {
   setIsAddShiftOpenModall: (value: boolean) => void;
   setIsDeleteOpenModall: (value: boolean) => void;
   setIsUserShiftInfoOpenModal: (value: boolean) => void;
+  setIsProductionOpenMdal: (value: boolean) => void;
+  setIsShipmentOpenMdal: (value: boolean) => void;
+  setIsPackOpenMdal: (value: boolean) => void;
+  setIsFixOpenMdal: (value: boolean) => void;
+  setIsResidueOpenMdal: (value: boolean) => void;
   setIsCookie: (value: boolean) => void;
   setSelectedId: (value: string) => void;
   setSelectedScrollPosition: (value: number) => void;
@@ -42,6 +52,11 @@ export const LayerContext = createContext<ILayerContextValue>({
   isAddShiftOpenModall: false,
   isDeleteOpenModall: false,
   isUserShiftInfoOpenModal: false,
+  isProductionOpenMdal: false,
+  isShipmentOpenMdal: false,
+  isPackOpenMdal: false,
+  isFixOpenMdal: false,
+  isResidueOpenMdal: false,
   isCookie: false,
   selectedId: '',
   selectedScrollPosition: 0,
@@ -56,6 +71,11 @@ export const LayerContext = createContext<ILayerContextValue>({
   setIsAddShiftOpenModall: () => {},
   setIsDeleteOpenModall: () => {},
   setIsUserShiftInfoOpenModal: () => {},
+  setIsProductionOpenMdal: () => {},
+  setIsShipmentOpenMdal: () => {},
+  setIsPackOpenMdal: () => {},
+  setIsFixOpenMdal: () => {},
+  setIsResidueOpenMdal: () => {},
   setIsCookie: () => {},
   setSelectedId: () => {},
   setSelectedScrollPosition: () => {},

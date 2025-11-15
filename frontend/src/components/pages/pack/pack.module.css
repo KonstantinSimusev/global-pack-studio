@@ -1,19 +1,22 @@
 .container {
   display: flex;
   flex-direction: column;
-  margin: 0 30px;
+  margin: 0 clamp(0rem, -6.375rem + 31.875vw, 31.875rem);
   flex-grow: 1;
   gap: 30px;
 }
 
-.item {
+.wrapper__margin {
   display: flex;
   flex-direction: column;
-  padding: 30px;
-  background-color: var(--bg-color-shift);
-  color: var(--color-shift);
-  border-radius: 26px;
-  gap: 18px;
+  gap: 30px;
+  margin-left: 10px;
+}
+
+.wrapper__info {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
 .wrapper__header {
@@ -40,4 +43,8 @@
 .title {
   opacity: 0.4;
   font-size: 14px;
+}
+
+.text__info {
+  font-size: 16px;
 }

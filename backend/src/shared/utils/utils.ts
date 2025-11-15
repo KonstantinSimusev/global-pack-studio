@@ -1,3 +1,4 @@
+import { ELocation, EUnit } from '../enums/enums';
 import { ISchedule } from '../interfaces/api.interface';
 
 export function getNextShift(teamNumber: number): ISchedule {
@@ -78,3 +79,31 @@ export function compareShifts(obj1: ISchedule, obj2: ISchedule): boolean {
     obj1.teamNumber === obj2.teamNumber
   );
 }
+
+export const productions = [
+  {
+    location: ELocation.LINE_1,
+    unit: EUnit.STAN,
+    count: 0,
+  },
+  {
+    location: ELocation.LINE_2,
+    unit: EUnit.ANGZ,
+    count: 0,
+  },
+  {
+    location: ELocation.LINE_2,
+    unit: EUnit.ANO,
+    count: 0,
+  },
+  {
+    location: ELocation.LINE_2,
+    unit: EUnit.AI,
+    count: 0,
+  },
+  {
+    location: ELocation.LINE_3,
+    unit: EUnit.ANGZ_3,
+    count: 0,
+  },
+];

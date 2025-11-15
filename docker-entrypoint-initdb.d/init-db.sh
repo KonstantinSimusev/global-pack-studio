@@ -51,6 +51,22 @@ psql -v ON_ERROR_STOP=1 --username "$DB_USER" --dbname "$DB_NAME" <<-EOSQL
     'Штабелировщик металла'
   );
 
+  -- Создание типа enum для location
+  CREATE TYPE gps.location_type AS ENUM (
+    '1 ОЧЕРЕДЬ',
+    '2 ОЧЕРЕДЬ',
+    '3 ОЧЕРЕДЬ'
+  );
+
+  -- Создание типа enum для unit
+  CREATE TYPE gps.unit_type AS ENUM (
+    'СТАН',
+    'АНГЦ',
+    'АНО',
+    'АИ',
+    'АНГЦ-3'
+  ); 
+
   -- Создание таблицы users
   CREATE TABLE IF NOT EXISTS gps.users (
     id uuid DEFAULT gps.uuid_generate_v4() NOT NULL PRIMARY KEY,
@@ -96,6 +112,17 @@ psql -v ON_ERROR_STOP=1 --username "$DB_USER" --dbname "$DB_NAME" <<-EOSQL
     CONSTRAINT unique_user_shift UNIQUE (user_id, shift_id),
 
     CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES gps.users(id),
+    CONSTRAINT fk_shift FOREIGN KEY (shift_id) REFERENCES gps.shifts(id) ON DELETE CASCADE
+  );
+
+  -- Создание таблицы productions
+  CREATE TABLE IF NOT EXISTS gps.productions (
+    id uuid DEFAULT gps.uuid_generate_v4() NOT NULL PRIMARY KEY,
+    location gps.location_type NOT NULL,
+    unit gps.unit_type NOT NULL,
+    count INTEGER NOT NULL,
+    shift_id uuid NOT NULL,
+
     CONSTRAINT fk_shift FOREIGN KEY (shift_id) REFERENCES gps.shifts(id) ON DELETE CASCADE
   );
 EOSQL

@@ -3,7 +3,6 @@
   flex-direction: column;
   gap: 6px;
   background-color: var(--bg-color-shift);
-  max-width: 400px;
   padding: 30px;
   border-radius: 30px;
 }
@@ -17,7 +16,6 @@
 .header,
 .footer,
 .item {
-  max-width: 400px;
   font-size: 16px;
   padding-bottom: 1px;
 }

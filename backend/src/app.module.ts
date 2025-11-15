@@ -9,6 +9,7 @@ import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ShiftModule } from './modules/shift/shift.module';
 import { UserShiftModule } from './modules/user-shift/user-shift.module';
+import { ProductionModule } from './modules/production/production.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { UserShiftModule } from './modules/user-shift/user-shift.module';
     UserModule,
     ShiftModule,
     UserShiftModule,
+    ProductionModule,
     // Первый статический модуль
     ServeStaticModule.forRoot({
       rootPath: path.join(__dirname, '..', 'dist', 'assets'),

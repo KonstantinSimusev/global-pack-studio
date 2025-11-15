@@ -42,6 +42,13 @@ export interface IUserShift {
   workHours: number;
 }
 
+export interface IProduction {
+  id: string;
+  location: string;
+  unit: string;
+  count: number;
+}
+
 export interface ISuccess {
   message?: string;
   accessToken?: string;

@@ -1,6 +1,6 @@
 .container {
   display: flex;
-  padding: 20px;
+  padding: 20px clamp(0.625rem, -5.625rem + 31.25vw, 31.875rem);
   background-image: linear-gradient(to left, #fffafa, #1c1c1c);
 }
 

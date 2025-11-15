@@ -22,6 +22,11 @@ export const LayerProvider = ({ children }: TLayerProviderProps) => {
   const [selectedId, setSelectedId] = useState('');
   const [selectedScrollPosition, setSelectedScrollPosition] = useState(0);
   const [selectedButtonActionType, setSelectedButtonActionType] = useState('');
+  const [isProductionOpenMdal, setIsProductionOpenMdal] = useState(false);
+  const [isShipmentOpenMdal, setIsShipmentOpenMdal] = useState(false);
+  const [isPackOpenMdal, setIsPackOpenMdal] = useState(false);
+  const [isFixOpenMdal, setIsFixOpenMdal] = useState(false);
+  const [isResidueOpenMdal, setIsResidueOpenMdal] = useState(false);
 
   // Мемоизируем значение контекста
   const value = useMemo(
@@ -36,6 +41,11 @@ export const LayerProvider = ({ children }: TLayerProviderProps) => {
       isAddShiftOpenModall,
       isDeleteOpenModall,
       isUserShiftInfoOpenModal,
+      isProductionOpenMdal,
+      isShipmentOpenMdal,
+      isPackOpenMdal,
+      isFixOpenMdal,
+      isResidueOpenMdal,
       isCookie,
       selectedId,
       selectedScrollPosition,
@@ -50,6 +60,11 @@ export const LayerProvider = ({ children }: TLayerProviderProps) => {
       setIsAddShiftOpenModall,
       setIsDeleteOpenModall,
       setIsUserShiftInfoOpenModal,
+      setIsProductionOpenMdal,
+      setIsShipmentOpenMdal,
+      setIsPackOpenMdal,
+      setIsFixOpenMdal,
+      setIsResidueOpenMdal,
       setIsCookie,
       setSelectedId,
       setSelectedScrollPosition,

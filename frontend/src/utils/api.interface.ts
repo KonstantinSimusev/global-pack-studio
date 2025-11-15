@@ -30,6 +30,8 @@ export interface IShift {
   date: Date;
   shiftNumber: number;
   teamNumber: number;
+  usersShifts: IUserShift[];
+  productions: IProduction[];
 }
 
 export interface IUserShift {
@@ -40,6 +42,13 @@ export interface IUserShift {
   workHours: number;
   user?: IUser;
   shift?: IShift;
+}
+
+export interface IProduction {
+  id: string;
+  location: string;
+  unit: string;
+  count: number;
 }
 
 export interface ICreateUserShift {

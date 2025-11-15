@@ -11,7 +11,6 @@ import { useDispatch, useSelector } from '../../../services/store';
 import { getUsersShifts } from '../../../services/slices/user-shift/actions';
 import { selectUsersShifts } from '../../../services/slices/user-shift/slice';
 import { SPECIAL_PROFESSIONS } from '../../../utils/types';
-import { formatDate } from '../../../utils/utils';
 
 export const UserShiftList = () => {
   const { id } = useParams();
@@ -82,10 +81,12 @@ export const UserShiftList = () => {
                 <span className={styles.index}>
                   {String(userShift.position).padStart(2, '0')}
                 </span>
+
                 <div className={styles.wrapper__edit}>
                   {userShift.workPlace !== 'Не выбрано' && (
-                    <SuccessIcon width={30} height={30} />
+                    <SuccessIcon width={32} height={32} />
                   )}
+
                   <EditButton
                     id={userShift.id}
                     actionType="worker"
@@ -95,13 +96,11 @@ export const UserShiftList = () => {
                 </div>
               </div>
 
-              <div className={styles.wrapper}>
-                <span className={styles.title}>ФИО</span>
-                <span className={styles.text}>
-                  {userShift.user.lastName}&nbsp;{userShift.user.firstName}{' '}
-                  {userShift.user.patronymic}
-                </span>
-              </div>
+              <span className={styles.wrapper}>
+                <span>{userShift.user.lastName}</span>
+                <span>{userShift.user.firstName}</span>
+                <span>{userShift.user.patronymic}</span>
+              </span>
 
               <div className={styles.wrapper}>
                 <span className={styles.title}>Статус работы</span>
@@ -118,31 +117,10 @@ export const UserShiftList = () => {
                 <span className={styles.text}>{userShift.workPlace}</span>
               </div>
 
-              <div className={styles.wrapper}>
-                <span className={styles.title}>Отработано часов</span>
-                <span className={styles.text}>{userShift.workHours}</span>
-              </div>
-
-              <div className={styles.wrapper}>
-                <span className={styles.title}>№ смены</span>
-                <span className={styles.text}>
-                  Смена {userShift.shift.shiftNumber}
-                </span>
-              </div>
-
-              <div className={styles.wrapper}>
-                <span className={styles.title}>№ бригады</span>
-                <span className={styles.text}>
-                  Бригада {userShift.shift.teamNumber}
-                </span>
-              </div>
-
               <div className={styles.wrapper__delete}>
                 <div className={styles.wrapper}>
-                  <span className={styles.title}>Дата</span>
-                  <span className={styles.text}>
-                    {formatDate(userShift.shift.date)}
-                  </span>
+                  <span className={styles.title}>Отработано часов</span>
+                  <span className={styles.text}>{userShift.workHours}</span>
                 </div>
 
                 {userShift.user.teamNumber !== userShift.shift.teamNumber && (

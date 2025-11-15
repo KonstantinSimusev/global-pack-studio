@@ -23,7 +23,7 @@ import { Shift } from '../shift/entities/shift.entity';
 import { UserShift } from './entities/user-shift.entity';
 import { User } from '../user/entities/user.entity';
 
-import { RequestDTO } from './dto/user-request.dto';
+import { AddUserShiftDTO } from './dto/add-user-shift.dto';
 
 import {
   IList,
@@ -44,7 +44,7 @@ export class UserShiftService {
   ) {}
 
   async creatUserShift(
-    @Body() dto: RequestDTO,
+    @Body() dto: AddUserShiftDTO,
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
   ): Promise<IUserShift> {

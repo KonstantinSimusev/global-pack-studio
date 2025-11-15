@@ -7,7 +7,8 @@ import {
   OneToMany,
 } from 'typeorm';
 
-import { UserShift } from '../../../modules/user-shift/entities/user-shift.entity';
+import { UserShift } from '../../user-shift/entities/user-shift.entity';
+import { Production } from '../../production/entities/production.entity';
 
 @Entity({
   schema: 'gps',
@@ -53,4 +54,9 @@ export class Shift {
     cascade: ['remove'], // Автоматически удалит UserShift при удалении Shift
   })
   usersShifts: UserShift[];
+
+  @OneToMany(() => Production, (userShift) => userShift.shift, {
+    cascade: ['remove'], // Автоматически удалит Production при удалении Shift
+  })
+  productions: Production[];
 }

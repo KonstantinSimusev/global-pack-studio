@@ -10,12 +10,14 @@ import { UserShiftModule } from '../user-shift/user-shift.module';
 import { ShiftController } from './shift.controller';
 import { ShiftService } from './shift.service';
 import { ShiftRepository } from './shift.repository';
+import { ProductionModule } from '../production/production.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Shift]),
     UserModule,
     AuthModule,
+    ProductionModule,
     forwardRef(() => UserShiftModule),
   ],
   controllers: [ShiftController],

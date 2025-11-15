@@ -15,6 +15,11 @@ export const CloseButton = () => {
     setIsAddShiftOpenModall,
     setIsDeleteOpenModall,
     setIsUserShiftInfoOpenModal,
+    setIsProductionOpenMdal,
+    setIsShipmentOpenMdal,
+    setIsPackOpenMdal,
+    setIsFixOpenMdal,
+    setIsResidueOpenMdal,
   } = useContext(LayerContext);
 
   const handleClick = () => {
@@ -27,6 +32,11 @@ export const CloseButton = () => {
     setIsAddShiftOpenModall(false);
     setIsDeleteOpenModall(false);
     setIsUserShiftInfoOpenModal(false);
+    setIsProductionOpenMdal(false);
+    setIsShipmentOpenMdal(false);
+    setIsPackOpenMdal(false);
+    setIsFixOpenMdal(false);
+    setIsResidueOpenMdal(false);
   };
 
   return (

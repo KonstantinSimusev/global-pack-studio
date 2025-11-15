@@ -2,7 +2,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 30px 30px 0;
+  margin: 30px clamp(0rem, -6.375rem + 31.875vw, 31.875rem) 0;
 }
 
 .logo {

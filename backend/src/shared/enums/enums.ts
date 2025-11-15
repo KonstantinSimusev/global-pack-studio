@@ -28,3 +28,17 @@ export enum ETeamProfession {
   PACKER_LUM = 'Укладчик-упаковщик ЛУМ',
   STACKER = 'Штабелировщик металла',
 }
+
+export enum ELocation {
+  LINE_1 = '1 ОЧЕРЕДЬ',
+  LINE_2 = '2 ОЧЕРЕДЬ',
+  LINE_3 = '3 ОЧЕРЕДЬ',
+}
+
+export enum EUnit {
+  STAN = 'СТАН',
+  ANGZ = 'АНГЦ',
+  ANO = 'АНО',
+  AI = 'АИ',
+  ANGZ_3 = 'АНГЦ-3',
+}

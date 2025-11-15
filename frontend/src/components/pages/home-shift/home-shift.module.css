@@ -1,7 +1,7 @@
 .container {
   display: flex;
   flex-direction: column;
-  margin: 0 30px;
+  margin: 0 clamp(0rem, -6.375rem + 31.875vw, 31.875rem);
   gap: 30px;
   flex-grow: 1;
 }

@@ -1,6 +1,6 @@
 import { IsNumber, IsNotEmpty, IsUUID } from 'class-validator';
 
-export class RequestDTO {
+export class AddUserShiftDTO {
   @IsNumber()
   @IsNotEmpty()
   personalNumber: number;

@@ -8,7 +8,7 @@
 
 body {
   min-width: 320px;
-  max-width: 1900px;
+  max-width: 1920px;
   margin: 0 auto;
   color: var(--color-default);
   font-family: var(--font-family-default);

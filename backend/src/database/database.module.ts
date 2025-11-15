@@ -5,6 +5,7 @@ import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { User } from '../modules/user/entities/user.entity';
 import { Shift } from '../modules/shift/entities/shift.entity';
 import { UserShift } from '../modules/user-shift/entities/user-shift.entity';
+import { Production } from '../modules/production/entities/production.entity';
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import { UserShift } from '../modules/user-shift/entities/user-shift.entity';
         return {
           type: 'postgres',
           url: dbUrl,
-          entities: [User, Shift, UserShift],
+          entities: [User, Shift, UserShift, Production],
           synchronize: false,
           retryAttempts: 5, // Количество попыток переподключения
           retryDelay: 1000, // Задержка между попытками в миллисекундах

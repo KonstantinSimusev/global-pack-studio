@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 
 import { User } from '../../user/entities/user.entity';
-import { Shift } from '../../../modules/shift/entities/shift.entity';
+import { Shift } from '../../shift/entities/shift.entity';
 
 @Entity({
   schema: 'gps',

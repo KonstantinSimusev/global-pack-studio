@@ -22,6 +22,7 @@ import { CreateShiftDTO } from './dto/create-shift.dto';
 
 import { IList, IShift, ISuccess } from '../../shared/interfaces/api.interface';
 import { compareShifts, getNextShift } from '../../shared/utils/utils';
+import { ProductionService } from '../production/production.service';
 
 @Injectable()
 export class ShiftService {
@@ -30,6 +31,7 @@ export class ShiftService {
     private readonly shiftRepository: ShiftRepository,
     private readonly userRepository: UserRepository,
     private readonly userShiftService: UserShiftService,
+    private readonly productionService: ProductionService,
   ) {}
 
   async createShift(
@@ -78,6 +80,9 @@ export class ShiftService {
 
       // Создаем связь с userShift
       await this.userShiftService.createUsersShifts(shift, users);
+
+      // Создаем связь с production
+      await this.productionService.createProductions(shift);
 
       return {
         message: 'Смена успешно создана',

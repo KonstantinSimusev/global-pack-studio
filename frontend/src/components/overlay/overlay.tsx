@@ -14,6 +14,11 @@ export const Overlay = () => {
     isAddShiftOpenModall,
     isDeleteOpenModall,
     isUserShiftInfoOpenModal,
+    isProductionOpenMdal,
+    isShipmentOpenMdal,
+    isPackOpenMdal,
+    isFixOpenMdal,
+    isResidueOpenMdal,
     setIsOpenOverlay,
     setIsOpenMenu,
     setIsLoginModalOpen,
@@ -23,6 +28,11 @@ export const Overlay = () => {
     setIsAddShiftOpenModall,
     setIsDeleteOpenModall,
     setIsUserShiftInfoOpenModal,
+    setIsProductionOpenMdal,
+    setIsShipmentOpenMdal,
+    setIsPackOpenMdal,
+    setIsFixOpenMdal,
+    setIsResidueOpenMdal,
   } = useContext(LayerContext);
 
   useEscapeHandler(() => {
@@ -61,6 +71,26 @@ export const Overlay = () => {
     if (isUserShiftInfoOpenModal) {
       setIsUserShiftInfoOpenModal(false);
     }
+
+    if (isProductionOpenMdal) {
+      setIsProductionOpenMdal(false);
+    }
+
+    if (isShipmentOpenMdal) {
+      setIsShipmentOpenMdal(false);
+    }
+
+    if (isPackOpenMdal) {
+      setIsPackOpenMdal(false);
+    }
+
+    if (isFixOpenMdal) {
+      setIsFixOpenMdal(false);
+    }
+
+    if (isResidueOpenMdal) {
+      setIsResidueOpenMdal(false);
+    }
   });
 
   const handleClick = (event: React.MouseEvent) => {
@@ -75,6 +105,11 @@ export const Overlay = () => {
       setIsAddShiftOpenModall(false);
       setIsDeleteOpenModall(false);
       setIsUserShiftInfoOpenModal(false);
+      setIsProductionOpenMdal(false);
+      setIsShipmentOpenMdal(false);
+      setIsPackOpenMdal(false);
+      setIsFixOpenMdal(false);
+      setIsResidueOpenMdal(false);
     }
   };
 

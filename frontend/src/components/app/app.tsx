@@ -31,9 +31,12 @@ import { useDispatch } from '../../services/store';
 import { UpdateWorkerForm } from '../forms/update-worker/update-worker.form';
 import { InfoBlock } from '../info-block/info-block';
 import { HomeShift } from '../pages/home-shift/home-shift';
+
 import { Shipment } from '../pages/shipment/shipment';
+import { Residue } from '../pages/residue/residue';
 import { Pack } from '../pages/pack/pack';
 import { Fix } from '../pages/fix/fix';
+import { ProductionForm } from '../forms/production/production.form';
 
 const App = () => {
   const { isLightTheme } = useContext(ThemeContext);
@@ -46,6 +49,7 @@ const App = () => {
     isAddShiftOpenModall,
     isDeleteOpenModall,
     isUserShiftInfoOpenModal,
+    isProductionOpenMdal,
     selectedScrollPosition,
     setSelectedScrollPosition,
   } = useContext(LayerContext);
@@ -103,6 +107,7 @@ const App = () => {
           <Route path="/shipment" element={<Shipment />} />
           <Route path="/pack" element={<Pack />} />
           <Route path="/fix" element={<Fix />} />
+          <Route path="/residue" element={<Residue />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
@@ -131,6 +136,12 @@ const App = () => {
       {isAddShiftOpenModall && (
         <Modal>
           <ShiftForm />
+        </Modal>
+      )}
+
+      {isProductionOpenMdal && (
+        <Modal>
+          <ProductionForm />
         </Modal>
       )}
 

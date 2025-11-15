@@ -2,18 +2,24 @@ import styles from './shift-list.module.css';
 
 import { formatDate } from '../../../utils/utils';
 import { EditButton } from '../../buttons/edit/edit';
+import { useDispatch, useSelector } from '../../../services/store';
+import { selectShifts } from '../../../services/slices/shift/slice';
+import { useEffect } from 'react';
+import { getTeamShifts } from '../../../services/slices/shift/actions';
 // import { DeleteButton } from '../../buttons/delete/delete';
 
-type TShiftListProps = {
-  items: { id?: string; date: Date; shiftNumber: number; teamNumber: number }[];
-};
+export const ShiftList = () => {
+  const dispatch = useDispatch();
+  const list = useSelector(selectShifts);
 
-export const ShiftList = ({ items }: TShiftListProps) => {
+  useEffect(() => {
+    dispatch(getTeamShifts());
+  }, []);
   return (
     <>
-      {items.length > 0 ? (
+      {list.length > 0 ? (
         <ul className={styles.list}>
-          {items.map((item) => (
+          {list.map((item) => (
             <li key={item.id} className={styles.item}>
               <div className={styles.wrapper__info}>
                 <div className={styles.wrapper}>
@@ -50,7 +56,7 @@ export const ShiftList = ({ items }: TShiftListProps) => {
           ))}
         </ul>
       ) : (
-        <span>Пожалуйста, создайте смену...</span>
+        <span className={styles.text__info}>Пожалуйста, создайте смену...</span>
       )}
     </>
   );
