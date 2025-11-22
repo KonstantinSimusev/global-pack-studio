@@ -17,7 +17,6 @@ import {
   validateForm,
   validationRules,
 } from '../../../utils/validation';
-import { getCurrentShiftID } from '../../../utils/utils';
 import {
   createUserShift,
   getUsersShifts,
@@ -106,8 +105,6 @@ export const AddWorkerForm = () => {
         if (!currentShiftId) {
           return null;
         }
-
-        // const currentShiftId = getCurrentShiftID();
 
         if (!currentShiftId) {
           throw new Error();

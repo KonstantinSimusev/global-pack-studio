@@ -60,28 +60,6 @@ export function getTotal(userShifts: IUserShift[]): number {
   return professionCounts.reduce((total, item) => total + item.count, 0);
 }
 
-export function getCurrentShiftID() {
-  const pathname = window.location.pathname; // Текущий путь из URL
-  const SHIFT_PATH_PREFIX = '/timesheet/shifts/';
-
-  // Проверяем, что путь начинается с нужного префикса
-  if (!pathname.startsWith(SHIFT_PATH_PREFIX)) {
-    return null;
-  }
-
-  // Удаляем префикс и разбиваем на сегменты
-  const relativePath = pathname.slice(SHIFT_PATH_PREFIX.length);
-  const parts = relativePath.split('/').filter((part) => part.length > 0);
-
-  // Должно быть хотя бы одно непустое значение после префикса
-  if (parts.length === 0) {
-    return null;
-  }
-
-  // Возвращаем первый (и обычно единственный) сегмент после префикса — это ID
-  return parts[0];
-}
-
 export function formatProductionUnit(unit: string | undefined | null): string {
   if (!unit) return '';
 

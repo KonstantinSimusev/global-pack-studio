@@ -3,7 +3,6 @@ import styles from './default.module.css';
 import { useContext } from 'react';
 import { LayerContext } from '../../../contexts/layer/layerContext';
 import { Button } from '../../ui/button/button';
-import clsx from 'clsx';
 import { Layout } from '../../ui/layout/layout';
 
 export const DefaultPage = () => {

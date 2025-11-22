@@ -8,7 +8,7 @@ export const InfoBlock = () => {
   return (
     <div className={styles.container}>
       <div className={styles.wrapper}>
-        <span className={styles.wrapper__fio}>
+        <div className={styles.wrapper__fio}>
           <span className={styles.text}>
             {currentUserShift?.user?.lastName}{' '}
             {currentUserShift?.user?.firstName}
@@ -16,7 +16,7 @@ export const InfoBlock = () => {
           <span className={styles.text}>
             {currentUserShift?.user?.patronymic}
           </span>
-        </span>
+        </div>
         <span className={styles.text}>
           из бригады №{currentUserShift?.user?.currentTeamNumber}
         </span>
