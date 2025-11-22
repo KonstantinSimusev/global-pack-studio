@@ -1,6 +1,6 @@
 .container {
   display: flex;
-  padding: 20px clamp(0.625rem, -5.625rem + 31.25vw, 31.875rem);
+  padding: 20px clamp(1.875rem, -8.406rem + 38.255vw, 37.5rem);
   background-image: linear-gradient(to left, #fffafa, #1c1c1c);
 }
 
@@ -17,14 +17,6 @@
 .text__bottom {
   display: block;
   color: var(--color-banner);
-  /* background-image: linear-gradient(
-    to right,
-    var(--color-banner-1),
-    var(--color-banner-2)
-  );
-  background-size: 200% 100%;
-  color: transparent;
-  background-clip: text; */
 }
 
 .text__top {

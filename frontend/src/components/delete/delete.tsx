@@ -6,20 +6,19 @@ import { LayerContext } from '../../contexts/layer/layerContext';
 import { useDispatch, useSelector } from '../../services/store';
 
 import { Spinner } from '../spinner/spinner';
-import { selectIsLoadingShift } from '../../services/slices/shift/slice';
+import {
+  selectCurrentShiftId,
+  selectIsLoadingShift,
+} from '../../services/slices/shift/slice';
 import { selectIsLoadingUserShift } from '../../services/slices/user-shift/slice';
 import {
   deleteUserShift,
   getUsersShifts,
 } from '../../services/slices/user-shift/actions';
-import { getCurrentShiftID } from '../../utils/utils';
-import {
-  deleteShift,
-  getTeamShifts,
-} from '../../services/slices/shift/actions';
 
 export const Delete = () => {
   const dispatch = useDispatch();
+  const currentShiftId = useSelector(selectCurrentShiftId);
   const isLoadingShift = useSelector(selectIsLoadingUserShift);
   const isLoadingUserShift = useSelector(selectIsLoadingShift);
   const {
@@ -31,20 +30,13 @@ export const Delete = () => {
 
   const handleClickDelete = async () => {
     try {
-      if (selectedButtonActionType === 'shift') {
-        await dispatch(deleteShift(selectedId));
-        await dispatch(getTeamShifts());
-      }
-
       if (selectedButtonActionType === 'userShift') {
         await dispatch(deleteUserShift(selectedId));
-
-        const currentShiftId = getCurrentShiftID();
 
         if (!currentShiftId) {
           return null;
         }
-        
+
         await dispatch(getUsersShifts(currentShiftId));
       }
 

@@ -1,20 +1,6 @@
 .container {
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
-  margin: 0 clamp(0rem, -6.375rem + 31.875vw, 31.875rem);
-  font-size: 16px;
-}
-
-.container__agree {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.list {
-  display: flex;
-  flex-direction: column;
   gap: 20px;
 }
 
@@ -46,13 +32,9 @@
   margin-bottom: 10px;
 }
 
-.button__agree {
-  margin-top: 40px;
-  border-radius: 16px;
-  max-width: 200px;
-  padding: 12px 0;
-  color: var(--color-button);
-  font-weight: 400;
-  background-color: var(--bg-color-button);
-  cursor: pointer;
+.wrapper__button {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 60px;
 }

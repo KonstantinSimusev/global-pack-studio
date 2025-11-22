@@ -36,22 +36,33 @@ export class UserShiftRepository {
     await this.userShiftRepository.delete(id);
   }
 
-  async findUsersShiftsByShiftId(id: string): Promise<UserShift[]> {
-    return await this.userShiftRepository
-      .createQueryBuilder('userShift')
-      .leftJoinAndSelect('userShift.user', 'user')
-      .leftJoinAndSelect('userShift.shift', 'shift')
-      .where('userShift.shift.id = :id', { id })
-      .andWhere('user.profession != :profession', {
-        profession: EProfession.MASTER,
-      })
-      .andWhere('user.sortOrder != :sortOrder', { sortOrder: 0 })
-      .addOrderBy('user.sortOrder', 'ASC')
-      .addOrderBy('user.lastName', 'ASC')
-      .addOrderBy('user.firstName', 'ASC')
-      .addOrderBy('user.patronymic', 'ASC')
-      .getMany();
+  async findUsersShiftsByShiftId(shiftId: string): Promise<UserShift[]> {
+    return this.userShiftRepository.find({
+      where: {
+        shift: {
+          id: shiftId,
+        },
+      },
+      relations: ['user'],
+    });
   }
+
+  // async findUsersShiftsByShiftId(id: string): Promise<UserShift[]> {
+  //   return await this.userShiftRepository
+  //     .createQueryBuilder('userShift')
+  //     .leftJoinAndSelect('userShift.user', 'user')
+  //     .leftJoinAndSelect('userShift.shift', 'shift')
+  //     .where('userShift.shift.id = :id', { id })
+  //     .andWhere('user.profession != :profession', {
+  //       profession: EProfession.MASTER,
+  //     })
+  //     .andWhere('user.sortOrder != :sortOrder', { sortOrder: 0 })
+  //     .addOrderBy('user.sortOrder', 'ASC')
+  //     .addOrderBy('user.lastName', 'ASC')
+  //     .addOrderBy('user.firstName', 'ASC')
+  //     .addOrderBy('user.patronymic', 'ASC')
+  //     .getMany();
+  // }
 
   async existsByUserAndShift(
     userId: string,

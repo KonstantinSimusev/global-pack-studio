@@ -15,7 +15,11 @@ import {
 import { Response, Request } from 'express';
 
 import { UserShiftService } from './user-shift.service';
-import { ISuccess, IUserShift } from '../../shared/interfaces/api.interface';
+import {
+  IList,
+  ISuccess,
+  IUserShift,
+} from '../../shared/interfaces/api.interface';
 import { AddUserShiftDTO } from './dto/add-user-shift.dto';
 import { DeleteUserShiftDTO } from './dto/delete-user-shift.dto';
 import { UpdateUserShiftDTO } from './dto/update-user-shift.dto';
@@ -24,7 +28,7 @@ import { UpdateUserShiftDTO } from './dto/update-user-shift.dto';
 export class UserShiftController {
   constructor(private readonly userShiftService: UserShiftService) {}
 
-  @Post('create')
+  @Post('create-user-shift')
   async createUserShift(
     @Body() dto: AddUserShiftDTO,
     @Req() req: Request,
@@ -33,16 +37,7 @@ export class UserShiftController {
     return this.userShiftService.creatUserShift(dto, req, res);
   }
 
-  // @Get(':id')
-  // async getUserShiftById(
-  //   @Param('id', ParseUUIDPipe) id: string,
-  //   @Req() req: Request,
-  //   @Res({ passthrough: true }) res: Response,
-  // ): Promise<IUserShift> {
-  //   return this.userShiftService.getUserShiftById(id, req, res);
-  // }
-
-  @Put('update')
+  @Put('update-user-shift')
   async updateUserShift(
     @Body() dto: UpdateUserShiftDTO,
     @Req() req: Request,
@@ -51,7 +46,7 @@ export class UserShiftController {
     return this.userShiftService.updateUserShift(dto, req, res);
   }
 
-  @Delete('delete')
+  @Delete('delete-user-shift')
   async deleteUserShift(
     @Body() dto: DeleteUserShiftDTO,
     @Req() req: Request,

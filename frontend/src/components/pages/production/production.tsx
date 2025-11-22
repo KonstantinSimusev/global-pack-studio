@@ -1,58 +1,36 @@
-import styles from './production.module.css';
+// import styles from './production.module.css';
 
 import { useEffect } from 'react';
 
-import { ProductionList } from '../../lists/production-list/production-list';
+import { Layout } from '../../ui/layout/layout';
+import { PageTitle } from '../../ui/page-title/page-title';
+import { ShiftInfo } from '../../shift-info/shift-info';
 
 import { useDispatch, useSelector } from '../../../services/store';
-import { selectShifts } from '../../../services/slices/shift/slice';
-import { getTeamShifts } from '../../../services/slices/shift/actions';
-
-import { formatDate } from '../../../utils/utils';
+import { selectCurrentShiftId } from '../../../services/slices/shift/slice';
+import { getLastTeamShift } from '../../../services/slices/shift/actions';
+import { Error } from '../../ui/error/error';
+import { ProductionList } from '../../lists/production-list/production-list';
 
 export const Production = () => {
   const dispatch = useDispatch();
-  const shifts = useSelector(selectShifts);
-  const lastShift = shifts[0];
+  const currentShiftId = useSelector(selectCurrentShiftId);
 
   useEffect(() => {
-    dispatch(getTeamShifts());
+    dispatch(getLastTeamShift());
   }, []);
 
   return (
-    <main className={styles.container}>
-      {shifts && shifts.length > 0 ? (
+    <Layout>
+      <PageTitle title="ПРОИЗВОДСТВО" />
+      {currentShiftId ? (
         <>
-          <div className={styles.wrapper__margin}>
-            <h5 className={styles.header__title}>ПРОИЗВОДСТВО</h5>
-            <div className={styles.wrapper__info}>
-              <div className={styles.wrapper}>
-                <span className={styles.title}>Дата</span>
-                <span className={styles.text}>
-                  {formatDate(lastShift.date)}
-                </span>
-              </div>
-
-              <div className={styles.wrapper}>
-                <span className={styles.title}>№ смены</span>
-                <span className={styles.text}>
-                  Смена {lastShift.shiftNumber}
-                </span>
-              </div>
-
-              <div className={styles.wrapper}>
-                <span className={styles.title}>№ бригады</span>
-                <span className={styles.text}>
-                  Бригада {lastShift.teamNumber}
-                </span>
-              </div>
-            </div>
-          </div>
-          <ProductionList />
+          <ShiftInfo />
+          <ProductionList shiftId={currentShiftId} />
         </>
       ) : (
-        <span className={styles.text__info}>Пожалуйста, создайте смену...</span>
+        <Error message={'Пожалуйста, создайте смену...'} />
       )}
-    </main>
+    </Layout>
   );
 };

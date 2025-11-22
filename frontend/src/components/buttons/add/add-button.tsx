@@ -2,7 +2,6 @@ import styles from './add-button.module.css';
 
 import { useContext } from 'react';
 import { LayerContext } from '../../../contexts/layer/layerContext';
-import { AddIcon } from '../../icons/add/add';
 
 interface IAddButtonProps {
   label?: string;
@@ -42,7 +41,7 @@ export const AddButton = ({ label, actionType, onOpen }: IAddButtonProps) => {
   return (
     <button className={styles.container} type="button" onClick={handleClick}>
       {label}
-      <AddIcon />
+      {/* <AddIcon /> */}
     </button>
   );
 };

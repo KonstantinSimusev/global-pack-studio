@@ -1,7 +1,6 @@
 import styles from './user-shift-list.module.css';
 
 import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 
 import { EditButton } from '../../buttons/edit/edit';
 import { DeleteButton } from '../../buttons/delete/delete';
@@ -11,20 +10,27 @@ import { useDispatch, useSelector } from '../../../services/store';
 import { getUsersShifts } from '../../../services/slices/user-shift/actions';
 import { selectUsersShifts } from '../../../services/slices/user-shift/slice';
 import { SPECIAL_PROFESSIONS } from '../../../utils/types';
+import { InfoBlock } from '../../ui/info-block/info-block';
+import { UserBlock } from '../../ui/user-block/user-block';
+import { Error } from '../../ui/error/error';
+import { selectCurrentShift } from '../../../services/slices/shift/slice';
 
-export const UserShiftList = () => {
-  const { id } = useParams();
+interface IUserShiftProps {
+  shiftId?: string;
+}
 
-  if (!id) {
+export const UserShiftList = ({ shiftId }: IUserShiftProps) => {
+  if (!shiftId) {
     return null;
   }
 
   const dispatch = useDispatch();
   const usersShifts = useSelector(selectUsersShifts);
+  const shift = useSelector(selectCurrentShift);
 
   useEffect(() => {
-    dispatch(getUsersShifts(id));
-  }, [dispatch, id]);
+    dispatch(getUsersShifts(shiftId));
+  }, [dispatch, shiftId]);
 
   // Функция для добавления position по профессиям
   const addPositionByProfession = (shifts: any[]) => {
@@ -96,34 +102,26 @@ export const UserShiftList = () => {
                 </div>
               </div>
 
-              <span className={styles.wrapper}>
-                <span>{userShift.user.lastName}</span>
-                <span>{userShift.user.firstName}</span>
-                <span>{userShift.user.patronymic}</span>
-              </span>
+              <UserBlock
+                lastName={userShift.user.lastName}
+                firstName={userShift.user.firstName}
+                patronymic={userShift.user.patronymic}
+              />
 
-              <div className={styles.wrapper}>
-                <span className={styles.title}>Статус работы</span>
-                <span className={styles.text}>{userShift.workStatus}</span>
-              </div>
-
-              <div className={styles.wrapper}>
-                <span className={styles.title}>Профессия в смене</span>
-                <span className={styles.text}>{userShift.shiftProfession}</span>
-              </div>
-
-              <div className={styles.wrapper}>
-                <span className={styles.title}>Рабочее место</span>
-                <span className={styles.text}>{userShift.workPlace}</span>
-              </div>
+              <InfoBlock title={'Статус работы'} text={userShift.workStatus} />
+              <InfoBlock
+                title={'Профессия в смене'}
+                text={userShift.shiftProfession}
+              />
+              <InfoBlock title={'Рабочее место'} text={userShift.workPlace} />
 
               <div className={styles.wrapper__delete}>
-                <div className={styles.wrapper}>
-                  <span className={styles.title}>Отработано часов</span>
-                  <span className={styles.text}>{userShift.workHours}</span>
-                </div>
+                <InfoBlock
+                  title={'Отработано часов'}
+                  text={userShift.workHours}
+                />
 
-                {userShift.user.teamNumber !== userShift.shift.teamNumber && (
+                {userShift.user.teamNumber !== shift?.teamNumber && (
                   <DeleteButton
                     id={userShift.id}
                     actionType="userShift"
@@ -136,7 +134,7 @@ export const UserShiftList = () => {
           ))}
         </ul>
       ) : (
-        <div>Смены работников не найдены</div>
+        <Error message={'Смены работников не найдены'} />
       )}
     </>
   );

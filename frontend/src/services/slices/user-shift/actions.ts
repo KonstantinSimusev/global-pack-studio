@@ -2,11 +2,10 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import {
   createUserShiftApi,
-  createUsersShiftsApi,
   deleteUserShiftApi,
   getUsersShiftsApi,
   updateUserShiftApi,
-} from '../../../utils/gpsApi';
+} from '../../../utils/api/user-shift.api';
 
 import {
   ICreateUserShift,
@@ -41,35 +40,11 @@ export const createUserShift = createAsyncThunk(
   },
 );
 
-export const createUsersShifts = createAsyncThunk(
-  'users-shifts/create-all',
-  async (id: string): Promise<ISuccess> => {
-    try {
-      // Вызываем API функцию
-      const response = await createUsersShiftsApi(id);
-
-      // Добавляем задержку кода
-      await delay();
-
-      if (!response) {
-        throw new Error();
-      }
-
-      return response;
-    } catch (error) {
-      // Добавляем задержку кода
-      await delay();
-
-      throw error;
-    }
-  },
-);
-
 export const getUsersShifts = createAsyncThunk(
   'users-shifts/get',
-  async (id: string): Promise<IList<IUserShift>> => {
+  async (shiftId: string): Promise<IList<IUserShift>> => {
     try {
-      const response = await getUsersShiftsApi(id);
+      const response = await getUsersShiftsApi(shiftId);
 
       // Добавляем задержку кода
       // await delay();

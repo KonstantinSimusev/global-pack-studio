@@ -16,16 +16,11 @@
 .header,
 .footer,
 .item {
-  font-size: 16px;
-  padding-bottom: 1px;
-}
-
-.header,
-.footer,
-.item {
   display: grid;
   grid-template-columns: auto 40px;
   justify-items: center;
+  font-size: 16px;
+  padding-bottom: 1px;
 }
 
 .header > span:nth-child(1),
@@ -59,4 +54,11 @@
 
 .success {
   gap: 10px;
+}
+
+.wrapper__button {
+  display: flex;
+  justify-content: end;
+  width: 100%;
+  margin-top: 30px;
 }

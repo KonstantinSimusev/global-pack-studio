@@ -5,11 +5,7 @@ import { useContext, useEffect, useState } from 'react';
 import { Spinner } from '../../spinner/spinner';
 
 import { useDispatch, useSelector } from '../../../services/store';
-import {
-  selectError,
-  selectIsLoadingUserShift,
-  clearError,
-} from '../../../services/slices/user-shift/slice';
+
 import { LayerContext } from '../../../contexts/layer/layerContext';
 
 import {
@@ -17,11 +13,13 @@ import {
   validateForm,
   validationRules,
 } from '../../../utils/validation';
-// import { getCurrentShiftID } from '../../../utils/utils';
-// import {
-//   createUserShift,
-//   getUsersShifts,
-// } from '../../../services/slices/user-shift/actions';
+import {
+  clearError,
+  selectError,
+  selectIsLoadingProductions,
+  selectProductionById,
+} from '../../../services/slices/production/slice';
+import { formatProductionUnit } from '../../../utils/utils';
 
 // Изменим тип IFormData на Record<string, string>
 interface IFormData extends Record<string, string> {
@@ -30,10 +28,20 @@ interface IFormData extends Record<string, string> {
 
 export const ProductionForm = () => {
   const dispatch = useDispatch();
-  const isLoading = useSelector(selectIsLoadingUserShift);
+
+  const {
+    isProductionOpenMdal,
+    selectedId,
+    setIsOpenOverlay,
+    setIsProductionOpenMdal,
+  } = useContext(LayerContext);
+
+  const production = useSelector((state) =>
+    selectProductionById(state, selectedId),
+  );
+
+  const isLoading = useSelector(selectIsLoadingProductions);
   const error = useSelector(selectError);
-  const { isProductionOpenMdal, selectedId, setIsOpenOverlay, setIsProductionOpenMdal } =
-    useContext(LayerContext);
 
   // Состояние для хранения значений полей формы
   const [formData, setFormData] = useState<IFormData>({
@@ -111,17 +119,17 @@ export const ProductionForm = () => {
         // const response = await dispatch(createUserShift(payload));
 
         // if (response.payload) {
-          if (payload) {
+        if (payload) {
           setIsProductionOpenMdal(false);
           setIsOpenOverlay(false);
 
           // const shiftID = getCurrentShiftID();
 
           // if (shiftID) {
-            // если shiftID не null
-            // dispatch(getUsersShifts(shiftID)); // shiftID гарантированно string
+          // если shiftID не null
+          // dispatch(getUsersShifts(shiftID)); // shiftID гарантированно string
           // }
-        } 
+        }
       } catch (error) {
         // dispatch(clearError())
         throw new Error();
@@ -130,13 +138,13 @@ export const ProductionForm = () => {
   };
 
   // Определяем, заблокирована ли кнопка
-  const isButtonDisabled = isLoading || !formData.total;
+  // const isButtonDisabled = isLoading || !formData.total;
 
   return (
     <div className={styles.container}>
-      <h3 className={styles.title}>АИ</h3>
+      <h3 className={styles.title}>{formatProductionUnit(production?.unit)}</h3>
       <form className={styles.form__production} onSubmit={handleSubmit}>
-        <label className={styles.input__name}>Производство за смену, рул</label>
+        <label className={styles.input__name}>Производство за смену</label>
         <input
           className={styles.input__production}
           type="text"
@@ -146,9 +154,7 @@ export const ProductionForm = () => {
           onBlur={handleBlur}
         />
         <div className={styles.errors}>
-          {errors.total && (
-            <span className={styles.error}>{errors.total}</span>
-          )}
+          {errors.total && <span className={styles.error}>{errors.total}</span>}
         </div>
 
         <div className={styles.spinner}>{isLoading && <Spinner />}</div>
@@ -157,7 +163,7 @@ export const ProductionForm = () => {
         <button
           type="submit"
           className={styles.button__production}
-          disabled={isButtonDisabled}
+          // disabled={isButtonDisabled}
           // style={{
           //   opacity: isButtonDisabled ? 0.4 : 0.9,
           // }}

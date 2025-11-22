@@ -11,7 +11,7 @@ import { Header } from '../header/header';
 import { Banner } from '../banner/banner';
 import { Home } from '../pages/home/home';
 import { Timesheet } from '../pages/timesheet/timesheet';
-import { Production } from '../pages/production/production';
+// import { Production } from '../pages/production/production';
 import { DefaultPage } from '../pages/default/default';
 import { Footer } from '../footer/footer';
 import { NotFound } from '../pages/not-found/not-found';
@@ -22,7 +22,6 @@ import { ShiftForm } from '../forms/shift/shift';
 import { AddWorkerForm } from '../forms/add-worker/add-worker.form';
 import { Logout } from '../loguot/logout';
 import { Delete } from '../delete/delete';
-import { TimesheetShift } from '../pages/timesheet-shift/timesheet-shift';
 
 import { ProtectedRoute } from '../protected-route/protected-route';
 
@@ -32,11 +31,12 @@ import { UpdateWorkerForm } from '../forms/update-worker/update-worker.form';
 import { InfoBlock } from '../info-block/info-block';
 import { HomeShift } from '../pages/home-shift/home-shift';
 
-import { Shipment } from '../pages/shipment/shipment';
-import { Residue } from '../pages/residue/residue';
-import { Pack } from '../pages/pack/pack';
-import { Fix } from '../pages/fix/fix';
+// import { Shipment } from '../pages/shipment/shipment';
+// import { Residue } from '../pages/residue/residue';
+// import { Pack } from '../pages/pack/pack';
+// import { Fix } from '../pages/fix/fix';
 import { ProductionForm } from '../forms/production/production.form';
+import { Production } from '../pages/production/production';
 
 const App = () => {
   const { isLightTheme } = useContext(ThemeContext);
@@ -102,12 +102,11 @@ const App = () => {
           <Route path="/home" element={<Home />} />
           <Route path="/home/shifts/:id" element={<HomeShift />} />
           <Route path="/timesheet" element={<Timesheet />} />
-          <Route path="/timesheet/shifts/:id" element={<TimesheetShift />} />
           <Route path="/production" element={<Production />} />
-          <Route path="/shipment" element={<Shipment />} />
+          {/* <Route path="/shipment" element={<Shipment />} />
           <Route path="/pack" element={<Pack />} />
           <Route path="/fix" element={<Fix />} />
-          <Route path="/residue" element={<Residue />} />
+          <Route path="/residue" element={<Residue />} /> */}
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

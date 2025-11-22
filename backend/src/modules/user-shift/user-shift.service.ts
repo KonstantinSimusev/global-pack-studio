@@ -142,7 +142,7 @@ export class UserShiftService {
   // }
 
   async getUsersShifts(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('shiftId', ParseUUIDPipe) shiftId: string,
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
   ): Promise<IList<IUserShift>> {
@@ -150,7 +150,7 @@ export class UserShiftService {
       await this.authService.validateAccessToken(req, res);
 
       const usersShifts =
-        await this.userShiftRepository.findUsersShiftsByShiftId(id);
+        await this.userShiftRepository.findUsersShiftsByShiftId(shiftId);
 
       return {
         total: usersShifts.length,
@@ -230,6 +230,7 @@ export class UserShiftService {
     workHours: number = 11.5,
   ): UserShift {
     const userShift = new UserShift();
+
     userShift.workStatus = workStatus;
     userShift.workPlace = workPlace;
     userShift.shiftProfession = user.profession;

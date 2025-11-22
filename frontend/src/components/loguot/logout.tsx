@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { LayerContext } from '../../contexts/layer/layerContext';
 import { useDispatch, useSelector } from '../../services/store';
 import { logoutUser } from '../../services/slices/auth/actions';
-import { clearShifts } from '../../services/slices/shift/slice';
+import { resetShift } from '../../services/slices/shift/slice';
 import { Spinner } from '../spinner/spinner';
 import { selectIsLoading } from '../../services/slices/auth/slice';
 
@@ -22,7 +22,7 @@ export const Logout = () => {
       await dispatch(logoutUser());
 
       // Отчищаем смены
-      dispatch(clearShifts());
+      dispatch(resetShift());
 
       // Очищаем состояние оверлеев и модальных окон
       setIsOpenOverlay(false);

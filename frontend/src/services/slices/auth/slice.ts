@@ -8,7 +8,7 @@ interface IAuthState {
   isLoading: boolean;
   checking: boolean;
   user: IUser | null;
-  users: IUser[];
+  // users: IUser[];
   error: string | null;
 }
 
@@ -17,7 +17,7 @@ const initialState: IAuthState = {
   isLoading: false,
   checking: true,
   user: null,
-  users: [],
+  // users: [],
   error: null,
 };
 
@@ -34,7 +34,7 @@ export const authSlice = createSlice({
     selectIsLoading: (state: IAuthState) => state.isLoading,
     selectIsChecking: (state: IAuthState) => state.checking,
     selectUser: (state: IAuthState) => state.user,
-    selectUsers: (state: IAuthState) => state.users,
+    // selectUsers: (state: IAuthState) => state.users,
     selectError: (state: IAuthState) => state.error,
   },
   extraReducers: (builder) => {
@@ -86,7 +86,7 @@ export const authSlice = createSlice({
         state.isAuthenticated = false;
         state.isLoading = false;
         state.user = null;
-        state.users = [];
+        // state.users = [];
         state.error = null;
       })
       .addCase(logoutUser.rejected, (state, action) => {
@@ -104,6 +104,6 @@ export const {
   selectIsLoading,
   selectIsChecking,
   selectUser,
-  selectUsers,
+  // selectUsers,
   selectError,
 } = authSlice.selectors;

@@ -81,3 +81,18 @@ export function getCurrentShiftID() {
   // Возвращаем первый (и обычно единственный) сегмент после префикса — это ID
   return parts[0];
 }
+
+export function formatProductionUnit(unit: string | undefined | null): string {
+  if (!unit) return '';
+
+  switch (unit) {
+    case 'СТАН':
+      return 'СТАН-2000';
+    case 'АИ':
+      return 'Агрегат Испекции';
+    case 'АНО':
+      return 'АНО-ГЦ';
+    default:
+      return unit;
+  }
+}

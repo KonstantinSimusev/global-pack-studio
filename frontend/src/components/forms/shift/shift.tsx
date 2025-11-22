@@ -14,7 +14,7 @@ import { LayerContext } from '../../../contexts/layer/layerContext';
 import { validateForm, validationRules } from '../../../utils/validation';
 import {
   createShift,
-  getTeamShifts,
+  getLastTeamShift,
 } from '../../../services/slices/shift/actions';
 import type { IShift } from '../../../utils/api.interface';
 import { selectUser } from '../../../services/slices/auth/slice';
@@ -91,7 +91,7 @@ export const ShiftForm = () => {
         const response = await dispatch(createShift(data));
 
         if (response.payload) {
-          dispatch(getTeamShifts());
+          dispatch(getLastTeamShift());
           setIsAddShiftOpenModall(false);
           setIsOpenOverlay(false);
         } else {

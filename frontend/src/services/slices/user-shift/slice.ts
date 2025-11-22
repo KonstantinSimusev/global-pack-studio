@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   createUserShift,
-  createUsersShifts,
+  // createUsersShifts,
   deleteUserShift,
   getUsersShifts,
   updateUserShift,
@@ -40,7 +40,7 @@ export const userShiftSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Обработчик для createUsersShifts
+      // Обработчик для createUsersShift
       .addCase(createUserShift.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -58,18 +58,18 @@ export const userShiftSlice = createSlice({
         state.error = action.error.message ?? 'Ошибка создания смены';
       })
       // Обработчик для createUsersShifts
-      .addCase(createUsersShifts.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
-      })
-      .addCase(createUsersShifts.fulfilled, (state) => {
-        state.isLoading = false;
-        state.error = null;
-      })
-      .addCase(createUsersShifts.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.error.message ?? 'Ошибка создания смены';
-      })
+      // .addCase(createUsersShifts.pending, (state) => {
+      //   state.isLoading = true;
+      //   state.error = null;
+      // })
+      // .addCase(createUsersShifts.fulfilled, (state) => {
+      //   state.isLoading = false;
+      //   state.error = null;
+      // })
+      // .addCase(createUsersShifts.rejected, (state, action) => {
+      //   state.isLoading = false;
+      //   state.error = action.error.message ?? 'Ошибка создания смены';
+      // })
       // Обработчик для getUsersShifts
       .addCase(getUsersShifts.pending, (state) => {
         state.isLoading = true;

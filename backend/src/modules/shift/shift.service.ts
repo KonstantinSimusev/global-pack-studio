@@ -21,8 +21,13 @@ import { UserShiftService } from '../user-shift/user-shift.service';
 import { CreateShiftDTO } from './dto/create-shift.dto';
 
 import { IList, IShift, ISuccess } from '../../shared/interfaces/api.interface';
-import { compareShifts, getNextShift } from '../../shared/utils/utils';
+import {
+  compareShifts,
+  getNextShift,
+  productions,
+} from '../../shared/utils/utils';
 import { ProductionService } from '../production/production.service';
+import { Production } from '../production/entities/production.entity';
 
 @Injectable()
 export class ShiftService {
@@ -96,54 +101,64 @@ export class ShiftService {
     }
   }
 
-  async deleteShift(
-    id: string,
+  // async deleteShift(
+  //   id: string,
+  //   @Req() req: Request,
+  //   @Res({ passthrough: true }) res: Response,
+  // ): Promise<ISuccess> {
+  //   try {
+  //     // Проверяем токен
+  //     await this.authService.validateAccessToken(req, res);
+
+  //     if (!id) {
+  //       throw new BadRequestException('ID смены обязателен для удаления');
+  //     }
+
+  //     const shift = await this.shiftRepository.findById(id);
+
+  //     if (!shift) {
+  //       throw new NotFoundException('Смена не найдена');
+  //     }
+
+  //     await this.shiftRepository.delete(id);
+
+  //     return {
+  //       message: 'Смена успешно удалена',
+  //     };
+  //   } catch {
+  //     throw new InternalServerErrorException('Ошибка при удалении смены');
+  //   }
+  // }
+
+  async getLastTeamShift(
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
-  ): Promise<ISuccess> {
-    try {
-      // Проверяем токен
-      await this.authService.validateAccessToken(req, res);
-
-      if (!id) {
-        throw new BadRequestException('ID смены обязателен для удаления');
-      }
-
-      const shift = await this.shiftRepository.findById(id);
-
-      if (!shift) {
-        throw new NotFoundException('Смена не найдена');
-      }
-
-      await this.shiftRepository.delete(id);
-
-      return {
-        message: 'Смена успешно удалена',
-      };
-    } catch {
-      throw new InternalServerErrorException('Ошибка при удалении смены');
-    }
-  }
-
-  async getTeamShifts(
-    @Req() req: Request,
-    @Res({ passthrough: true }) res: Response,
-  ): Promise<IList<IShift>> {
+  ): Promise<IShift | null> {
     try {
       const { currentTeamNumber } = await this.authService.validateAccessToken(
         req,
         res,
       );
 
-      const lastShifts =
+      const shifts =
         await this.shiftRepository.findLastShift(currentTeamNumber);
 
-      return {
-        total: lastShifts.length,
-        items: lastShifts,
-      };
+      if (shifts.length === 0) {
+        throw new NotFoundException('Пожалуйста, создайте смену...');
+      }
+
+      const lastShift = shifts[0];
+
+      if (!lastShift) {
+        throw new NotFoundException('Смена не найдена');
+      }
+
+      return lastShift;
     } catch (error) {
-      console.log(error);
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+
       throw new InternalServerErrorException(
         'Произошла ошибка при получении списка пользователей',
       );

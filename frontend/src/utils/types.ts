@@ -104,4 +104,4 @@ export const WORK_PLACE_OPTIONS: TWorkPlace[] = [
   'Бригада по реквизитам',
 ];
 
-export type TArea = '';
+export type TUnit = 'СТАН' | 'АНГЦ' | 'АНО' | 'АИ' | 'АНГЦ-3';

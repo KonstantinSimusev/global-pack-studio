@@ -1,16 +1,34 @@
 import styles from './production-list.module.css';
 
 import { EditButton } from '../../buttons/edit/edit';
+import { Error } from '../../ui/error/error';
+import { InfoBlock } from '../../ui/info-block/info-block';
+import { useDispatch, useSelector } from '../../../services/store';
+import { selectProductions } from '../../../services/slices/production/slice';
+import { useEffect } from 'react';
+import { getProductions } from '../../../services/slices/production/actions';
+import { formatProductionUnit } from '../../../utils/utils';
 
-export const ProductionList = () => {
-  const list = [
-    {
-      id: '1',
-      location: '1 ОЧЕРЕДЬ',
-      unit: 'СТАН',
-      count: 0
-    }
-  ]
+interface IProductionProps {
+  shiftId?: string;
+}
+
+export const ProductionList = ({ shiftId }: IProductionProps) => {
+  const dispatch = useDispatch();
+  const productions = useSelector(selectProductions);
+
+  const list = productions
+    .slice()
+    .sort((a, b) => a.location.localeCompare(b.location));
+
+  if (!shiftId) {
+    return null;
+  }
+
+  useEffect(() => {
+    dispatch(getProductions(shiftId));
+  }, [dispatch, shiftId]);
+
   return (
     <ul className={styles.list}>
       {list && list.length > 0 ? (
@@ -26,19 +44,18 @@ export const ProductionList = () => {
               />
             </div>
 
-            <div className={styles.wrapper}>
-              <span className={styles.title}>Агрегат</span>
-              <span className={styles.text}>{item.unit}</span>
-            </div>
-
-            <div className={styles.wrapper}>
-              <span className={styles.title}>Производство за смену, рул</span>
-              <span className={styles.text}>{item.count}</span>
-            </div>
+            <InfoBlock
+              title={'Оборудование цеха'}
+              text={formatProductionUnit(item.unit)}
+            />
+            <InfoBlock
+              title={'Производство за смену'}
+              text={`${item.count} рул`}
+            />
           </li>
         ))
       ) : (
-        <span className={styles.text__info}>Нет данных для отображения...</span>
+        <Error message={'Нет данных для отображения...'} />
       )}
     </ul>
   );

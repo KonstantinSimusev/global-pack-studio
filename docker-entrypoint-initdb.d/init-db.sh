@@ -65,7 +65,7 @@ psql -v ON_ERROR_STOP=1 --username "$DB_USER" --dbname "$DB_NAME" <<-EOSQL
     'АНО',
     'АИ',
     'АНГЦ-3'
-  ); 
+  );
 
   -- Создание таблицы users
   CREATE TABLE IF NOT EXISTS gps.users (

@@ -47,21 +47,21 @@ export class ShiftRepository {
     });
   }
 
-  async findTeamShifts(
-    teamNumber: number,
-    startOfMonth: Date,
-    endOfMonth: Date,
-  ): Promise<Shift[]> {
-    return this.shiftRepository.find({
-      where: {
-        teamNumber,
-        date: Between(startOfMonth, endOfMonth),
-      },
-      order: {
-        date: 'DESC',
-      },
-    });
-  }
+  // async findTeamShifts(
+  //   teamNumber: number,
+  //   startOfMonth: Date,
+  //   endOfMonth: Date,
+  // ): Promise<Shift[]> {
+  //   return this.shiftRepository.find({
+  //     where: {
+  //       teamNumber,
+  //       date: Between(startOfMonth, endOfMonth),
+  //     },
+  //     order: {
+  //       date: 'DESC',
+  //     },
+  //   });
+  // }
 
   /*
   async findAll(): Promise<Shift[]> {

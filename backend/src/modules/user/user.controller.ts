@@ -6,11 +6,7 @@ import {
   Param,
   Post,
   Put,
-  Req,
-  Res,
 } from '@nestjs/common';
-
-import { Response, Request } from 'express';
 
 import { UserService } from './user.service';
 import { AuthService } from '../auth/auth.service';
@@ -32,16 +28,13 @@ export class UserController {
     return this.userService.createUser(dto);
   }
 
-  @Post('all')
+  @Post()
   async createUsers(@Body() dto: CreateUserDTO[]): Promise<ISuccess> {
     return this.userService.createUsers(dto);
   }
 
   @Get()
-  async getUsers(
-    // @Req() req: Request,
-    // @Res({ passthrough: true }) res: Response,
-  ): Promise<IList<IUser>> {
+  async getUsers(): Promise<IList<IUser>> {
     return this.userService.getUsers();
   }
 
@@ -62,25 +55,4 @@ export class UserController {
   async deleteUser(@Param('id') id: string): Promise<ISuccess> {
     return this.userService.deleteUser(id);
   }
-
-  /*
-  @Get('team')
-  async getTeamUsers(
-    @Res() res: Response,
-    @Req() req: Request,
-  ): Promise<IUser[]> {
-    try {
-      const savedAccessToken = getAccessToken(req);
-
-      const { user, accessToken } =
-        await this.authService.validateAccessToken(savedAccessToken);
-
-      setAccessToken(res, accessToken);
-
-      return await this.userService.getTeamUsers(user.id);
-    } catch {
-      throw new UnauthorizedException('Требуется повторная авторизация');
-    }
-  }
-    */
 }

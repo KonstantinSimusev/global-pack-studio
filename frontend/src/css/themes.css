@@ -21,14 +21,14 @@
   --color-button-return: rgba(0 0 0 / 0.6);
   --color-shift: rgba(0 0 0 / 0.9);
   --bg-color-default: #fffafa;
-  --bg-color-button: rgba(0 0 0 / 0.7);
+  --bg-color-button: rgba(0 0 0 / 0.9);
   --bg-color-icon-theme: #dbdbdb;
   --bg-color-slider: #adadad;
   --bg-color-overlay: rgba(0 0 0 / 0.3);
   --bg-color-link: rgba(0 0 0 / 0.5);
   --bg-button-return: rgba(0 0 0 / 0.1);
   --bg-color-shift: rgba(100 100 100 / 0.1);
-  --bg-color-column: rgba(57, 57, 57, 0.6);
+  --bg-color-column: rgba(57 57 57 / 0.6);
 }
 
 .theme-dark {

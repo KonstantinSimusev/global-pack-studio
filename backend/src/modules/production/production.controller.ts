@@ -1,21 +1,15 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get, Param, ParseUUIDPipe, Req, Res } from '@nestjs/common';
+
+import { Request, Response } from 'express';
 
 import { ProductionService } from './production.service';
+import { IList, IProduction } from '../../shared/interfaces/api.interface';
 
-@Controller('production')
+@Controller('productions')
 export class ProductionController {
   constructor(private readonly productionService: ProductionService) {}
 
-  // @Post('create')
-  // async createProduction(
-  //   @Body() dto: CreateProductionDTO,
-  //   @Req() req: Request,
-  //   @Res({ passthrough: true }) res: Response,
-  // ): Promise<IProduction> {
-  //   return this.productionService.createProduction(dto, req, res);
-  // }
-
-  // @Put('update')
+  // @Put('update-production')
   // async updateUserShift(
   //   @Body() dto: UpdateProductionDTO,
   //   @Req() req: Request,

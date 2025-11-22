@@ -6,8 +6,8 @@ import { selectCurrentUserShift } from '../../services/slices/user-shift/slice';
 export const InfoBlock = () => {
   const currentUserShift = useSelector(selectCurrentUserShift);
   return (
-    <span className={styles.container}>
-      <span className={styles.wrapper}>
+    <div className={styles.container}>
+      <div className={styles.wrapper}>
         <span className={styles.wrapper__fio}>
           <span className={styles.text}>
             {currentUserShift?.user?.lastName}{' '}
@@ -18,12 +18,12 @@ export const InfoBlock = () => {
           </span>
         </span>
         <span className={styles.text}>
-          Бригада №{currentUserShift?.user?.currentTeamNumber}
+          из бригады №{currentUserShift?.user?.currentTeamNumber}
         </span>
 
-        <span className={styles.text}>Добавлен в категорию:</span>
+        <span className={styles.text}>добавлен в категорию:</span>
         <span className={styles.text}>{currentUserShift?.shiftProfession}</span>
-      </span>
-    </span>
+      </div>
+    </div>
   );
 };

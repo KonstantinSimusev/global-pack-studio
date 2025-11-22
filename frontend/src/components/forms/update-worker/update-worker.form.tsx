@@ -37,6 +37,7 @@ import {
 } from '../../../services/slices/user-shift/actions';
 
 import { getCurrentShiftID } from '../../../utils/utils';
+import { selectCurrentShiftId } from '../../../services/slices/shift/slice';
 
 // Изменим тип IFormData на Record<string, string>
 interface IFormData extends Record<string, string> {
@@ -55,6 +56,7 @@ export const UpdateWorkerForm = () => {
   } = useContext(LayerContext);
 
   const dispatch = useDispatch();
+  const shiftID = useSelector(selectCurrentShiftId);
   const isLoading = useSelector(selectIsLoadingUserShift);
   const error = useSelector(selectError);
 
@@ -188,7 +190,7 @@ export const UpdateWorkerForm = () => {
           setIsUpdateWorkerOpenModall(false);
           setIsOpenOverlay(false);
 
-          const shiftID = getCurrentShiftID();
+          // const shiftID = getCurrentShiftID();
 
           if (shiftID) {
             // если shiftID не null

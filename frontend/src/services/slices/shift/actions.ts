@@ -2,10 +2,12 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import {
   createShiftApi,
-  deleteShiftApi,
-  getTeamShiftsApi,
-} from '../../../utils/gpsApi';
-import { IShift, ISuccess } from '../../../utils/api.interface';
+  getLastTeamShiftApi,
+} from '../../../utils/api/shift.api';
+import {
+  IShift,
+  ISuccess,
+} from '../../../utils/api.interface';
 import { delay } from '../../../utils/utils';
 
 export const createShift = createAsyncThunk(
@@ -32,9 +34,9 @@ export const createShift = createAsyncThunk(
   },
 );
 
-export const getTeamShifts = createAsyncThunk('shifts/get', async () => {
+export const getLastTeamShift = createAsyncThunk('shift/last', async () => {
   try {
-    const response = await getTeamShiftsApi();
+    const response = await getLastTeamShiftApi();
 
     // Добавляем задержку кода
     // await delay();
@@ -53,21 +55,3 @@ export const getTeamShifts = createAsyncThunk('shifts/get', async () => {
   }
 });
 
-export const deleteShift = createAsyncThunk(
-  'shift/delete',
-  async (id: string): Promise<ISuccess> => {
-    try {
-      const response = await deleteShiftApi(id);
-      await delay();
-
-      if (!response) {
-        throw new Error();
-      }
-
-      return response;
-    } catch (error) {
-      await delay();
-      throw error;
-    }
-  },
-);

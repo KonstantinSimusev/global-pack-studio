@@ -6,8 +6,14 @@ import {
 import { authSlice } from './slices/auth/slice';
 import { shiftSlice } from './slices/shift/slice';
 import { userShiftSlice } from './slices/user-shift/slice';
+import { productionSlice } from './slices/production/slice';
 
-export const rootReducer = combineSlices(authSlice, shiftSlice, userShiftSlice);
+export const rootReducer = combineSlices(
+  authSlice,
+  shiftSlice,
+  userShiftSlice,
+  productionSlice,
+);
 
 export const store = configureStore({
   reducer: rootReducer,

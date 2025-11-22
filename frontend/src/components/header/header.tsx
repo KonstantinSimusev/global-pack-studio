@@ -1,12 +1,13 @@
 import styles from './header.module.css';
 
+import { useContext } from 'react';
+
 import { Sidebar } from '../sidebar/sidebar';
 import { LogoIcon } from '../icons/logo/logo';
 import { BurgerButton } from '../buttons/burger/burger';
 
 import { useSelector } from '../../services/store';
 import { selectIsAuthenticated } from '../../services/slices/auth/slice';
-import { useContext } from 'react';
 import { LayerContext } from '../../contexts/layer/layerContext';
 
 export const Header = () => {

@@ -22,6 +22,7 @@ import {
   createUserShift,
   getUsersShifts,
 } from '../../../services/slices/user-shift/actions';
+import { selectCurrentShiftId } from '../../../services/slices/shift/slice';
 
 // Изменим тип IFormData на Record<string, string>
 interface IFormData extends Record<string, string> {
@@ -31,6 +32,7 @@ interface IFormData extends Record<string, string> {
 export const AddWorkerForm = () => {
   const dispatch = useDispatch();
   const isLoading = useSelector(selectIsLoadingUserShift);
+  const currentShiftId = useSelector(selectCurrentShiftId);
   const error = useSelector(selectError);
   const {
     isAddWorkerOpenModall,
@@ -101,7 +103,11 @@ export const AddWorkerForm = () => {
     // Если форма валидна, можно отправить данные на сервер
     if (Object.keys(formErrors).length === 0) {
       try {
-        const currentShiftId = getCurrentShiftID();
+        if (!currentShiftId) {
+          return null;
+        }
+
+        // const currentShiftId = getCurrentShiftID();
 
         if (!currentShiftId) {
           throw new Error();

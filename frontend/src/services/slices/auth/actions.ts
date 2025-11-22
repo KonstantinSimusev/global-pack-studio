@@ -3,7 +3,7 @@ import {
   checkAccessTokenApi,
   loginUserApi,
   logoutUserApi,
-} from '../../../utils/gpsApi';
+} from '../../../utils/api/auth.api';
 import { delay } from '../../../utils/utils';
 import { ILoginData, IUser } from '../../../utils/api.interface';
 

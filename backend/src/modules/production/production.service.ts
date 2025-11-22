@@ -1,4 +1,13 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  Param,
+  ParseUUIDPipe,
+  Req,
+  Res,
+} from '@nestjs/common';
+
+import { Request, Response } from 'express';
 
 import { ProductionRepository } from './production.repository';
 
@@ -6,14 +15,23 @@ import { Shift } from '../shift/entities/shift.entity';
 import { Production } from './entities/production.entity';
 
 import { productions } from '../../shared/utils/utils';
+import {
+  IList,
+  IProduction,
+  ISuccess,
+} from 'src/shared/interfaces/api.interface';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable()
 export class ProductionService {
-  constructor(private readonly productionRepository: ProductionRepository) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly productionRepository: ProductionRepository,
+  ) {}
 
-  async createProductions(shift: Shift): Promise<Production[]> {
+  async createProductions(shift: Shift): Promise<ISuccess> {
     try {
-      return await Promise.all(
+      await Promise.all(
         productions.map((production) => {
           const createdProduction = new Production();
 
@@ -25,8 +43,33 @@ export class ProductionService {
           return this.productionRepository.create(createdProduction);
         }),
       );
+
+      return {
+        message: 'Произвлдства успешно созданы',
+      };
     } catch (error) {
-      throw new InternalServerErrorException('Ошибка при создании смены');
+      throw new InternalServerErrorException('Ошибка при создании производств');
+    }
+  }
+
+  async getProductions(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<IList<IProduction>> {
+    try {
+      await this.authService.validateAccessToken(req, res);
+
+      const productions = await this.productionRepository.findProductionsByShiftId(id);
+
+      return {
+        total: productions.length,
+        items: productions,
+      };
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Ошибка при получении списка смен',
+      );
     }
   }
 

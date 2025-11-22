@@ -6,6 +6,7 @@ import { getProfessionsWithCounts, getTotal } from '../../../utils/utils';
 
 import { ErrorIcon } from '../../icons/error/error';
 import { SuccessIcon } from '../../icons/success/success';
+import { AddButton } from '../../buttons/add/add-button';
 
 export const TeamProfessionList = () => {
   const usersShifts = useSelector(selectUsersShifts);
@@ -47,6 +48,9 @@ export const TeamProfessionList = () => {
               <span>{item.count}</span>
             </li>
           ))}
+          <div className={styles.wrapper__button}>
+            <AddButton label={'Добавить работника'} actionType="worker" />
+          </div>
         </ul>
       ) : (
         <div>Данных нет</div>
