@@ -36,7 +36,6 @@ import {
   updateUserShift,
 } from '../../../services/slices/user-shift/actions';
 
-import { getCurrentShiftID } from '../../../utils/utils';
 import { selectCurrentShiftId } from '../../../services/slices/shift/slice';
 
 // Изменим тип IFormData на Record<string, string>
