@@ -1,17 +1,10 @@
-.container {
+.wrapper__button {
+  position: relative;
+  left: -10px;
+}
+
+.wrapper__master {
   display: flex;
   flex-direction: column;
-  margin: 0 clamp(0rem, -6.375rem + 31.875vw, 31.875rem);
-  gap: 30px;
-  flex-grow: 1;
-}
-
-.container > :nth-child(1) {
-  margin-right: auto;
-}
-
-.wrapper {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
+  gap: 10px;
 }

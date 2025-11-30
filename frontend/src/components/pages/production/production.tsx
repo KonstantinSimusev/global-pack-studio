@@ -7,13 +7,17 @@ import { PageTitle } from '../../ui/page-title/page-title';
 import { ShiftInfo } from '../../shift-info/shift-info';
 
 import { useDispatch, useSelector } from '../../../services/store';
-import { selectCurrentShiftId } from '../../../services/slices/shift/slice';
+import {
+  selectCurrentShift,
+  selectCurrentShiftId,
+} from '../../../services/slices/shift/slice';
 import { getLastTeamShift } from '../../../services/slices/shift/actions';
 import { Error } from '../../ui/error/error';
 import { ProductionList } from '../../lists/production-list/production-list';
 
 export const Production = () => {
   const dispatch = useDispatch();
+  const lastShift = useSelector(selectCurrentShift);
   const currentShiftId = useSelector(selectCurrentShiftId);
 
   useEffect(() => {
@@ -23,13 +27,17 @@ export const Production = () => {
   return (
     <Layout>
       <PageTitle title="ПРОИЗВОДСТВО" />
-      {currentShiftId ? (
+      {currentShiftId && lastShift ? (
         <>
-          <ShiftInfo />
+          <ShiftInfo
+            date={lastShift.date}
+            shiftNumber={lastShift.shiftNumber}
+            teamNumber={lastShift.teamNumber}
+          />
           <ProductionList shiftId={currentShiftId} />
         </>
       ) : (
-        <Error message={'Пожалуйста, создайте смену...'} />
+        <Error />
       )}
     </Layout>
   );

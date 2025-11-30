@@ -1,4 +1,4 @@
-import type { IList, IProduction } from '../api.interface';
+import type { IList, IProduction, ISuccess } from '../api.interface';
 
 // Используем переменную окружения
 export const URL = import.meta.env.VITE_API_URL ?? '/api/gps';
@@ -31,7 +31,7 @@ export const getProductionsApi = async (
 
 export const updateProductionApi = async (
   payload: IProduction,
-): Promise<IProduction> => {
+): Promise<ISuccess> => {
   try {
     // Здесь происходит запрос к серверу
     const response = await fetch(`${URL}/productions/update-production`, {

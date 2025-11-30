@@ -50,6 +50,22 @@ export class Shift {
   @Max(5)
   teamNumber: number;
 
+  @Column({
+    name: 'start_shift',
+    type: 'timestamptz',
+    nullable: false,
+  })
+  @IsDate()
+  startShift: Date;
+
+  @Column({
+    name: 'end_shift',
+    type: 'timestamptz',
+    nullable: false,
+  })
+  @IsDate()
+  endShift: Date;
+
   @OneToMany(() => UserShift, (userShift) => userShift.shift, {
     cascade: ['remove'], // Автоматически удалит UserShift при удалении Shift
   })

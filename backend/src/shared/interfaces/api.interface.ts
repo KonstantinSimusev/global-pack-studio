@@ -25,7 +25,10 @@ export interface IShift {
   date: Date;
   shiftNumber: number;
   teamNumber: number;
-  usersShifts?: IUserShift[]
+  startShift: Date;
+  endShift: Date;
+  usersShifts?: IUserShift[];
+  productions?: IProduction[];
 }
 
 export interface ISchedule {

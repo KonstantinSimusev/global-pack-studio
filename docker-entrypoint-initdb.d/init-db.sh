@@ -94,6 +94,8 @@ psql -v ON_ERROR_STOP=1 --username "$DB_USER" --dbname "$DB_NAME" <<-EOSQL
     date DATE NOT NULL,
     shift_number INTEGER NOT NULL,
     team_number INTEGER NOT NULL,
+    start_shift TIMESTAMP WITH TIME ZONE NOT NULL,
+    end_shift TIMESTAMP WITH TIME ZONE NOT NULL,
     
     CONSTRAINT unique_date_team UNIQUE (date, team_number),
     CONSTRAINT unique_date_shift UNIQUE (date, shift_number)

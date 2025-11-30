@@ -1,17 +1,26 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { createShift, getLastTeamShift } from './actions';
+import {
+  createShift,
+  getActiveShift,
+  getFinishedShift,
+  getLastTeamShift,
+} from './actions';
 
 import type { IShift } from '../../../utils/api.interface';
 
 interface IShiftState {
-  shift: IShift | null;
+  lastTeamShift: IShift | null;
+  activeShift: IShift | null;
+  finishedShift: IShift | null;
   isLoading: boolean;
   error: string | null;
 }
 
 const initialState: IShiftState = {
-  shift: null,
+  lastTeamShift: null,
+  activeShift: null,
+  finishedShift: null,
   isLoading: false,
   error: null,
 };
@@ -24,14 +33,16 @@ export const shiftSlice = createSlice({
       state.error = null;
     },
     resetShift: (state) => {
-      state.shift = null;
+      state.lastTeamShift = null;
       state.error = null;
     },
   },
   selectors: {
-    selectCurrentShift: (state: IShiftState) => state.shift,
+    selectCurrentShift: (state: IShiftState) => state.lastTeamShift,
+    selectActiveShift: (state: IShiftState) => state.activeShift,
+    selectFinishedShift: (state: IShiftState) => state.finishedShift,
     selectCurrentShiftId: (state: IShiftState) =>
-      state.shift ? state.shift.id : null,
+      state.lastTeamShift ? state.lastTeamShift.id : null,
     selectIsLoadingShift: (state: IShiftState) => state.isLoading,
     selectError: (state: IShiftState) => state.error,
   },
@@ -50,6 +61,40 @@ export const shiftSlice = createSlice({
         state.isLoading = false;
         state.error = action.error.message ?? 'Ошибка создания смены';
       })
+      // Обработчик для getActiveShift
+      .addCase(getActiveShift.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(
+        getActiveShift.fulfilled,
+        (state, action: PayloadAction<IShift>) => {
+          state.activeShift = action.payload;
+          state.isLoading = false;
+          state.error = null;
+        },
+      )
+      .addCase(getActiveShift.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message ?? 'Ошибка получения смен';
+      })
+      // Обработчик для getFinishedShift
+      .addCase(getFinishedShift.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(
+        getFinishedShift.fulfilled,
+        (state, action: PayloadAction<IShift>) => {
+          state.finishedShift = action.payload;
+          state.isLoading = false;
+          state.error = null;
+        },
+      )
+      .addCase(getFinishedShift.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message ?? 'Ошибка получения смен';
+      })
       // Обработчик для getLastTeamShift
       .addCase(getLastTeamShift.pending, (state) => {
         state.isLoading = true;
@@ -58,14 +103,14 @@ export const shiftSlice = createSlice({
       .addCase(
         getLastTeamShift.fulfilled,
         (state, action: PayloadAction<IShift>) => {
-          state.shift = action.payload;
+          state.lastTeamShift = action.payload;
           state.isLoading = false;
           state.error = null;
         },
       )
       .addCase(getLastTeamShift.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error.message ?? 'Ошибка создания смены';
+        state.error = action.error.message ?? 'Ошибка получения смены';
       });
   },
 });
@@ -73,6 +118,8 @@ export const shiftSlice = createSlice({
 export const { resetShift, clearError } = shiftSlice.actions;
 export const {
   selectCurrentShift,
+  selectActiveShift,
+  selectFinishedShift,
   selectCurrentShiftId,
   selectIsLoadingShift,
   selectError,

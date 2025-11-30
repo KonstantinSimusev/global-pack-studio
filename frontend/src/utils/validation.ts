@@ -237,6 +237,23 @@ export const validationRules: IValidationRules = {
       // },
     ],
   },
+  count: {
+    required: true,
+    validators: [
+      {
+        type: 'required',
+        pattern: /^.+$/,
+        message: 'Это поле обязательно',
+      },
+      {
+        type: 'range',
+        pattern: /^\d+$/,
+        min: 0,
+        max: 1000,
+        message: 'Только целое число от 0 до 1000',
+      },
+    ],
+  },
 };
 
 // Функция для валидации одного поля
@@ -270,6 +287,21 @@ export const validateField = (
       }
       if (numValue < 0 || numValue > 12) {
         return 'Введите число от 0 до 12';
+      }
+    }
+
+    if (validator.type === 'range') {
+      // Если поле пустое — уже отловилось в 'integer'
+      if (value === '') return validator.message;
+
+      const num = Number(value);
+      if (isNaN(num)) return validator.message;
+
+      if (
+        (validator.min !== undefined && num < validator.min) ||
+        (validator.max !== undefined && num > validator.max)
+      ) {
+        return validator.message;
       }
     }
 

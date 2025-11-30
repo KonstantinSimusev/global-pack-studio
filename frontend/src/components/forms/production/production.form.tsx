@@ -20,10 +20,15 @@ import {
   selectProductionById,
 } from '../../../services/slices/production/slice';
 import { formatProductionUnit } from '../../../utils/utils';
+import {
+  getProductions,
+  updateProduction,
+} from '../../../services/slices/production/actions';
+import { selectCurrentShiftId } from '../../../services/slices/shift/slice';
 
 // Изменим тип IFormData на Record<string, string>
 interface IFormData extends Record<string, string> {
-  total: string;
+  count: string;
 }
 
 export const ProductionForm = () => {
@@ -40,24 +45,38 @@ export const ProductionForm = () => {
     selectProductionById(state, selectedId),
   );
 
+  const currentShiftId = useSelector(selectCurrentShiftId);
+
   const isLoading = useSelector(selectIsLoadingProductions);
   const error = useSelector(selectError);
 
   // Состояние для хранения значений полей формы
   const [formData, setFormData] = useState<IFormData>({
-    total: '',
+    count: '',
   });
 
   // Состояние для хранения ошибок валидации
   const [errors, setErrors] = useState<{ [key: string]: string }>({
-    total: '',
+    count: '',
   });
 
+  // 1. Очищаем ошибки при открытии модалки
   useEffect(() => {
     if (isProductionOpenMdal) {
       dispatch(clearError());
     }
   }, [isProductionOpenMdal, dispatch]);
+
+  // // 2. Инициализируем formData.count из production при открытии и наличии данных
+  // useEffect(() => {
+  //   if (isProductionOpenMdal && production) {
+  //     setFormData({
+  //       count: String(production.count || ''), // преобразуем число в строку
+  //     });
+  //     // Сброс ошибок при перезагрузке данных
+  //     setErrors({ count: '' });
+  //   }
+  // }, [isProductionOpenMdal, production]);
 
   // Обработчик изменения поля ввода
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -105,30 +124,22 @@ export const ProductionForm = () => {
     // Если форма валидна, можно отправить данные на сервер
     if (Object.keys(formErrors).length === 0) {
       try {
-        // const currentShiftId = getCurrentShiftID();
-
-        // if (!currentShiftId) {
-        //   throw new Error();
-        // }
-
         const payload = {
-          total: Number(formData.total),
           id: selectedId,
+          count: Number(formData.count),
         };
 
-        // const response = await dispatch(createUserShift(payload));
+        const response = await dispatch(updateProduction(payload));
 
-        // if (response.payload) {
-        if (payload) {
+        if (response.payload) {
           setIsProductionOpenMdal(false);
           setIsOpenOverlay(false);
 
-          // const shiftID = getCurrentShiftID();
+          if (!currentShiftId) {
+            return null;
+          }
 
-          // if (shiftID) {
-          // если shiftID не null
-          // dispatch(getUsersShifts(shiftID)); // shiftID гарантированно string
-          // }
+          dispatch(getProductions(currentShiftId));
         }
       } catch (error) {
         // dispatch(clearError())
@@ -138,7 +149,7 @@ export const ProductionForm = () => {
   };
 
   // Определяем, заблокирована ли кнопка
-  // const isButtonDisabled = isLoading || !formData.total;
+  const isButtonDisabled = isLoading || !formData.count;
 
   return (
     <div className={styles.container}>
@@ -148,13 +159,13 @@ export const ProductionForm = () => {
         <input
           className={styles.input__production}
           type="text"
-          name="total"
-          value={formData.total}
+          name="count"
+          value={formData.count}
           onChange={handleChange}
           onBlur={handleBlur}
         />
         <div className={styles.errors}>
-          {errors.total && <span className={styles.error}>{errors.total}</span>}
+          {errors.count && <span className={styles.error}>{errors.count}</span>}
         </div>
 
         <div className={styles.spinner}>{isLoading && <Spinner />}</div>
@@ -163,10 +174,10 @@ export const ProductionForm = () => {
         <button
           type="submit"
           className={styles.button__production}
-          // disabled={isButtonDisabled}
-          // style={{
-          //   opacity: isButtonDisabled ? 0.4 : 0.9,
-          // }}
+          disabled={isButtonDisabled}
+          style={{
+            opacity: isButtonDisabled ? 0.4 : 0.9,
+          }}
         >
           Сохранить
         </button>

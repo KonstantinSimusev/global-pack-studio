@@ -20,6 +20,7 @@ export enum EProfession {
 }
 
 export enum ETeamProfession {
+  MASTER = 'Мастер участка',
   BRIGADIR_OSP = 'Бригадир ОСП',
   DRIVER = 'Водитель погрузчика',
   OPERATOR = 'Оператор ПУ',

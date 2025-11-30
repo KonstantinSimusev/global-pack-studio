@@ -28,6 +28,54 @@ export const createShiftApi = async (data: IShift): Promise<ISuccess> => {
   }
 };
 
+export const getActiveShiftApi = async (): Promise<IShift> => {
+  try {
+    // Здесь происходит запрос к серверу
+    const response = await fetch(`${URL}/shifts/active-shift`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+      },
+      credentials: 'include', // Важно для работы с cookie
+    });
+
+    if (!response.ok) {
+      // Если ответ не успешный, создаем ошибку, происходит переход в catch
+      throw new Error();
+    }
+
+    // Если все хорошо, возвращаем данные
+    return await response.json();
+  } catch (error) {
+    // Сюда попадаем при любом throw new Error()
+    throw error;
+  }
+};
+
+export const getFinishedShiftApi = async (): Promise<IShift> => {
+  try {
+    // Здесь происходит запрос к серверу
+    const response = await fetch(`${URL}/shifts/finished-shift`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+      },
+      credentials: 'include', // Важно для работы с cookie
+    });
+
+    if (!response.ok) {
+      // Если ответ не успешный, создаем ошибку, происходит переход в catch
+      throw new Error();
+    }
+
+    // Если все хорошо, возвращаем данные
+    return await response.json();
+  } catch (error) {
+    // Сюда попадаем при любом throw new Error()
+    throw error;
+  }
+};
+
 export const getLastTeamShiftApi = async (): Promise<IShift> => {
   try {
     // Здесь происходит запрос к серверу

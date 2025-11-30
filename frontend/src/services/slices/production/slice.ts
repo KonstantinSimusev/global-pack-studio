@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { IList, IProduction } from '../../../utils/api.interface';
-import { getProductions } from './actions';
+import { getProductions, updateProduction } from './actions';
 
 interface IProductionState {
   pruduction: IProduction | null;
@@ -22,6 +22,10 @@ export const productionSlice = createSlice({
   initialState,
   reducers: {
     clearError: (state) => {
+      state.error = null;
+    },
+    resetProductions: (state) => {
+      state.productions = [];
       state.error = null;
     },
   },
@@ -52,11 +56,24 @@ export const productionSlice = createSlice({
       .addCase(getProductions.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message ?? 'Ошибка создания производств';
+      })
+      // Обработчик для updatePrction
+      .addCase(updateProduction.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(updateProduction.fulfilled, (state) => {
+        state.isLoading = false;
+        state.error = null;
+      })
+      .addCase(updateProduction.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message ?? 'Ошибка обновления производства';
       });
   },
 });
 
-export const { clearError } = productionSlice.actions;
+export const { clearError, resetProductions } = productionSlice.actions;
 export const {
   selectProductionById,
   selectProductions,

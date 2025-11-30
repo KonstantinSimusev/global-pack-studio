@@ -65,7 +65,7 @@ export const getUsersShifts = createAsyncThunk(
 );
 
 export const updateUserShift = createAsyncThunk(
-  'users-shifts/update-shift',
+  'users-shifts/update',
   async (payload: IUserShift): Promise<ISuccess> => {
     try {
       // Вызываем API функцию

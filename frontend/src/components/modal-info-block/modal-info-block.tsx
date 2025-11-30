@@ -1,4 +1,4 @@
-import styles from './info-block.module.css';
+import styles from './modal-info-block.module.css';
 
 import { useSelector } from 'react-redux';
 import { selectCurrentUserShift } from '../../services/slices/user-shift/slice';
@@ -6,7 +6,7 @@ import { Button } from '../ui/button/button';
 import { useContext } from 'react';
 import { LayerContext } from '../../contexts/layer/layerContext';
 
-export const InfoBlock = () => {
+export const ModalInfoBlock = () => {
   const currentUserShift = useSelector(selectCurrentUserShift);
   const { setIsOpenOverlay, setIsUserShiftInfoOpenModal } =
     useContext(LayerContext);

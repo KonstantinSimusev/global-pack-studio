@@ -44,6 +44,22 @@ export class ShiftController {
     return this.shiftService.createShift(dto, req, res);
   }
 
+  @Get('active-shift')
+  async getActiveShift(
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<IShift> {
+    return this.shiftService.getActiveShift(req, res);
+  }
+
+  @Get('finished-shift')
+  async getFinishedShift(
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<IShift> {
+    return this.shiftService.getFinishedShift(req, res);
+  }
+
   @Get('last-team-shift')
   async getLastTeamShift(
     @Req() req: Request,

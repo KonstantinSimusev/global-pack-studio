@@ -1,4 +1,4 @@
-import { Repository, Between } from 'typeorm';
+import { Repository, LessThanOrEqual, MoreThan, LessThan } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { Injectable } from '@nestjs/common';
@@ -15,6 +15,10 @@ export class ShiftRepository {
   async create(shift: Shift): Promise<Shift> {
     const newShift = this.shiftRepository.create(shift);
     return this.shiftRepository.save(newShift);
+  }
+
+  async findAll(): Promise<Shift[]> {
+    return this.shiftRepository.find({});
   }
 
   async findById(id: string): Promise<Shift> {
@@ -35,7 +39,40 @@ export class ShiftRepository {
     });
   }
 
-  async findLastShift(teamNumber: number): Promise<Shift[]> {
+  async findActiveShift(): Promise<Shift> {
+    const nowUTC = new Date();
+    nowUTC.setMinutes(nowUTC.getMinutes() - nowUTC.getTimezoneOffset());
+
+    return this.shiftRepository.findOne({
+      where: {
+        startShift: LessThanOrEqual(nowUTC), // startShift <= now
+        endShift: MoreThan(nowUTC), // endShift > now
+      },
+      order: {
+        date: 'DESC',
+        shiftNumber: 'DESC',
+      },
+      relations: ['usersShifts', 'usersShifts.user', 'productions'],
+    });
+  }
+
+  async findFinishedShift(): Promise<Shift> {
+    const nowUTC = new Date();
+    nowUTC.setMinutes(nowUTC.getMinutes() - nowUTC.getTimezoneOffset());
+
+    return this.shiftRepository.findOne({
+      where: {
+        endShift: LessThan(nowUTC), // endShift < nowUTC (смена уже закончилась)
+      },
+      order: {
+        date: 'DESC', // сначала самые свежие даты
+        shiftNumber: 'DESC', // затем самый большой номер смены
+      },
+      relations: ['usersShifts', 'productions'],
+    });
+  }
+
+  async findLastTeamShift(teamNumber: number): Promise<Shift[]> {
     return this.shiftRepository.find({
       where: {
         teamNumber,
@@ -46,22 +83,6 @@ export class ShiftRepository {
       take: 1, // нам нужна только последняя смена
     });
   }
-
-  // async findTeamShifts(
-  //   teamNumber: number,
-  //   startOfMonth: Date,
-  //   endOfMonth: Date,
-  // ): Promise<Shift[]> {
-  //   return this.shiftRepository.find({
-  //     where: {
-  //       teamNumber,
-  //       date: Between(startOfMonth, endOfMonth),
-  //     },
-  //     order: {
-  //       date: 'DESC',
-  //     },
-  //   });
-  // }
 
   /*
   async findAll(): Promise<Shift[]> {

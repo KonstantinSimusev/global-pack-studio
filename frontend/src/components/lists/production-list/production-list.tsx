@@ -8,6 +8,7 @@ import { selectProductions } from '../../../services/slices/production/slice';
 import { useEffect } from 'react';
 import { getProductions } from '../../../services/slices/production/actions';
 import { formatProductionUnit } from '../../../utils/utils';
+import { TLocation } from '../../../utils/types';
 
 interface IProductionProps {
   shiftId?: string;
@@ -17,17 +18,27 @@ export const ProductionList = ({ shiftId }: IProductionProps) => {
   const dispatch = useDispatch();
   const productions = useSelector(selectProductions);
 
-  const list = productions
-    .slice()
-    .sort((a, b) => a.location.localeCompare(b.location));
+  const list = productions.slice().sort((a, b) => {
+    // Извлекаем номер очереди (цифру в начале строки)
+    const orderA = parseInt((a.location as TLocation).split(' ')[0], 10);
+    const orderB = parseInt((b.location as TLocation).split(' ')[0], 10);
+
+    // Сначала сортируем по номеру очереди
+    if (orderA !== orderB) {
+      return orderA - orderB;
+    }
+
+    // Если очереди одинаковые, сортируем по названию оборудования (алфавитно)
+    return (a.unit as string).localeCompare(b.unit as string);
+  });
 
   if (!shiftId) {
-    return null;
+    return <Error />;
   }
 
   useEffect(() => {
     dispatch(getProductions(shiftId));
-  }, [dispatch, shiftId]);
+  }, []);
 
   return (
     <ul className={styles.list}>
@@ -55,7 +66,7 @@ export const ProductionList = ({ shiftId }: IProductionProps) => {
           </li>
         ))
       ) : (
-        <Error message={'Нет данных для отображения...'} />
+        <Error />
       )}
     </ul>
   );

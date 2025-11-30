@@ -1,60 +1,57 @@
 import styles from './production-chart.module.css';
 
-export const ProductionChart = () => {
+import { selectProductions } from '../../../services/slices/production/slice';
+import { useDispatch, useSelector } from '../../../services/store';
+import { Error } from '../../ui/error/error';
+import { getCount } from '../../../utils/utils';
+import { useEffect } from 'react';
+import { getProductions } from '../../../services/slices/production/actions';
+
+interface IProductionChartProps {
+  shiftId?: string;
+}
+
+export const ProductionChart = ({ shiftId }: IProductionChartProps) => {
+  const dispatch = useDispatch();
+  const productions = useSelector(selectProductions);
   const MAX_VALUE = 200;
-  const list = [
-    {
-      id: '1',
-      title: 'СТАН',
-      total: 0,
-    },
-    {
-      id: '2',
-      title: 'АНГЦ',
-      total: 173,
-    },
-    {
-      id: '3',
-      title: 'АНО',
-      total: 76,
-    },
-    {
-      id: '4',
-      title: 'АИ',
-      total: 13,
-    },
-    {
-      id: '5',
-      title: 'АНГЦ-3',
-      total: 110,
-    },
-  ];
+
+  useEffect(() => {
+    if (shiftId) {
+      dispatch(getProductions(shiftId));
+    }
+  }, [shiftId]);
 
   return (
     <div className={styles.container}>
-      <span className={styles.location}>ПРОИЗВОДСТВО</span>
-      <ul className={styles.chart}>
-        {list.map((item) => {
-          const percentage = Math.round((item.total / MAX_VALUE) * 100);
-          return (
-            <li key={item.id} className={styles.column}>
-              <span
-                style={{ height: `${percentage}px` }}
-                className={styles.column__height}
-              >
-                <span className={styles.total}>{item.total}</span>
-              </span>
-              <span className={styles.border}></span>
-              <span className={styles.title}>{item.title}</span>
-            </li>
-          );
-        })}
-      </ul>
-      <div className={styles.wrapper__common}>
-
-      <span className={styles.common}>Итого за смену:</span>
-      <span className={styles.common}>210 рул</span>
-      </div>
+      {!shiftId ? (
+        <Error />
+      ) : (
+        <>
+          <span className={styles.location}>ПРОИЗВОДСТВО</span>
+          <ul className={styles.chart}>
+            {productions.map((item) => {
+              const percentage = Math.round((item.count / MAX_VALUE) * 100);
+              return (
+                <li key={item.id} className={styles.column}>
+                  <span
+                    style={{ height: `${percentage}px` }}
+                    className={styles.column__height}
+                  >
+                    <span className={styles.count}>{item.count > 0 ? item.count : ''}</span>
+                  </span>
+                  <span className={styles.border}></span>
+                  <span className={styles.title}>{item.unit}</span>
+                </li>
+              );
+            })}
+          </ul>
+          <div className={styles.wrapper__footer}>
+            <span className={styles.common}>Итого за смену:</span>
+            <span className={styles.common}>{getCount(productions)} рул</span>
+          </div>
+        </>
+      )}
     </div>
   );
 };

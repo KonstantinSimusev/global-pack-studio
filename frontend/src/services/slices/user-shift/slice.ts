@@ -36,7 +36,7 @@ export const userShiftSlice = createSlice({
     selectIsLoadingUserShift: (state: IUserShiftState) => state.isLoading,
     selectError: (state: IUserShiftState) => state.error,
     selectUserShiftById: (state: IUserShiftState, id: string) =>
-      state.usersShifts.find((shift) => shift.id === id) || null,
+      state.usersShifts.find((shift) => shift.id === id),
   },
   extraReducers: (builder) => {
     builder
@@ -57,19 +57,6 @@ export const userShiftSlice = createSlice({
         state.isLoading = false;
         state.error = action.error.message ?? 'Ошибка создания смены';
       })
-      // Обработчик для createUsersShifts
-      // .addCase(createUsersShifts.pending, (state) => {
-      //   state.isLoading = true;
-      //   state.error = null;
-      // })
-      // .addCase(createUsersShifts.fulfilled, (state) => {
-      //   state.isLoading = false;
-      //   state.error = null;
-      // })
-      // .addCase(createUsersShifts.rejected, (state, action) => {
-      //   state.isLoading = false;
-      //   state.error = action.error.message ?? 'Ошибка создания смены';
-      // })
       // Обработчик для getUsersShifts
       .addCase(getUsersShifts.pending, (state) => {
         state.isLoading = true;
@@ -85,7 +72,8 @@ export const userShiftSlice = createSlice({
       )
       .addCase(getUsersShifts.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error.message ?? 'Ошибка получения смены';
+        state.error =
+          action.error.message ?? 'Ошибка получения смен работников';
       })
       // Обработчик для updateUserShift
       .addCase(updateUserShift.pending, (state) => {
@@ -98,7 +86,8 @@ export const userShiftSlice = createSlice({
       })
       .addCase(updateUserShift.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error.message ?? 'Ошибка обновления смены';
+        state.error =
+          action.error.message ?? 'Ошибка обновления смен работников';
       })
       // Обработчик для deleteUserShift
       .addCase(deleteUserShift.pending, (state) => {

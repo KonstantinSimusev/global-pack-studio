@@ -80,68 +80,75 @@ export const Sidebar = () => {
           )}
 
           {isAuthenticated && user?.role === master && (
-            <>
-              <li
-                className={clsx(
-                  styles.link,
-                  location.pathname === '/timesheet' && styles.link__active,
-                )}
-                onClick={hanldeClick}
-              >
-                <Link to="/timesheet">Табель</Link>
-              </li>
-
-              <li
-                className={clsx(
-                  styles.link,
-                  location.pathname === '/production' && styles.link__active,
-                )}
-                onClick={hanldeClick}
-              >
-                <Link to="/production">Производство</Link>
-              </li>
-
-              <li
-                className={clsx(
-                  styles.link,
-                  location.pathname === '/shipment' && styles.link__active,
-                )}
-                onClick={hanldeClick}
-              >
-                <Link to="/shipment">Отгрузка</Link>
-              </li>
-
-              <li
-                className={clsx(
-                  styles.link,
-                  location.pathname === '/pack' && styles.link__active,
-                )}
-                onClick={hanldeClick}
-              >
-                <Link to="/pack">Упаковка</Link>
-              </li>
-
-              <li
-                className={clsx(
-                  styles.link,
-                  location.pathname === '/fix' && styles.link__active,
-                )}
-                onClick={hanldeClick}
-              >
-                <Link to="/fix">Раскрепление</Link>
-              </li>
-
-              <li
-                className={clsx(
-                  styles.link,
-                  location.pathname === '/residue' && styles.link__active,
-                )}
-                onClick={hanldeClick}
-              >
-                <Link to="/residue">Неупакованный металл</Link>
-              </li>
-            </>
+            <li
+              className={clsx(
+                styles.link,
+                location.pathname === '/timesheet' && styles.link__active,
+              )}
+              onClick={hanldeClick}
+            >
+              <Link to="/timesheet">Табель</Link>
+            </li>
           )}
+
+          {isAuthenticated &&
+            user?.role === master &&
+            (user?.teamNumber === 1 ||
+              user?.teamNumber === 2 ||
+              user?.teamNumber === 3 ||
+              user?.teamNumber === 4) && (
+              <>
+                <li
+                  className={clsx(
+                    styles.link,
+                    location.pathname === '/production' && styles.link__active,
+                  )}
+                  onClick={hanldeClick}
+                >
+                  <Link to="/production">Производство</Link>
+                </li>
+
+                <li
+                  className={clsx(
+                    styles.link,
+                    location.pathname === '/shipment' && styles.link__active,
+                  )}
+                  onClick={hanldeClick}
+                >
+                  <Link to="/shipment">Отгрузка</Link>
+                </li>
+
+                <li
+                  className={clsx(
+                    styles.link,
+                    location.pathname === '/pack' && styles.link__active,
+                  )}
+                  onClick={hanldeClick}
+                >
+                  <Link to="/pack">Упаковка</Link>
+                </li>
+
+                <li
+                  className={clsx(
+                    styles.link,
+                    location.pathname === '/fix' && styles.link__active,
+                  )}
+                  onClick={hanldeClick}
+                >
+                  <Link to="/fix">Раскрепление</Link>
+                </li>
+
+                <li
+                  className={clsx(
+                    styles.link,
+                    location.pathname === '/residue' && styles.link__active,
+                  )}
+                  onClick={hanldeClick}
+                >
+                  <Link to="/residue">Остатки</Link>
+                </li>
+              </>
+            )}
 
           {isAuthenticated && (
             <li className={clsx(styles.link)} onClick={hanldeClickLogout}>

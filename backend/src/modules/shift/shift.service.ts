@@ -21,13 +21,9 @@ import { UserShiftService } from '../user-shift/user-shift.service';
 import { CreateShiftDTO } from './dto/create-shift.dto';
 
 import { IList, IShift, ISuccess } from '../../shared/interfaces/api.interface';
-import {
-  compareShifts,
-  getNextShift,
-  productions,
-} from '../../shared/utils/utils';
+import { compareShifts, getNextShift } from '../../shared/utils/utils';
+
 import { ProductionService } from '../production/production.service';
-import { Production } from '../production/entities/production.entity';
 
 @Injectable()
 export class ShiftService {
@@ -51,8 +47,30 @@ export class ShiftService {
       // Модифицируем дату для смены 1
       let userDate = new Date(dto.date);
 
+      const targetDate = new Date();
+      targetDate.setUTCHours(0, 0, 0, 0); // Обнуляем до 00:00:00.000 UTC
+
+      let startShift: Date;
+      let endShift: Date;
+
       if (dto.shiftNumber === 1) {
-        userDate.setDate(userDate.getDate() + 1);
+        // Модифицируем дату для смены 1
+        userDate.setUTCDate(userDate.getUTCDate() + 1);
+
+        // Смена 1: 19:30 сегодня → 07:30 завтра
+        startShift = new Date(targetDate);
+        startShift.setUTCHours(20, 0, 0, 0); // 19:30 текущего дня
+
+        endShift = new Date(targetDate);
+        endShift.setUTCDate(endShift.getUTCDate() + 1); // +1 день
+        endShift.setUTCHours(8, 0, 0, 0); // 07:30 следующего дня
+      } else {
+        // Смена 2: 07:30 → 19:30 в тот же день
+        startShift = new Date(targetDate);
+        startShift.setUTCHours(8, 0, 0, 0);
+
+        endShift = new Date(targetDate);
+        endShift.setUTCHours(20, 0, 0, 0);
       }
 
       // Создаем объект для проверки
@@ -60,6 +78,8 @@ export class ShiftService {
       newShift.date = userDate;
       newShift.shiftNumber = dto.shiftNumber;
       newShift.teamNumber = dto.teamNumber;
+      newShift.startShift = startShift;
+      newShift.endShift = endShift;
 
       const nextShift = getNextShift(dto.teamNumber);
       const equal = compareShifts(nextShift, newShift);
@@ -101,6 +121,56 @@ export class ShiftService {
     }
   }
 
+  async getActiveShift(
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<IShift> {
+    try {
+      await this.authService.validateAccessToken(req, res);
+
+      const activeShift = await this.shiftRepository.findActiveShift();
+
+      if (!activeShift) {
+        throw new NotFoundException('Идет планирование...');
+      }
+
+      return activeShift;
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+
+      throw new InternalServerErrorException(
+        'Произошла ошибка при получении смены',
+      );
+    }
+  }
+
+  async getFinishedShift(
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<IShift> {
+    try {
+      await this.authService.validateAccessToken(req, res);
+
+      const finishedShift = await this.shiftRepository.findFinishedShift();
+
+      if (!finishedShift) {
+        throw new NotFoundException('Нет данных...');
+      }
+
+      return finishedShift;
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+
+      throw new InternalServerErrorException(
+        'Произошла ошибка при получении смены',
+      );
+    }
+  }
+
   // async deleteShift(
   //   id: string,
   //   @Req() req: Request,
@@ -133,7 +203,7 @@ export class ShiftService {
   async getLastTeamShift(
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
-  ): Promise<IShift | null> {
+  ): Promise<IShift> {
     try {
       const { currentTeamNumber } = await this.authService.validateAccessToken(
         req,
@@ -141,7 +211,7 @@ export class ShiftService {
       );
 
       const shifts =
-        await this.shiftRepository.findLastShift(currentTeamNumber);
+        await this.shiftRepository.findLastTeamShift(currentTeamNumber);
 
       if (shifts.length === 0) {
         throw new NotFoundException('Пожалуйста, создайте смену...');

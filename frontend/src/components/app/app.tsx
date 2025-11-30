@@ -28,7 +28,7 @@ import { ProtectedRoute } from '../protected-route/protected-route';
 import { checkAccessToken } from '../../services/slices/auth/actions';
 import { useDispatch } from '../../services/store';
 import { UpdateWorkerForm } from '../forms/update-worker/update-worker.form';
-import { InfoBlock } from '../info-block/info-block';
+import { ModalInfoBlock } from '../modal-info-block/modal-info-block';
 import { HomeShift } from '../pages/home-shift/home-shift';
 
 // import { Shipment } from '../pages/shipment/shipment';
@@ -37,6 +37,10 @@ import { HomeShift } from '../pages/home-shift/home-shift';
 // import { Fix } from '../pages/fix/fix';
 import { ProductionForm } from '../forms/production/production.form';
 import { Production } from '../pages/production/production';
+import {
+  getActiveShift,
+  getFinishedShift,
+} from '../../services/slices/shift/actions';
 
 const App = () => {
   const { isLightTheme } = useContext(ThemeContext);
@@ -82,6 +86,8 @@ const App = () => {
   useEffect(() => {
     console.log('✅ App смонтирован');
     dispatch(checkAccessToken());
+    dispatch(getActiveShift());
+    dispatch(getFinishedShift());
   }, []);
 
   console.log('🔁 App отрендерен');
@@ -100,7 +106,7 @@ const App = () => {
         <Route path="/" element={<DefaultPage />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/home" element={<Home />} />
-          <Route path="/home/shifts/:id" element={<HomeShift />} />
+          <Route path="/home/shifts/:shiftId" element={<HomeShift />} />
           <Route path="/timesheet" element={<Timesheet />} />
           <Route path="/production" element={<Production />} />
           {/* <Route path="/shipment" element={<Shipment />} />
@@ -158,7 +164,7 @@ const App = () => {
 
       {isUserShiftInfoOpenModal && (
         <Modal>
-          <InfoBlock />
+          <ModalInfoBlock />
         </Modal>
       )}
     </div>

@@ -17,6 +17,20 @@ export class ProductionRepository {
     return await this.productionRepository.save(newProduction);
   }
 
+  async findById(id: string): Promise<Production> {
+    return await this.productionRepository.findOneBy({ id });
+  }
+
+  async update(
+    production: Production,
+    updateData: Partial<Production>,
+  ): Promise<Production> {
+    return await this.productionRepository.save({
+      ...production,
+      ...updateData,
+    });
+  }
+
   async findProductionsByShiftId(shiftId: string): Promise<Production[]> {
     return this.productionRepository.find({
       where: {

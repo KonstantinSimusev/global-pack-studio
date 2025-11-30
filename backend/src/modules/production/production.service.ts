@@ -1,6 +1,8 @@
 import {
+  Body,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
   Param,
   ParseUUIDPipe,
   Req,
@@ -21,6 +23,7 @@ import {
   ISuccess,
 } from 'src/shared/interfaces/api.interface';
 import { AuthService } from '../auth/auth.service';
+import { UpdateProductionDTO } from './dto/update-production.dto';
 
 @Injectable()
 export class ProductionService {
@@ -60,7 +63,8 @@ export class ProductionService {
     try {
       await this.authService.validateAccessToken(req, res);
 
-      const productions = await this.productionRepository.findProductionsByShiftId(id);
+      const productions =
+        await this.productionRepository.findProductionsByShiftId(id);
 
       return {
         total: productions.length,
@@ -73,36 +77,40 @@ export class ProductionService {
     }
   }
 
-  // async updateUserShift(
-  //   @Body() dto: UpdateUserShiftDTO,
-  //   @Req() req: Request,
-  //   @Res({ passthrough: true }) res: Response,
-  // ): Promise<ISuccess> {
-  //   try {
-  //     await this.authService.validateAccessToken(req, res);
+  async updateProduction(
+    @Body() dto: UpdateProductionDTO,
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<ISuccess> {
+    try {
+      await this.authService.validateAccessToken(req, res);
 
-  //     const userShift = await this.userShiftRepository.findById(dto.id);
+      const production = await this.productionRepository.findById(dto.id);
 
-  //     if (!userShift) {
-  //       throw new NotFoundException('Смена не найдена');
-  //     }
+      if (!production) {
+        throw new NotFoundException('Производство не найдено');
+      }
 
-  //     const updateUserShift = await this.userShiftRepository.update(
-  //       userShift,
-  //       dto,
-  //     );
+      const updateProduction = await this.productionRepository.update(
+        production,
+        dto,
+      );
 
-  //     if (!updateUserShift) {
-  //       throw new NotFoundException('Смена не обновлена');
-  //     }
+      if (!updateProduction) {
+        throw new NotFoundException('Производство не обновлена');
+      }
 
-  //     return {
-  //       message: 'Смена пользователя успешно обновлена',
-  //     };
-  //   } catch (error) {
-  //     throw new InternalServerErrorException(
-  //       'Произошла ошибка при обновлении смены',
-  //     );
-  //   }
-  // }
+      return {
+        message: 'Смена пользователя успешно обновлена',
+      };
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      
+      throw new InternalServerErrorException(
+        'Произошла ошибка при обновлении смены',
+      );
+    }
+  }
 }

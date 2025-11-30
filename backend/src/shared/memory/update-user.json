@@ -1,15 +1,16 @@
 {
-    "positionCode": 643984,
-    "lastName": "Белинский",
-    "firstName": "Максим",
-    "patronymic": "Викторович",
-    "profession": "Бригадир на ОСП",
-    "grade": 4,
-    "personalNumber": 132239,
+    "currentTeamNumber": 3,
+    "firstName": "Евгений",
+    "grade": 13,
+    "lastName": "Шишин",
+    "patronymic": "Олегович",
+    "personalNumber": 135914,
+    "positionCode": 643843,
+    "profession": "Мастер участка",
+    "role": "MASTER",
+    "sortOrder": 0,
     "teamNumber": 3,
-    "currentTeamNumber": 4,
     "workSchedule": "2-А",
     "workshopCode": "ЛПЦ-11",
-    "login": "Worker_203",
-    "role": "MASTER"
+    "login": "Master_113"
 }

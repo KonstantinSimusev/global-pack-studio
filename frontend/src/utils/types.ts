@@ -1,5 +1,24 @@
 export type TRole = 'MANAGER' | 'MASTER' | 'ADMIN' | 'USER';
 
+export type TWorker =
+  | 'Упаковщик'
+  | 'Штабелировщик'
+  | 'Оператор'
+  | 'Упаковщик ЛУМ'
+  | 'Бригадир'
+  | 'Водитель'
+  | 'Резчик';
+
+export const WORKERS: TWorker[] = [
+  'Упаковщик',
+  'Штабелировщик',
+  'Оператор',
+  'Упаковщик ЛУМ',
+  'Бригадир',
+  'Водитель',
+  'Резчик',
+];
+
 export type TProfession =
   | 'Укладчик-упаковщик'
   | 'Штабелировщик металла'
@@ -65,7 +84,9 @@ export type TTeamProfession =
   | 'Резчик холодного металла'
   | 'Укладчик-упаковщик'
   | 'Укладчик-упаковщик ЛУМ'
-  | 'Штабелировщик металла';
+  | 'Штабелировщик металла'
+  | 'Мастер участка'
+  | 'Ио мастера участка';
 
 export const TEAM_PROFESSION_OPTIONS: TTeamProfession[] = [
   'Бригадир ОСП',
@@ -75,6 +96,8 @@ export const TEAM_PROFESSION_OPTIONS: TTeamProfession[] = [
   'Укладчик-упаковщик',
   'Укладчик-упаковщик ЛУМ',
   'Штабелировщик металла',
+  'Мастер участка',
+  'Ио мастера участка',
 ];
 
 export type TWorkPlace =
@@ -88,7 +111,8 @@ export type TWorkPlace =
   | 'Тупик 7'
   | 'Тупик 8'
   | 'Тупик 10'
-  | 'Бригада по реквизитам';
+  | 'Бригада по реквизитам'
+  | 'ЛПЦ-11';
 
 export const WORK_PLACE_OPTIONS: TWorkPlace[] = [
   'Не выбрано',
@@ -102,6 +126,16 @@ export const WORK_PLACE_OPTIONS: TWorkPlace[] = [
   'Тупик 8',
   'Тупик 10',
   'Бригада по реквизитам',
+  'ЛПЦ-11',
 ];
 
+export type TWorkerLocation = '1 оч' | '2 оч' | '3 оч' | 'ЛУМ';
+
 export type TUnit = 'СТАН' | 'АНГЦ' | 'АНО' | 'АИ' | 'АНГЦ-3';
+
+export type TLocation = '1 ОЧЕРЕДЬ' | '2 ОЧЕРЕДЬ' | '3 ОЧЕРЕДЬ';
+
+export type TShiftStatus = 'активная' | 'завершённая';
+
+export type TResidue = '1 ОЧ' | '2 ОЧ' | '3 ОЧ' | 'ВЛРТ';
+export const RESIDUES = ['1 ОЧ', '2 ОЧ', '3 ОЧ', 'ВЛРТ'];
