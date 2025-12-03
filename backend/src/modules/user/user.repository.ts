@@ -43,14 +43,10 @@ export class UserRepository {
     });
   }
 
-  async findUsersByTeam(currentTeamNumber: number): Promise<User[]> {
+  async findUsersByTeam(teamNumber: number): Promise<User[]> {
     const teamUsers = await this.userRepository.find({
-      where: {
-        currentTeamNumber,
-        // profession: Not(EProfession.MASTER),
-      },
+      where: [{ teamNumber: teamNumber }, { currentTeamNumber: teamNumber }],
     });
-
     return teamUsers;
   }
 

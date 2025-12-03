@@ -1,7 +1,7 @@
 .container {
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 50px;
   padding: 30px;
   background-color: var(--bg-color-shift);
   opacity: 0.9;
@@ -9,9 +9,9 @@
   border-radius: 30px;
 }
 
-/* .location {
-  margin-bottom: 10px;
-} */
+.location {
+  letter-spacing: 0.4px;
+}
 
 .wrapper {
   display: flex;
@@ -63,13 +63,6 @@
   background-color: var(--bg-color-column);
   position: relative;
   width: 30%;
-}
-
-.border {
-  width: 100%;
-  height: 1px;
-  background-color: var(--bg-color-column);
-  opacity: 0.5;
 }
 
 .title {

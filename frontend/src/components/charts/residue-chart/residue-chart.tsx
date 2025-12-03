@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import { getProductions } from '../../../services/slices/production/actions';
 import { RESIDUES } from '../../../utils/types';
 import { IResidue } from '../../../utils/api.interface';
+import { Border } from '../../ui/border/border';
 
 interface IChartProps {
   shiftId?: string;
@@ -60,7 +61,7 @@ export const ResidueChart = ({ shiftId }: IChartProps) => {
                         {item.count > 0 ? item.count : ''}
                       </span>
                     </span>
-                    <span className={styles.border}></span>
+                    <Border />
                     <span className={styles.title}>{item.location}</span>
                   </li>
                 );

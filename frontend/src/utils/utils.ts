@@ -1,3 +1,12 @@
+import { IShift, IUserShift } from './api.interface';
+import {
+  TProfession,
+  TRole,
+  TWorkStatus,
+  WORK_STATUS_ABBREVIATIONS,
+  WORK_STATUS_OPTIONS,
+} from './types';
+
 // Функция для форматирования даты
 export const formatDate = (date: Date) => {
   const parsedDate = new Date(date);
@@ -33,4 +42,343 @@ export function formatProductionUnit(unit: string | undefined | null): string {
     default:
       return unit;
   }
+}
+
+export function countProfessions(usersShifts: IUserShift[]) {
+  const count: Record<string, number> = {};
+  const sortOrderMap: Record<string, number> = {};
+
+  // Проходим по каждому сотруднику
+  usersShifts.forEach((userShift) => {
+    const profession = userShift.shiftProfession;
+    const user = userShift.user;
+
+    // Учитываем количество профессий
+    if (count[profession]) {
+      count[profession]++;
+    } else {
+      count[profession] = 1;
+    }
+
+    // Сохраняем sortOrder для профессии (если пользователь и sortOrder доступны)
+    if (user && user.sortOrder != null) {
+      sortOrderMap[profession] = user.sortOrder;
+    }
+  });
+
+  // Преобразуем объект в массив объектов { profession, count, sortOrder }
+  const result = Object.keys(count).map((profession) => ({
+    profession: profession,
+    count: count[profession],
+    sortOrder: sortOrderMap[profession] || 0, // если sortOrder не найден, ставим 0
+  }));
+
+  // Сортируем по sortOrder
+  return result.sort((a, b) => a.sortOrder - b.sortOrder);
+}
+
+export function countProfessionsByAttendance(
+  usersShifts: IUserShift[],
+): { profession: string; count: number; sortOrder: number }[] {
+  const count: Record<string, number> = {};
+  const sortOrderMap: Record<string, number> = {};
+
+  // Проходим по каждому элементу смены
+  usersShifts.forEach((userShift) => {
+    // Учитываем только записи со статусом "Явка"
+    if (
+      userShift.workStatus !== 'Явка' ||
+      userShift.workPlace === 'Не выбрано'
+    ) {
+      return;
+    }
+
+    const profession = userShift.shiftProfession;
+    const user = userShift.user;
+
+    // Увеличиваем счётчик для данной профессии
+    if (count[profession]) {
+      count[profession]++;
+    } else {
+      count[profession] = 1;
+    }
+
+    // Сохраняем sortOrder для профессии, если он доступен у пользователя
+    if (user && user.sortOrder != null) {
+      sortOrderMap[profession] = user.sortOrder;
+    }
+  });
+
+  // Преобразуем собранные данные в массив объектов
+  const result = Object.keys(count).map((profession) => ({
+    profession,
+    count: count[profession],
+    sortOrder: sortOrderMap[profession] || 0, // если sortOrder не найден, ставим 0
+  }));
+
+  // Сортируем результат по полю sortOrder
+  return result.sort((a, b) => a.sortOrder - b.sortOrder);
+}
+
+// Проверяем, нужно ли показывать смену
+export const isShowShift = (lastShift: IShift) => {
+  if (!lastShift || !lastShift.date) return false;
+
+  const today = new Date();
+  const lastShiftDate = new Date(lastShift.date);
+
+  // Устанавливаем время на 00:00:00 для корректного сравнения дат
+  today.setHours(0, 0, 0, 0);
+  lastShiftDate.setHours(0, 0, 0, 0);
+
+  // Разница в днях между текущей датой и датой последней смены
+  // today - lastShiftDate: положительное число = прошло дней, отрицательное = в будущем
+  const diffTime = today.getTime() - lastShiftDate.getTime();
+  const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+
+  /*
+     Условия отображения:
+     - если последняя смена сегодня (diffDays = 0) → показываем
+     - если последняя смена была вчера (diffDays = 1) → показываем
+     - если последняя смена будет завтра (diffDays = -1) → показываем (сегодня меньше на 1 день)
+     - во всех остальных случаях (≥2 дня назад или ≥2 дня вперёд) → не показываем
+    */
+  return diffDays === 0 || diffDays === -1;
+};
+
+export function countProfessionsByAddedAttendance(
+  usersShifts: IUserShift[],
+  teamNumber: number,
+): {
+  profession: string;
+  teamNumber: number;
+  count: number;
+  sortOrder: number;
+}[] {
+  // Расширяем тип вложенного объекта: добавляем statusIndex
+  const resultMap: Record<
+    string,
+    Record<number, { count: number; sortOrder: number; statusIndex: number }>
+  > = {};
+
+  usersShifts.forEach((userShift) => {
+    // Учитываем только записи со статусом "Явка",
+    // местом работы не "Не выбрано"
+    // и номером команды, не равным teamNumber
+    if (
+      userShift.workStatus !== 'Явка' ||
+      userShift.workPlace === 'Не выбрано' ||
+      userShift.user?.teamNumber === teamNumber
+    ) {
+      return;
+    }
+
+    const profession = userShift.shiftProfession;
+
+    if (!resultMap[profession]) {
+      resultMap[profession] = {};
+    }
+
+    const currentTeamNumber = userShift.user?.teamNumber ?? 0;
+
+    if (!resultMap[profession][currentTeamNumber]) {
+      resultMap[profession][currentTeamNumber] = {
+        count: 0,
+        sortOrder: userShift.user?.sortOrder ?? 0,
+        statusIndex: 0, // инициализируем как 0, т.к. больше не используем statusAbbreviations
+      };
+    }
+
+    resultMap[profession][currentTeamNumber].count++;
+  });
+
+  const result = Object.keys(resultMap).reduce(
+    (acc, profession) => {
+      const teamNumbers = Object.keys(resultMap[profession]).map(Number);
+      teamNumbers.forEach((teamNum) => {
+        acc.push({
+          profession,
+          teamNumber: teamNum,
+          count: resultMap[profession][teamNum].count,
+          sortOrder: resultMap[profession][teamNum].sortOrder,
+          statusIndex: resultMap[profession][teamNum].statusIndex,
+        });
+      });
+      return acc;
+    },
+    [] as {
+      profession: string;
+      teamNumber: number;
+      count: number;
+      sortOrder: number;
+      statusIndex: number;
+    }[],
+  );
+
+  return (
+    result
+      .sort((a, b) => {
+        if (a.sortOrder !== b.sortOrder) {
+          return a.sortOrder - b.sortOrder;
+        }
+        return a.statusIndex - b.statusIndex;
+      })
+      // Удаляем statusIndex из итогового объекта (если не нужен снаружи)
+      .map(({ profession, teamNumber, count, sortOrder }) => ({
+        profession,
+        teamNumber,
+        count,
+        sortOrder,
+      }))
+  );
+}
+
+export const transformWorkStatusOptions = (): string[] => {
+  return WORK_STATUS_OPTIONS.map((status: TWorkStatus) => {
+    // Берем сокращение из словаря; если нет — дефолтная логика
+    return (
+      WORK_STATUS_ABBREVIATIONS[status] ?? status.slice(0, 2).toLowerCase()
+    );
+  });
+};
+
+export function countNonAttendedProfessions(
+  usersShifts: IUserShift[],
+): { profession: string; reason: string; count: number; sortOrder: number }[] {
+  // Расширяем тип вложенного объекта: добавляем statusIndex
+  const resultMap: Record<
+    string,
+    Record<string, { count: number; sortOrder: number; statusIndex: number }>
+  > = {};
+
+  const statusAbbreviations = transformWorkStatusOptions();
+
+  usersShifts.forEach((userShift) => {
+    if (
+      userShift.workStatus === 'Явка' ||
+      userShift.workPlace === 'Не выбрано'
+    ) {
+      return;
+    }
+
+    const profession = userShift.shiftProfession;
+    const status = userShift.workStatus as TWorkStatus;
+
+    const reason =
+      statusAbbreviations[WORK_STATUS_OPTIONS.indexOf(status)] ||
+      status.slice(0, 2).toLowerCase();
+
+    const statusIndex = statusAbbreviations.indexOf(reason);
+
+    if (!resultMap[profession]) {
+      resultMap[profession] = {};
+    }
+
+    if (!resultMap[profession][reason]) {
+      resultMap[profession][reason] = {
+        count: 0,
+        sortOrder: userShift.user?.sortOrder ?? 0,
+        statusIndex: statusIndex, // теперь тип включает statusIndex
+      };
+    }
+
+    resultMap[profession][reason].count++;
+  });
+
+  const result = Object.keys(resultMap).reduce(
+    (acc, profession) => {
+      const reasons = Object.keys(resultMap[profession]);
+      reasons.forEach((reason) => {
+        acc.push({
+          profession,
+          reason,
+          count: resultMap[profession][reason].count,
+          sortOrder: resultMap[profession][reason].sortOrder,
+          statusIndex: resultMap[profession][reason].statusIndex, // используем поле
+        });
+      });
+      return acc;
+    },
+    [] as {
+      profession: string;
+      reason: string;
+      count: number;
+      sortOrder: number;
+      statusIndex: number; // добавляем в тип массива
+    }[],
+  );
+
+  return (
+    result
+      .sort((a, b) => {
+        if (a.sortOrder !== b.sortOrder) {
+          return a.sortOrder - b.sortOrder;
+        }
+        return a.statusIndex - b.statusIndex;
+      })
+      // Удаляем statusIndex из итогового объекта (если не нужен снаружи)
+      .map(({ profession, reason, count, sortOrder }) => ({
+        profession,
+        reason,
+        count,
+        sortOrder,
+      }))
+  );
+}
+
+export function filterWorkers(usersShifts: IUserShift[]): IUserShift[] {
+  const profession: TProfession = 'Мастер участка';
+  const role: TRole = 'MASTER';
+
+  // Проверяем, есть ли пользователь с профессией 'Мастер участка'
+  const hasMasterProfession = usersShifts.some(
+    (userShift) => userShift.user?.profession === profession,
+  );
+
+  if (hasMasterProfession) {
+    // Если есть мастер по профессии — фильтруем его
+    return usersShifts.filter(
+      (userShift) => userShift.user?.profession !== profession,
+    );
+  }
+
+  // Если нет мастера по профессии — ищем по роли
+  const hasMasterRole = usersShifts.some(
+    (userShift) => userShift.user?.role === role,
+  );
+
+  if (hasMasterRole) {
+    // Если есть мастер по роли — фильтруем его
+    return usersShifts.filter((userShift) => userShift.user?.role !== role);
+  }
+
+  // Если ни мастера по профессии, ни по роли не найдено — возвращаем пустой массив
+  return usersShifts;
+}
+
+export function filterMaster(usersShifts: IUserShift[]) {
+  const profession: TProfession = 'Мастер участка';
+  const role: TRole = 'MASTER';
+
+  // Ищем пользователя с профессией 'Мастер участка'
+  const masterByProfession = usersShifts.find(
+    (userShift) => userShift.user?.profession === profession,
+  );
+
+  if (masterByProfession) {
+    // Если найден мастер по профессии — возвращаем его
+    return masterByProfession;
+  }
+
+  // Если нет мастера по профессии — ищем по роли
+  const masterByRole = usersShifts.find(
+    (userShift) => userShift.user?.role === role,
+  );
+
+  if (masterByRole) {
+    // Если найден мастер по роли — возвращаем его
+    return masterByRole;
+  }
+
+  return;
 }

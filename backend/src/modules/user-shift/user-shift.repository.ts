@@ -4,7 +4,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
 
 import { UserShift } from './entities/user-shift.entity';
-import { EProfession, ERole } from '../../shared/enums/enums';
 
 @Injectable()
 export class UserShiftRepository {
@@ -40,10 +39,6 @@ export class UserShiftRepository {
     return this.userShiftRepository.find({
       where: {
         shift: { id },
-        // user: {
-          // profession: EProfession.MASTER,
-          // sortOrder: Not(0),
-        // },
       },
       order: {
         user: {
@@ -54,6 +49,25 @@ export class UserShiftRepository {
         },
       },
       relations: ['user', 'shift'],
+      select: {
+        user: {
+          id: true,
+          positionCode: true,
+          lastName: true,
+          firstName: true,
+          patronymic: true,
+          profession: true,
+          grade: true,
+          personalNumber: true,
+          teamNumber: true,
+          currentTeamNumber: true,
+          workSchedule: true,
+          workshopCode: true,
+          role: true,
+          sortOrder: true,
+          // hashedPassword не указываем → не загружаем
+        },
+      },
     });
   }
 

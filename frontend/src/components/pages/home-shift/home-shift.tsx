@@ -12,11 +12,17 @@ import {
 import { Error } from '../../ui/error/error';
 import { WorkerAttendanceList } from '../../lists/worker-attendance-list/worker-attendance-list';
 import { Layout } from '../../ui/layout/layout';
-import { InfoBlock } from '../../ui/info-block/info-block';
-import { TRole } from '../../../utils/types';
+import { TeamProfessionList } from '../../lists/profession-list/profession-list';
+import { useEffect } from 'react';
+import { TShiftStatus } from '../../../utils/types';
 
 export const HomeShift = () => {
   const { shiftId } = useParams();
+
+  useEffect(() => {
+    // Скролим страницу наверх
+    window.scrollTo(0, 0);
+  }, []);
 
   if (!shiftId) {
     return <Error />;
@@ -25,45 +31,33 @@ export const HomeShift = () => {
   const activeShift = useSelector(selectActiveShift);
   const finishedShift = useSelector(selectFinishedShift);
 
-  const userRole: TRole = 'MASTER';
+  const activeStatusShift: TShiftStatus = 'активная';
+  const finishedStatusShift: TShiftStatus = 'завершённая';
 
   const currentShift =
     activeShift?.id === shiftId ? activeShift : finishedShift;
 
-  const usersShifts = currentShift?.usersShifts;
-
-  const userShift = usersShifts?.find(
-    (userShift) => userShift.user?.role === userRole,
-  );
-
-  // Формируем полное ФИО мастера
-  const masterFullName = userShift
-    ? `${userShift.user?.lastName} ${userShift.user?.firstName} ${userShift.user?.patronymic}`
-    : 'Нет данных...';
-
-  // Формируем должность
-  const profession = userShift ? userShift.user?.profession : 'Нет данных...';
+  const currentStatus =
+    currentShift === activeShift ? activeStatusShift : finishedStatusShift;
 
   return (
     <Layout>
       <div className={styles.wrapper__button}>
         <BackButton actionType="home" />
       </div>
-      <div className={styles.wrapper__master}>
-        {masterFullName && (<>
-          <InfoBlock title={'Руководитель бригады'} text={masterFullName} />
-        </>
-        )}
-        {profession && (<>
-          <InfoBlock title={'Должность'} text={profession} />
-        </>
-        )}
-        
-      </div>
+
       {currentShift && (
         <ShiftInfo
           date={currentShift.date}
           shiftNumber={currentShift.shiftNumber}
+          teamNumber={currentShift.teamNumber}
+        />
+      )}
+
+      {currentShift?.usersShifts && (
+        <TeamProfessionList
+          type={currentStatus}
+          list={currentShift?.usersShifts}
           teamNumber={currentShift.teamNumber}
         />
       )}

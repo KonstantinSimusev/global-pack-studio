@@ -10,6 +10,7 @@
 }
 
 .location {
+  letter-spacing: 0.4px;
   margin-bottom: 30px;
 }
 
@@ -46,13 +47,6 @@
   background-color: var(--bg-color-column);
   position: relative;
   width: 30%;
-}
-
-.border {
-  width: 100%;
-  height: 1px;
-  background-color: var(--bg-color-column);
-  opacity: 0.5;
 }
 
 .title {

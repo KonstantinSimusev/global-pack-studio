@@ -8,7 +8,7 @@ import { selectProductions } from '../../../services/slices/production/slice';
 import { useEffect } from 'react';
 import { getProductions } from '../../../services/slices/production/actions';
 import { formatProductionUnit } from '../../../utils/utils';
-import { TLocation } from '../../../utils/types';
+import { UNITS } from '../../../utils/types';
 
 interface IProductionProps {
   shiftId?: string;
@@ -18,19 +18,11 @@ export const ProductionList = ({ shiftId }: IProductionProps) => {
   const dispatch = useDispatch();
   const productions = useSelector(selectProductions);
 
-  const list = productions.slice().sort((a, b) => {
-    // Извлекаем номер очереди (цифру в начале строки)
-    const orderA = parseInt((a.location as TLocation).split(' ')[0], 10);
-    const orderB = parseInt((b.location as TLocation).split(' ')[0], 10);
-
-    // Сначала сортируем по номеру очереди
-    if (orderA !== orderB) {
-      return orderA - orderB;
-    }
-
-    // Если очереди одинаковые, сортируем по названию оборудования (алфавитно)
-    return (a.unit as string).localeCompare(b.unit as string);
-  });
+  const sortedArray = productions
+    .filter((item) => item.unit !== undefined) // исключаем элементы без unit
+    .sort((a, b) => {
+      return UNITS.indexOf(a.unit!) - UNITS.indexOf(b.unit!);
+    });
 
   if (!shiftId) {
     return <Error />;
@@ -41,9 +33,9 @@ export const ProductionList = ({ shiftId }: IProductionProps) => {
   }, []);
 
   return (
-    <ul className={styles.list}>
-      {list && list.length > 0 ? (
-        list.map((item) => (
+    <ul className={styles.container}>
+      {sortedArray.length > 0 ? (
+        sortedArray.map((item) => (
           <li key={item.id} className={styles.item}>
             <div className={styles.wrapper__header}>
               <h5 className={styles.location}>{item.location}</h5>

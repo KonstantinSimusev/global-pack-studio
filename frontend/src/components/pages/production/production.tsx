@@ -14,6 +14,7 @@ import {
 import { getLastTeamShift } from '../../../services/slices/shift/actions';
 import { Error } from '../../ui/error/error';
 import { ProductionList } from '../../lists/production-list/production-list';
+import { isShowShift } from '../../../utils/utils';
 
 export const Production = () => {
   const dispatch = useDispatch();
@@ -27,7 +28,7 @@ export const Production = () => {
   return (
     <Layout>
       <PageTitle title="ПРОИЗВОДСТВО" />
-      {currentShiftId && lastShift ? (
+      {currentShiftId && lastShift && isShowShift(lastShift) ? (
         <>
           <ShiftInfo
             date={lastShift.date}

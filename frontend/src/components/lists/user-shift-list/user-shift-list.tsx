@@ -13,15 +13,18 @@ import { InfoBlock } from '../../ui/info-block/info-block';
 import { UserBlock } from '../../ui/user-block/user-block';
 import { Error } from '../../ui/error/error';
 import { selectCurrentShift } from '../../../services/slices/shift/slice';
-
 interface IUserShiftProps {
   shiftId?: string;
 }
 
 export const UserShiftList = ({ shiftId }: IUserShiftProps) => {
   const dispatch = useDispatch();
-  const usersShifts = useSelector(selectUsersShifts);
+  const dataBaseUsersShifts = useSelector(selectUsersShifts);
   const shift = useSelector(selectCurrentShift);
+
+  const workersShifts = dataBaseUsersShifts.filter(
+    (userShift) => userShift.user?.profession !== 'Мастер участка',
+  );
 
   if (!shiftId) {
     return <Error />;
@@ -33,7 +36,7 @@ export const UserShiftList = ({ shiftId }: IUserShiftProps) => {
 
   return (
     <ul className={styles.container}>
-      {usersShifts.map((userShift, index) => (
+      {workersShifts.map((userShift, index) => (
         <li key={userShift.id} className={styles.item}>
           <div className={styles.wrapper__header}>
             <span className={styles.index}>

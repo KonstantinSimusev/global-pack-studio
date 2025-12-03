@@ -53,6 +53,44 @@ export class ShiftRepository {
         shiftNumber: 'DESC',
       },
       relations: ['usersShifts', 'usersShifts.user', 'productions'],
+
+      select: {
+        // Поля Shift
+        id: true,
+        date: true,
+        shiftNumber: true,
+        teamNumber: true,
+        startShift: true,
+        endShift: true,
+
+        // Поля UserShift
+        usersShifts: {
+          id: true,
+          workStatus: true,
+          workPlace: true,
+          shiftProfession: true,
+          workHours: true,
+
+          // Поля User (вложенные)
+          user: {
+            id: true,
+            positionCode: true,
+            lastName: true,
+            firstName: true,
+            patronymic: true,
+            profession: true,
+            grade: true,
+            personalNumber: true,
+            teamNumber: true,
+            currentTeamNumber: true,
+            workSchedule: true,
+            workshopCode: true,
+            role: true,
+            sortOrder: true,
+            // hashedPassword не указываем → не загружаем
+          },
+        },
+      },
     });
   }
 
@@ -68,7 +106,45 @@ export class ShiftRepository {
         date: 'DESC', // сначала самые свежие даты
         shiftNumber: 'DESC', // затем самый большой номер смены
       },
-      relations: ['usersShifts', 'productions'],
+      relations: ['usersShifts', 'usersShifts.user', 'productions'],
+
+      select: {
+        // Поля Shift
+        id: true,
+        date: true,
+        shiftNumber: true,
+        teamNumber: true,
+        startShift: true,
+        endShift: true,
+
+        // Поля UserShift
+        usersShifts: {
+          id: true,
+          workStatus: true,
+          workPlace: true,
+          shiftProfession: true,
+          workHours: true,
+
+          // Поля User (вложенные)
+          user: {
+            id: true,
+            positionCode: true,
+            lastName: true,
+            firstName: true,
+            patronymic: true,
+            profession: true,
+            grade: true,
+            personalNumber: true,
+            teamNumber: true,
+            currentTeamNumber: true,
+            workSchedule: true,
+            workshopCode: true,
+            role: true,
+            sortOrder: true,
+            // hashedPassword не указываем → не загружаем
+          },
+        },
+      },
     });
   }
 

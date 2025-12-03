@@ -189,8 +189,6 @@ export const UpdateWorkerForm = () => {
           setIsUpdateWorkerOpenModall(false);
           setIsOpenOverlay(false);
 
-          // const shiftID = getCurrentShiftID();
-
           if (shiftID) {
             // если shiftID не null
             dispatch(getUsersShifts(shiftID)); // shiftID гарантированно string
