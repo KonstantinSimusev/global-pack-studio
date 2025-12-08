@@ -8,15 +8,27 @@ import { useEffect } from 'react';
 import { getProductions } from '../../../services/slices/production/actions';
 import { Border } from '../../ui/border/border';
 import { UNITS } from '../../../utils/types';
+import { IUserShift } from '../../../utils/api.interface';
 
 interface IProductionChartProps {
   shiftId?: string;
+  list?: IUserShift[];
 }
 
 export const ProductionChart = ({ shiftId }: IProductionChartProps) => {
   const dispatch = useDispatch();
   const productions = useSelector(selectProductions);
-  const MAX_VALUE = 200;
+
+  const total = productions
+    .filter((item) => item.location === '2 ОЧЕРЕДЬ')
+    .reduce((sum, item) => sum + item.count, 0);
+
+  const getMaxCount = () => {
+    if (productions.length === 0) return 0; // или null, в зависимости от логики
+    return Math.max(...productions.map((item) => item.count));
+  };
+
+  const MAX_VALUE = getMaxCount() + 50;
 
   const sortedArray = productions
     .filter((item) => item.unit !== undefined) // исключаем элементы без unit
@@ -36,7 +48,12 @@ export const ProductionChart = ({ shiftId }: IProductionChartProps) => {
         <Error />
       ) : (
         <>
-          <span className={styles.location}>ПРОИЗВОДСТВО</span>
+          <div className={styles.wrapper__header}>
+            <span className={styles.location}>ПРОИЗВОДСТВО</span>
+            <span className={styles.wrapper__status}>
+              данные на начало смены
+            </span>
+          </div>
           <ul className={styles.chart}>
             {sortedArray.map((item) => {
               const percentage = Math.round((item.count / MAX_VALUE) * 100);
@@ -56,9 +73,19 @@ export const ProductionChart = ({ shiftId }: IProductionChartProps) => {
               );
             })}
           </ul>
-          <div className={styles.wrapper__footer}>
-            <span className={styles.common}>Итого за смену:</span>
-            <span className={styles.common}>{getCount(productions)} рул</span>
+
+          <div className={styles.wrapper__count}>
+            <div className={styles.wrapper__footer}>
+              <span className={styles.total__size}>АНГЦ + АНО + АИ:</span>
+              <span className={styles.total__size}>{total} рул</span>
+            </div>
+
+            <div className={styles.wrapper__footer}>
+              <span className={styles.total__size}>Итого за смену:</span>
+              <span className={styles.total__size}>
+                {getCount(productions)} рул
+              </span>
+            </div>
           </div>
         </>
       )}

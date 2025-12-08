@@ -52,7 +52,15 @@ export class ShiftRepository {
         date: 'DESC',
         shiftNumber: 'DESC',
       },
-      relations: ['usersShifts', 'usersShifts.user', 'productions'],
+      relations: [
+        'usersShifts',
+        'usersShifts.user',
+        'productions',
+        'shipments',
+        'packs',
+        'fixs',
+        'residues',
+      ],
 
       select: {
         // Поля Shift
@@ -106,7 +114,15 @@ export class ShiftRepository {
         date: 'DESC', // сначала самые свежие даты
         shiftNumber: 'DESC', // затем самый большой номер смены
       },
-      relations: ['usersShifts', 'usersShifts.user', 'productions'],
+      relations: [
+        'usersShifts',
+        'usersShifts.user',
+        'productions',
+        'shipments',
+        'packs',
+        'fixs',
+        'residues',
+      ],
 
       select: {
         // Поля Shift

@@ -67,6 +67,21 @@ psql -v ON_ERROR_STOP=1 --username "$DB_USER" --dbname "$DB_NAME" <<-EOSQL
     'АНГЦ-3'
   );
 
+  -- Создание типа enum для railway
+  CREATE TYPE gps.railway_type AS ENUM (
+    'Тупик 6',
+    'Тупик 7',
+    'Тупик 8',
+    'Тупик 10'
+  );
+
+  -- Создание типа enum для area
+  CREATE TYPE gps.area_type AS ENUM (
+    'Ручная упаковка',
+    'ЛУМ',
+    'ВЛРТ'
+  );
+
   -- Создание таблицы users
   CREATE TABLE IF NOT EXISTS gps.users (
     id uuid DEFAULT gps.uuid_generate_v4() NOT NULL PRIMARY KEY,
@@ -123,6 +138,55 @@ psql -v ON_ERROR_STOP=1 --username "$DB_USER" --dbname "$DB_NAME" <<-EOSQL
     location gps.location_type NOT NULL,
     unit gps.unit_type NOT NULL,
     count INTEGER NOT NULL,
+    sort_order INTEGER NOT NULL,
+    shift_id uuid NOT NULL,
+
+    CONSTRAINT fk_shift FOREIGN KEY (shift_id) REFERENCES gps.shifts(id) ON DELETE CASCADE
+  );
+
+  -- Создание таблицы shipments
+  CREATE TABLE IF NOT EXISTS gps.shipments (
+    id uuid DEFAULT gps.uuid_generate_v4() NOT NULL PRIMARY KEY,
+    location gps.location_type NOT NULL,
+    railway gps.railway_type NOT NULL,
+    count INTEGER NOT NULL,
+    sort_order INTEGER NOT NULL,
+    shift_id uuid NOT NULL,
+
+    CONSTRAINT fk_shift FOREIGN KEY (shift_id) REFERENCES gps.shifts(id) ON DELETE CASCADE
+  );
+
+  -- Создание таблицы packs
+  CREATE TABLE IF NOT EXISTS gps.packs (
+    id uuid DEFAULT gps.uuid_generate_v4() NOT NULL PRIMARY KEY,
+    location gps.location_type NOT NULL,
+    area gps.area_type NOT NULL,
+    count INTEGER NOT NULL,
+    sort_order INTEGER NOT NULL,
+    shift_id uuid NOT NULL,
+
+    CONSTRAINT fk_shift FOREIGN KEY (shift_id) REFERENCES gps.shifts(id) ON DELETE CASCADE
+  );
+
+  -- Создание таблицы fixs
+  CREATE TABLE IF NOT EXISTS gps.fixs (
+    id uuid DEFAULT gps.uuid_generate_v4() NOT NULL PRIMARY KEY,
+    location gps.location_type NOT NULL,
+    railway gps.railway_type NOT NULL,
+    count INTEGER NOT NULL,
+    sort_order INTEGER NOT NULL,
+    shift_id uuid NOT NULL,
+
+    CONSTRAINT fk_shift FOREIGN KEY (shift_id) REFERENCES gps.shifts(id) ON DELETE CASCADE
+  );
+
+  -- Создание таблицы residues
+  CREATE TABLE IF NOT EXISTS gps.residues (
+    id uuid DEFAULT gps.uuid_generate_v4() NOT NULL PRIMARY KEY,
+    location gps.location_type NOT NULL,
+    area gps.area_type NOT NULL,
+    count INTEGER NOT NULL,
+    sort_order INTEGER NOT NULL,
     shift_id uuid NOT NULL,
 
     CONSTRAINT fk_shift FOREIGN KEY (shift_id) REFERENCES gps.shifts(id) ON DELETE CASCADE

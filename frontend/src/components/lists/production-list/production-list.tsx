@@ -48,7 +48,7 @@ export const ProductionList = ({ shiftId }: IProductionProps) => {
             </div>
 
             <InfoBlock
-              title={'Оборудование цеха'}
+              title={'Оборудование в цехе'}
               text={formatProductionUnit(item.unit)}
             />
             <InfoBlock

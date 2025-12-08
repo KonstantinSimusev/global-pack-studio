@@ -35,7 +35,7 @@ export const Home = () => {
     <Layout>
       <InfoBlock
         title={'Структурное подразделение'}
-        text={'ЛПЦ-11 ПАО "ММК"'}
+        text={'ЛПЦ-11 ПАО ММК'}
       />
       {finishedShift && <ResidueChart shiftId={finishedShift.id ?? ''} />}
       {!activeShift ? (

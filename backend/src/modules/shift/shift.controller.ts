@@ -17,15 +17,21 @@ import { ShiftService } from './shift.service';
 import { CreateShiftDTO } from './dto/create-shift.dto';
 
 import {
+  IFix,
   IList,
+  IPack,
   IProduction,
   IShift,
+  IShipment,
   ISuccess,
   IUserShift,
 } from '../../shared/interfaces/api.interface';
-import { DeleteShiftDTO } from './dto/delete-shift.dto';
 import { ProductionService } from '../production/production.service';
 import { UserShiftService } from '../user-shift/user-shift.service';
+import { ShipmentService } from '../shipment/shipment.service';
+import { PackService } from '../pack/pack.service';
+import { FixService } from '../fix/fix.service';
+import { ResidueService } from '../residue/residue.service';
 
 @Controller('shifts')
 export class ShiftController {
@@ -33,6 +39,10 @@ export class ShiftController {
     private readonly shiftService: ShiftService,
     private readonly userShiftService: UserShiftService,
     private readonly productionService: ProductionService,
+    private readonly shipmentService: ShipmentService,
+    private readonly packService: PackService,
+    private readonly fixService: FixService,
+    private readonly residueService: ResidueService,
   ) {}
 
   @Post('create-shift')
@@ -84,6 +94,42 @@ export class ShiftController {
     @Res({ passthrough: true }) res: Response,
   ): Promise<IList<IProduction>> {
     return this.productionService.getProductions(shiftId, req, res);
+  }
+
+  @Get(':shiftId/shipments')
+  async getShipments(
+    @Param('shiftId', ParseUUIDPipe) shiftId: string,
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<IList<IShipment>> {
+    return this.shipmentService.getShipments(shiftId, req, res);
+  }
+
+  @Get(':shiftId/packs')
+  async getPacks(
+    @Param('shiftId', ParseUUIDPipe) shiftId: string,
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<IList<IPack>> {
+    return this.packService.getPacks(shiftId, req, res);
+  }
+
+  @Get(':shiftId/fixs')
+  async getFixs(
+    @Param('shiftId', ParseUUIDPipe) shiftId: string,
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<IList<IFix>> {
+    return this.fixService.getFixs(shiftId, req, res);
+  }
+
+  @Get(':shiftId/residues')
+  async getResidues(
+    @Param('shiftId', ParseUUIDPipe) shiftId: string,
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<IList<IPack>> {
+    return this.residueService.getResidues(shiftId, req, res);
   }
 
   // @Get('team-shifts')

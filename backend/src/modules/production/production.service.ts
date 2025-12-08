@@ -21,7 +21,7 @@ import {
   IList,
   IProduction,
   ISuccess,
-} from 'src/shared/interfaces/api.interface';
+} from '../../shared/interfaces/api.interface';
 import { AuthService } from '../auth/auth.service';
 import { UpdateProductionDTO } from './dto/update-production.dto';
 
@@ -41,6 +41,7 @@ export class ProductionService {
           createdProduction.location = production.location;
           createdProduction.unit = production.unit;
           createdProduction.count = production.count;
+          createdProduction.sortOrder = production.sortOrder;
           createdProduction.shift = shift;
 
           return this.productionRepository.create(createdProduction);
@@ -48,7 +49,7 @@ export class ProductionService {
       );
 
       return {
-        message: 'Произвлдства успешно созданы',
+        message: 'Производства успешно созданы',
       };
     } catch (error) {
       throw new InternalServerErrorException('Ошибка при создании производств');
@@ -72,7 +73,7 @@ export class ProductionService {
       };
     } catch (error) {
       throw new InternalServerErrorException(
-        'Ошибка при получении списка смен',
+        'Ошибка при получении производств',
       );
     }
   }
@@ -97,11 +98,11 @@ export class ProductionService {
       );
 
       if (!updateProduction) {
-        throw new NotFoundException('Производство не обновлена');
+        throw new NotFoundException('Производство не обновлено');
       }
 
       return {
-        message: 'Смена пользователя успешно обновлена',
+        message: 'Производство успешно обновлено',
       };
     } catch (error) {
       if (error instanceof NotFoundException) {
@@ -109,7 +110,7 @@ export class ProductionService {
       }
       
       throw new InternalServerErrorException(
-        'Произошла ошибка при обновлении смены',
+        'Произошла ошибка при обновлении производста',
       );
     }
   }

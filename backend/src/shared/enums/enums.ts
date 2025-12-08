@@ -43,3 +43,16 @@ export enum EUnit {
   AI = 'АИ',
   ANGZ_3 = 'АНГЦ-3',
 }
+
+export enum ERailway {
+  TUPIC_6 = 'Тупик 6',
+  TUPIC_7 = 'Тупик 7',
+  TUPIC_8 = 'Тупик 8',
+  TUPIC_10 = 'Тупик 10',
+}
+
+export enum EArea {
+  PACK = 'Ручная упаковка',
+  LUM = 'ЛУМ',
+  VLRT = 'ВЛРТ',
+}

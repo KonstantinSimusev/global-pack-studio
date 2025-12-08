@@ -20,10 +20,14 @@ import { UserShiftService } from '../user-shift/user-shift.service';
 
 import { CreateShiftDTO } from './dto/create-shift.dto';
 
-import { IList, IShift, ISuccess } from '../../shared/interfaces/api.interface';
+import { IShift, ISuccess } from '../../shared/interfaces/api.interface';
 import { compareShifts, getNextShift } from '../../shared/utils/utils';
 
 import { ProductionService } from '../production/production.service';
+import { ShipmentService } from '../shipment/shipment.service';
+import { PackService } from '../pack/pack.service';
+import { FixService } from '../fix/fix.service';
+import { ResidueService } from '../residue/residue.service';
 
 @Injectable()
 export class ShiftService {
@@ -33,6 +37,10 @@ export class ShiftService {
     private readonly userRepository: UserRepository,
     private readonly userShiftService: UserShiftService,
     private readonly productionService: ProductionService,
+    private readonly shipmentService: ShipmentService,
+    private readonly packService: PackService,
+    private readonly fixService: FixService,
+    private readonly residueService: ResidueService,
   ) {}
 
   async createShift(
@@ -109,10 +117,32 @@ export class ShiftService {
       // Создаем связь с production
       await this.productionService.createProductions(shift);
 
+      // Создаем связь с shipment
+      await this.shipmentService.createShipments(shift);
+
+      // Создаем связь с pack
+      await this.packService.createPacks(shift);
+
+      // Создаем связь с fix
+      await this.fixService.createFixs(shift);
+
+      // Создаем связь с residue
+      await this.residueService.createResidues(shift);
+
       return {
         message: 'Смена успешно создана',
       };
     } catch (error) {
+
+      console.error('=== ОШИБКА В createShift ===');
+  console.error('Сообщение:', error.message);
+  console.error('Тип ошибки:', error.name);
+  console.error('Стек:', error.stack);
+  console.error('DTO:', JSON.stringify(dto, null, 2));
+  console.error('IP:', req.ip);
+  console.error('Путь:', req.path);
+  console.error('===========================');
+
       if (error instanceof ConflictException) {
         throw error;
       }

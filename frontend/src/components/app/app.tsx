@@ -31,16 +31,20 @@ import { UpdateWorkerForm } from '../forms/update-worker/update-worker.form';
 import { ModalInfoBlock } from '../modal-info-block/modal-info-block';
 import { HomeShift } from '../pages/home-shift/home-shift';
 
-// import { Shipment } from '../pages/shipment/shipment';
-// import { Residue } from '../pages/residue/residue';
-// import { Pack } from '../pages/pack/pack';
-// import { Fix } from '../pages/fix/fix';
+import { Shipment } from '../pages/shipment/shipment';
+import { Pack } from '../pages/pack/pack';
+import { Residue } from '../pages/residue/residue';
+import { Fix } from '../pages/fix/fix';
 import { ProductionForm } from '../forms/production/production.form';
+import { ShipmentForm } from '../forms/shipment/shipment.form';
 import { Production } from '../pages/production/production';
 import {
   getActiveShift,
   getFinishedShift,
 } from '../../services/slices/shift/actions';
+import { PackForm } from '../forms/pack/pack.form';
+import { FixForm } from '../forms/fix/fix.form';
+import { ResidueForm } from '../forms/residue/residue.form';
 
 const App = () => {
   const { isLightTheme } = useContext(ThemeContext);
@@ -54,6 +58,10 @@ const App = () => {
     isDeleteOpenModall,
     isUserShiftInfoOpenModal,
     isProductionOpenMdal,
+    isShipmentOpenMdal,
+    isPackOpenMdal,
+    isFixOpenMdal,
+    isResidueOpenMdal,
     selectedScrollPosition,
     setSelectedScrollPosition,
   } = useContext(LayerContext);
@@ -109,10 +117,10 @@ const App = () => {
           <Route path="/home/shifts/:shiftId" element={<HomeShift />} />
           <Route path="/timesheet" element={<Timesheet />} />
           <Route path="/production" element={<Production />} />
-          {/* <Route path="/shipment" element={<Shipment />} />
+          <Route path="/shipment" element={<Shipment />} />
           <Route path="/pack" element={<Pack />} />
           <Route path="/fix" element={<Fix />} />
-          <Route path="/residue" element={<Residue />} /> */}
+          <Route path="/residue" element={<Residue />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
@@ -147,6 +155,30 @@ const App = () => {
       {isProductionOpenMdal && (
         <Modal>
           <ProductionForm />
+        </Modal>
+      )}
+
+      {isShipmentOpenMdal && (
+        <Modal>
+          <ShipmentForm />
+        </Modal>
+      )}
+
+      {isPackOpenMdal && (
+        <Modal>
+          <PackForm />
+        </Modal>
+      )}
+
+      {isFixOpenMdal && (
+        <Modal>
+          <FixForm />
+        </Modal>
+      )}
+
+      {isResidueOpenMdal && (
+        <Modal>
+          <ResidueForm />
         </Modal>
       )}
 

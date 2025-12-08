@@ -1,60 +1,59 @@
 import styles from './pack-list.module.css';
 
-import { EditButton } from '../../buttons/edit/edit';
+import { useEffect } from 'react';
 
-export const PackList = () => {
-  const list = [
-    {
-      id: '1',
-      location: '1 ОЧЕРЕДЬ',
-      name: 'СТАН-2000',
-      total: 0,
-    },
-    {
-      id: '2',
-      location: '2 ОЧЕРЕДЬ',
-      name: 'ЛУМ',
-      total: 0,
-    },
-    {
-      id: '3',
-      location: '2 ОЧЕРЕДЬ',
-      name: 'Ручная упаковка',
-      total: 0,
-    },
-    {
-      id: '4',
-      location: '3 ОЧЕРЕДЬ',
-      name: 'АНГЦ-3',
-      total: 0,
-    },
-  ];
+import { EditButton } from '../../buttons/edit/edit';
+import { Error } from '../../ui/error/error';
+import { InfoBlock } from '../../ui/info-block/info-block';
+
+import { useDispatch, useSelector } from '../../../services/store';
+import { selectPacks } from '../../../services/slices/pack/slice';
+import { getPacks } from '../../../services/slices/pack/actions';
+
+interface IListProps {
+  shiftId?: string;
+}
+
+export const PackList = ({ shiftId }: IListProps) => {
+  const dispatch = useDispatch();
+  const packs = useSelector(selectPacks);
+
+  if (!shiftId) {
+    return <Error />;
+  }
+
+  useEffect(() => {
+    dispatch(getPacks(shiftId));
+  }, []);
 
   return (
-    <ul className={styles.list}>
-      {list.map((item) => (
-        <li key={item.id} className={styles.item}>
-          <div className={styles.wrapper__header}>
-            <h5 className={styles.location}>{item.location}</h5>
-            <EditButton
-              id={item.id}
-              actionType="pack"
-              iconWidth={30}
-              iconHeight={30}
+    <ul className={styles.container}>
+      {packs.length > 0 ? (
+        packs.map((item) => (
+          <li key={item.id} className={styles.item}>
+            <div className={styles.wrapper__header}>
+              <h5 className={styles.location}>{item.location}</h5>
+              <EditButton
+                id={item.id}
+                actionType="pack"
+                iconWidth={30}
+                iconHeight={30}
+              />
+            </div>
+
+            <InfoBlock
+              title={'Участок в цехе'}
+              text={`${item.area}`}
             />
-          </div>
-
-          <div className={styles.wrapper}>
-            <span className={styles.title}>Участок</span>
-            <span className={styles.text}>{item.name}</span>
-          </div>
-
-          <div className={styles.wrapper}>
-            <span className={styles.title}>Упаковано за смену, рул</span>
-            <span className={styles.text}>{item.total}</span>
-          </div>
-        </li>
-      ))}
+            <InfoBlock
+              title={'Упаковка за смену'}
+              text={`${item.count} рул`}
+            />
+          </li>
+        ))
+      ) : (
+        <Error />
+      )}
     </ul>
   );
 };

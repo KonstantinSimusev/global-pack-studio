@@ -1,4 +1,4 @@
-import { IShift, IUserShift } from './api.interface';
+import { IPack, IResidue, IShift, IUserShift } from './api.interface';
 import {
   TProfession,
   TRole,
@@ -50,7 +50,8 @@ export function countProfessions(usersShifts: IUserShift[]) {
 
   // Проходим по каждому сотруднику
   usersShifts.forEach((userShift) => {
-    const profession = userShift.shiftProfession;
+    // Безопасное получение профессии: если undefined → используем заглушку
+    const profession = userShift.user?.profession ?? 'Unknown';
     const user = userShift.user;
 
     // Учитываем количество профессий
@@ -81,7 +82,18 @@ export function countProfessionsByAttendance(
   usersShifts: IUserShift[],
 ): { profession: string; count: number; sortOrder: number }[] {
   const count: Record<string, number> = {};
-  const sortOrderMap: Record<string, number> = {};
+
+  // Фиксированная карта приоритетов профессий (главный критерий сортировки)
+  const priorityMap: Record<string, number> = {
+    'Укладчик-упаковщик': 1,
+    'Штабелировщик металла': 2,
+    'Оператор ПУ': 3,
+    'Укладчик-упаковщик ЛУМ': 4,
+    'Бригадир ОСП': 5,
+    'Водитель погрузчика': 6,
+    'Резчик холодного металла': 7,
+    // Все остальные профессии получат приоритет 99 (будут в конце)
+  };
 
   // Проходим по каждому элементу смены
   usersShifts.forEach((userShift) => {
@@ -94,7 +106,6 @@ export function countProfessionsByAttendance(
     }
 
     const profession = userShift.shiftProfession;
-    const user = userShift.user;
 
     // Увеличиваем счётчик для данной профессии
     if (count[profession]) {
@@ -102,21 +113,18 @@ export function countProfessionsByAttendance(
     } else {
       count[profession] = 1;
     }
-
-    // Сохраняем sortOrder для профессии, если он доступен у пользователя
-    if (user && user.sortOrder != null) {
-      sortOrderMap[profession] = user.sortOrder;
-    }
   });
 
   // Преобразуем собранные данные в массив объектов
   const result = Object.keys(count).map((profession) => ({
     profession,
     count: count[profession],
-    sortOrder: sortOrderMap[profession] || 0, // если sortOrder не найден, ставим 0
+    // Основной критерий сортировки — приоритет из priorityMap
+    // Если профессии нет в карте, ставим высокий номер (в конец списка)
+    sortOrder: priorityMap[profession] || 99,
   }));
 
-  // Сортируем результат по полю sortOrder
+  // Сортируем результат по приоритету (sortOrder)
   return result.sort((a, b) => a.sortOrder - b.sortOrder);
 }
 
@@ -328,7 +336,7 @@ export function countNonAttendedProfessions(
 
 export function filterWorkers(usersShifts: IUserShift[]): IUserShift[] {
   const profession: TProfession = 'Мастер участка';
-  const role: TRole = 'MASTER';
+  const masterRole: TRole = 'MASTER';
 
   // Проверяем, есть ли пользователь с профессией 'Мастер участка'
   const hasMasterProfession = usersShifts.some(
@@ -344,12 +352,14 @@ export function filterWorkers(usersShifts: IUserShift[]): IUserShift[] {
 
   // Если нет мастера по профессии — ищем по роли
   const hasMasterRole = usersShifts.some(
-    (userShift) => userShift.user?.role === role,
+    (userShift) => userShift.user?.role === masterRole,
   );
 
   if (hasMasterRole) {
     // Если есть мастер по роли — фильтруем его
-    return usersShifts.filter((userShift) => userShift.user?.role !== role);
+    return usersShifts.filter(
+      (userShift) => userShift.user?.role !== masterRole,
+    );
   }
 
   // Если ни мастера по профессии, ни по роли не найдено — возвращаем пустой массив
@@ -358,11 +368,13 @@ export function filterWorkers(usersShifts: IUserShift[]): IUserShift[] {
 
 export function filterMaster(usersShifts: IUserShift[]) {
   const profession: TProfession = 'Мастер участка';
-  const role: TRole = 'MASTER';
+  const masterRole: TRole = 'MASTER';
 
   // Ищем пользователя с профессией 'Мастер участка'
   const masterByProfession = usersShifts.find(
-    (userShift) => userShift.user?.profession === profession,
+    (userShift) =>
+      userShift.user?.profession === profession &&
+      userShift.user?.role === masterRole,
   );
 
   if (masterByProfession) {
@@ -372,7 +384,7 @@ export function filterMaster(usersShifts: IUserShift[]) {
 
   // Если нет мастера по профессии — ищем по роли
   const masterByRole = usersShifts.find(
-    (userShift) => userShift.user?.role === role,
+    (userShift) => userShift.user?.role === masterRole,
   );
 
   if (masterByRole) {
@@ -381,4 +393,175 @@ export function filterMaster(usersShifts: IUserShift[]) {
   }
 
   return;
+}
+
+export function getPackerStats(usersShifts: IUserShift[]) {
+  const packer: TProfession = 'Укладчик-упаковщик';
+  const attendance: TWorkStatus = 'Явка';
+
+  const statsMap = new Map<
+    string,
+    { profession: string; workplace: string; count: number }
+  >();
+
+  usersShifts.forEach((item) => {
+    // 1. Строгая проверка профессии: только "Укладчик-упаковщик" (без ЛУМ и др.)
+    if (item.shiftProfession !== packer) {
+      return;
+    }
+
+    // 2. Проверка статуса: только "Явка"
+    if (item.workStatus !== attendance) {
+      return;
+    }
+
+    // 3. Проверка рабочего места: только 1/2/3 очередь
+    const validWorkplaces = ['1 очередь', '2 очередь', '3 очередь'];
+    if (!validWorkplaces.includes(item.workPlace)) {
+      return;
+    }
+
+    // 4. Ключ для группировки: профессия + рабочее место
+    const key = `${item.shiftProfession}_${item.workPlace}`;
+
+    if (statsMap.has(key)) {
+      statsMap.get(key)!.count++;
+    } else {
+      statsMap.set(key, {
+        profession: item.shiftProfession,
+        workplace: item.workPlace,
+        count: 1,
+      });
+    }
+  });
+
+  return Array.from(statsMap.values()).sort((a, b) =>
+    a.workplace.localeCompare(b.workplace),
+  );
+}
+
+export function getShipmentStats(usersShifts: IUserShift[]) {
+  const shipment: TProfession = 'Штабелировщик металла';
+  const attendance: TWorkStatus = 'Явка';
+
+  const statsMap = new Map<
+    string,
+    { profession: string; workplace: string; count: number }
+  >();
+
+  usersShifts.forEach((item) => {
+    // 1. Строгая проверка профессии: только "Укладчик-упаковщик" (без ЛУМ и др.)
+    if (item.shiftProfession !== shipment) {
+      return;
+    }
+
+    // 2. Проверка статуса: только "Явка"
+    if (item.workStatus !== attendance) {
+      return;
+    }
+
+    // 3. Проверка рабочего места: только 1/2/3 очередь
+    const validWorkplaces = ['1 очередь', '2 очередь', '3 очередь'];
+    if (!validWorkplaces.includes(item.workPlace)) {
+      return;
+    }
+
+    // 4. Ключ для группировки: профессия + рабочее место
+    const key = `${item.shiftProfession}_${item.workPlace}`;
+
+    if (statsMap.has(key)) {
+      statsMap.get(key)!.count++;
+    } else {
+      statsMap.set(key, {
+        profession: item.shiftProfession,
+        workplace: item.workPlace,
+        count: 1,
+      });
+    }
+  });
+
+  return Array.from(statsMap.values()).sort((a, b) =>
+    a.workplace.localeCompare(b.workplace),
+  );
+}
+
+export function transformLocations(data: IPack[]): IPack[] {
+  return data.map((item) => {
+    let newLocation: string | undefined; // Сохраняем тип как в интерфейсе
+
+    if (item.area === 'Ручная упаковка') {
+      // Проверяем, что item.location существует и не пустое
+      if (item.location) {
+        const number = item.location.split(' ')[0];
+        newLocation = `${number} ОЧ`;
+      } else {
+        newLocation = undefined; // Или можно задать значение по умолчанию, например: 'Неизвестно ОЧ'
+      }
+    } else if (item.area === 'ЛУМ') {
+      newLocation = 'ЛУМ'; // Исправлено: было newDecoration
+    } else {
+      // Если area не совпадает — оставляем location как есть (может быть undefined)
+      newLocation = item.location;
+    }
+
+    return {
+      ...item,
+      location: newLocation,
+    };
+  });
+}
+
+export function transformResidueLocations(data: IResidue[]): IResidue[] {
+  return data.map((item) => {
+    let newLocation: string | undefined; // Сохраняем тип как в интерфейсе
+
+    if (item.area === 'Ручная упаковка') {
+      // Проверяем, что item.location существует и не пустое
+      if (item.location) {
+        const number = item.location.split(' ')[0];
+        newLocation = `${number} ОЧ`;
+      } else {
+        newLocation = undefined; // Или можно задать значение по умолчанию, например: 'Неизвестно ОЧ'
+      }
+    } else if (item.area === 'ВЛРТ') {
+      newLocation = 'ВЛРТ'; // Исправлено: было newDecoration
+    } else {
+      // Если area не совпадает — оставляем location как есть (может быть undefined)
+      newLocation = item.location;
+    }
+
+    return {
+      ...item,
+      location: newLocation,
+    };
+  });
+}
+
+export function filterAndSortProfessions(
+  data: {
+    profession: string;
+    count: number;
+    sortOrder: number;
+  }[],
+): {
+  profession: string;
+  count: number;
+  sortOrder: number;
+}[] {
+  const requiredProfessions = ['Оператор ПУ', 'Укладчик-упаковщик ЛУМ'];
+
+  return data
+    .filter((item) => requiredProfessions.includes(item.profession))
+    .sort((a, b) => {
+      // Определяем индекс профессии в требуемом порядке
+      const indexA = requiredProfessions.indexOf(a.profession);
+      const indexB = requiredProfessions.indexOf(b.profession);
+      return indexA - indexB;
+    });
+}
+
+// Функция для извлечения числа из строки вида «Тупик X»
+export function extractNumber(railway: string) {
+  const match = railway.match(/Тупик\s+(\d+)/);
+  return match ? parseInt(match[1], 10) : 0;
 }

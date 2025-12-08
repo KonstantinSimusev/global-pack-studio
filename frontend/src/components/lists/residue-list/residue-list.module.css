@@ -1,4 +1,4 @@
-.list {
+.container {
   display: flex;
   flex-direction: column;
   gap: 30px;
@@ -39,4 +39,9 @@
 .title {
   opacity: 0.4;
   font-size: 14px;
+}
+
+.text__info {
+  font-size: 16px;
+  opacity: 0.6;
 }

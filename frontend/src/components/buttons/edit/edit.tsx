@@ -34,8 +34,16 @@ export const EditButton = ({
   }
 
   const navigate = useNavigate();
-  const { setIsOpenOverlay, setIsUpdateWorkerOpenModall, setIsProductionOpenMdal, setSelectedId } =
-    useContext(LayerContext);
+  const {
+    setIsOpenOverlay,
+    setIsUpdateWorkerOpenModall,
+    setIsProductionOpenMdal,
+    setIsShipmentOpenMdal,
+    setIsPackOpenMdal,
+    setIsFixOpenMdal,
+    setIsResidueOpenMdal,
+    setSelectedId,
+  } = useContext(LayerContext);
 
   const handleClick = () => {
     switch (actionType) {
@@ -50,18 +58,22 @@ export const EditButton = ({
         break;
       case 'shipment':
         setIsOpenOverlay(true);
+        setIsShipmentOpenMdal(true);
         setSelectedId(id);
         break;
       case 'pack':
         setIsOpenOverlay(true);
+        setIsPackOpenMdal(true);
         setSelectedId(id);
         break;
       case 'fix':
         setIsOpenOverlay(true);
+        setIsFixOpenMdal(true);
         setSelectedId(id);
         break;
       case 'residue':
         setIsOpenOverlay(true);
+        setIsResidueOpenMdal(true);
         setSelectedId(id);
         break;
       case 'worker':

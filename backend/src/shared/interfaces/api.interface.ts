@@ -50,6 +50,39 @@ export interface IProduction {
   location: string;
   unit: string;
   count: number;
+  sortOrder: number;
+}
+
+export interface IShipment {
+  id: string;
+  location: string;
+  railway: string;
+  count: number;
+  sortOrder: number;
+}
+
+export interface IPack {
+  id: string;
+  location: string;
+  area: string;
+  count: number;
+  sortOrder: number;
+}
+
+export interface IFix {
+  id: string;
+  location: string;
+  railway: string;
+  count: number;
+  sortOrder: number;
+}
+
+export interface IResidue {
+  id: string;
+  location: string;
+  area: string;
+  count: number;
+  sortOrder: number;
 }
 
 export interface ISuccess {

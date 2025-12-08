@@ -2,11 +2,6 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 
-import { User } from '../modules/user/entities/user.entity';
-import { Shift } from '../modules/shift/entities/shift.entity';
-import { UserShift } from '../modules/user-shift/entities/user-shift.entity';
-import { Production } from '../modules/production/entities/production.entity';
-
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
@@ -20,7 +15,8 @@ import { Production } from '../modules/production/entities/production.entity';
         return {
           type: 'postgres',
           url: dbUrl,
-          entities: [User, Shift, UserShift, Production],
+          // Автоматическое подключение сущностей по шаблону
+          entities: [__dirname + '/../modules/**/*.entity.{js,ts}'],
           synchronize: false,
           retryAttempts: 5, // Количество попыток переподключения
           retryDelay: 1000, // Задержка между попытками в миллисекундах

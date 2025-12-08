@@ -23,6 +23,12 @@ export class CreateProductionDTO {
   @Max(1000)
   count: number;
 
+  @IsNumber()
+  @IsNotEmpty()
+   @Min(0)
+  @Max(20)
+  sortOrder: number;
+
   @IsUUID()
   shiftId: string;
 }

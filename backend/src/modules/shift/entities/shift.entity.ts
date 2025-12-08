@@ -9,6 +9,10 @@ import {
 
 import { UserShift } from '../../user-shift/entities/user-shift.entity';
 import { Production } from '../../production/entities/production.entity';
+import { Shipment } from '../../shipment/entities/shipment.entity';
+import { Pack } from '../../pack/entities/pack.entity';
+import { Fix } from '../../fix/entities/fix.entity';
+import { Residue } from '../../residue/entities/residue.entity';
 
 @Entity({
   schema: 'gps',
@@ -71,8 +75,28 @@ export class Shift {
   })
   usersShifts: UserShift[];
 
-  @OneToMany(() => Production, (userShift) => userShift.shift, {
-    cascade: ['remove'], // Автоматически удалит Production при удалении Shift
+  @OneToMany(() => Production, (production) => production.shift, {
+    cascade: ['remove'],
   })
   productions: Production[];
+
+  @OneToMany(() => Shipment, (shipment) => shipment.shift, {
+    cascade: ['remove'],
+  })
+  shipments: Shipment[];
+
+  @OneToMany(() => Pack, (pack) => pack.shift, {
+    cascade: ['remove'],
+  })
+  packs: Pack[];
+
+  @OneToMany(() => Fix, (fix) => fix.shift, {
+    cascade: ['remove'],
+  })
+  fixs: Fix[];
+
+  @OneToMany(() => Residue, (residue) => residue.shift, {
+    cascade: ['remove'],
+  })
+  residues: Pack[];
 }

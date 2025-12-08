@@ -10,11 +10,13 @@ import {
   selectFinishedShift,
 } from '../../../services/slices/shift/slice';
 import { Error } from '../../ui/error/error';
-import { WorkerAttendanceList } from '../../lists/worker-attendance-list/worker-attendance-list';
 import { Layout } from '../../ui/layout/layout';
 import { TeamProfessionList } from '../../lists/profession-list/profession-list';
 import { useEffect } from 'react';
 import { TShiftStatus } from '../../../utils/types';
+import { ShipmentChart } from '../../charts/shipment-chart/shipment-chart';
+import { PackChart } from '../../charts/pack-chart/pack-chart';
+import { FixChart } from '../../charts/fix-chart/fix-chart';
 
 export const HomeShift = () => {
   const { shiftId } = useParams();
@@ -55,16 +57,17 @@ export const HomeShift = () => {
       )}
 
       {currentShift?.usersShifts && (
-        <TeamProfessionList
-          type={currentStatus}
-          list={currentShift?.usersShifts}
-          teamNumber={currentShift.teamNumber}
-        />
-      )}
-
-      <ProductionChart shiftId={shiftId} />
-      {currentShift?.usersShifts && (
-        <WorkerAttendanceList list={currentShift?.usersShifts} />
+        <>
+          <TeamProfessionList
+            type={currentStatus}
+            list={currentShift?.usersShifts}
+            teamNumber={currentShift.teamNumber}
+          />
+          <ProductionChart shiftId={shiftId} list={currentShift?.usersShifts} />
+          <PackChart shiftId={shiftId} list={currentShift?.usersShifts} />
+          <ShipmentChart shiftId={shiftId} list={currentShift?.usersShifts} />
+          <FixChart shiftId={shiftId} list={currentShift?.usersShifts} />
+        </>
       )}
     </Layout>
   );

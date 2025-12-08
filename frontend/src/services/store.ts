@@ -7,12 +7,20 @@ import { authSlice } from './slices/auth/slice';
 import { shiftSlice } from './slices/shift/slice';
 import { userShiftSlice } from './slices/user-shift/slice';
 import { productionSlice } from './slices/production/slice';
+import { shipmentSlice } from './slices/shipment/slice';
+import { packSlice } from './slices/pack/slice';
+import { fixSlice } from './slices/fix/slice';
+import { residueSlice } from './slices/residue/slice';
 
 export const rootReducer = combineSlices(
   authSlice,
   shiftSlice,
   userShiftSlice,
   productionSlice,
+  shipmentSlice,
+  packSlice,
+  fixSlice,
+  residueSlice,
 );
 
 export const store = configureStore({

@@ -156,7 +156,7 @@ export class User {
   })
   @IsNumber()
   @IsPositive()
-  @Min(1)
+  @Min(0)
   @Max(20)
   sortOrder: number;
 

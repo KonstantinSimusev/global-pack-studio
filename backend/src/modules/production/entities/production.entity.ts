@@ -1,10 +1,4 @@
-import {
-  IsNumber,
-  IsString,
-  IsUUID,
-  Max,
-  Min,
-} from 'class-validator';
+import { IsNumber, IsPositive, IsString, IsUUID, Max, Min } from 'class-validator';
 
 import { Shift } from '../../shift/entities/shift.entity';
 
@@ -54,6 +48,17 @@ export class Production {
   @Max(1000)
   @IsNumber()
   count: number;
+
+  @Column({
+    name: 'sort_order',
+    type: 'integer',
+    nullable: false,
+  })
+  @IsNumber()
+  @IsPositive()
+  @Min(0)
+  @Max(20)
+  sortOrder: number;
 
   @ManyToOne(() => Shift, (shift) => shift.productions)
   @JoinColumn({ name: 'shift_id' })
