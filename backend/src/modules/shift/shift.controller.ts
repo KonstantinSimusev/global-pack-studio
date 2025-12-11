@@ -78,11 +78,11 @@ export class ShiftController {
   }
 
   @Get('last-shifts-teams')
-  async getLastShiftsForTeams(
+  async getLastShiftsTeams(
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
-  ): Promise<IShift[]> {
-    return this.shiftService.getLastShiftsForTeams(req, res);
+  ): Promise<IList<IShift>> {
+    return this.shiftService.getLastShiftsTeams(req, res);
   }
 
   @Get(':shiftId/users-shifts')

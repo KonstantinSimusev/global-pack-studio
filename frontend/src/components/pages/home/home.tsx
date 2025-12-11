@@ -1,26 +1,31 @@
-// import styles from './home.module.css';
+import styles from './home.module.css';
+
+import { useEffect } from 'react';
 
 import { Layout } from '../../ui/layout/layout';
 import { InfoBlock } from '../../ui/info-block/info-block';
+import { EmptyCard } from '../../ui/empty-card/empty-card';
+import { ShiftCard } from '../../ui/shift-card/shift-card';
+import { SickInfo } from '../../sick-info/sick-info';
+import { ResidueChart } from '../../charts/residue-chart/residue-chart';
+
 import { useDispatch, useSelector } from '../../../services/store';
+
 import {
   selectActiveShift,
   selectFinishedShift,
 } from '../../../services/slices/shift/slice';
-import { useEffect } from 'react';
+
 import {
   getActiveShift,
   getFinishedShift,
 } from '../../../services/slices/shift/actions';
-import { ShiftCard } from '../../ui/shift-card/shift-card';
+
 import { TShiftStatus } from '../../../utils/types';
-import { ResidueChart } from '../../charts/residue-chart/residue-chart';
-import { SickInfo } from '../../sick-info/sick-info';
-import { EmptyCard } from '../../ui/empty-card/empty-card';
 
 export const Home = () => {
   const dispatch = useDispatch();
-  
+
   const activeShift = useSelector(selectActiveShift);
   const finishedShift = useSelector(selectFinishedShift);
 
@@ -35,10 +40,13 @@ export const Home = () => {
   return (
     <Layout>
       <InfoBlock
+        className={styles.title__bottom}
         title={'Структурное подразделение'}
         text={'ЛПЦ-11 ПАО ММК'}
       />
-      {finishedShift && <ResidueChart shiftId={finishedShift.id ?? ''} shiftStatus={finished} />}
+      {finishedShift && (
+        <ResidueChart shiftId={finishedShift.id ?? ''} shiftStatus={finished} />
+      )}
       {/* {activeShift && <ResidueChart shiftId={activeShift.id ?? ''} />} */}
       {!activeShift ? (
         <EmptyCard type={active} text={'Идет планирование...'} />

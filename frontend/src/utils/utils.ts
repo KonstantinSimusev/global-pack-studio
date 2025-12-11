@@ -565,3 +565,48 @@ export function extractNumber(railway: string) {
   const match = railway.match(/Тупик\s+(\d+)/);
   return match ? parseInt(match[1], 10) : 0;
 }
+
+export function countProfessionsBySickLeave(
+  shifts: IShift[],
+): { profession: string; count: number }[] {
+  // 1. Собираем всех сотрудников на больничном с их sortOrder
+  const sickUsers: { profession: string; sortOrder: number }[] = [];
+
+  for (const shift of shifts) {
+    const users = shift.usersShifts ?? [];
+
+    for (const user of users) {
+      if (
+        user?.workStatus === 'Больничный лист' &&
+        user.user?.sortOrder != null
+      ) {
+        sickUsers.push({
+          profession: user.shiftProfession,
+          sortOrder: user.user.sortOrder,
+        });
+      }
+    }
+  }
+
+  // 2. Сортируем по sortOrder (по возрастанию)
+  sickUsers.sort((a, b) => a.sortOrder - b.sortOrder);
+
+  // 3. Считаем количество профессий, сохраняя порядок сортировки
+  const counts: Record<string, number> = {};
+  const order: string[] = []; // Чтобы запомнить порядок профессий по sortOrder
+
+  for (const { profession } of sickUsers) {
+    if (!counts[profession]) {
+      counts[profession] = 1;
+      order.push(profession); // Первая встреча профессии — добавляем в порядок
+    } else {
+      counts[profession]++;
+    }
+  }
+
+  // 4. Формируем результат в порядке сортировки
+  return order.map((profession) => ({
+    profession,
+    count: counts[profession],
+  }));
+}

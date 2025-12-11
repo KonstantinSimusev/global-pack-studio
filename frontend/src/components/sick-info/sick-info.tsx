@@ -1,24 +1,38 @@
 import styles from './sick-info.module.css';
 
-// import { countProfessionsByLocation } from '../../../utils/utils';
-// import { SPECIAL_PROFESSIONS } from '../../utils/types';
+import { useEffect } from 'react';
+
 import { Border } from '../ui/border/border';
-import { TEAM_PROFESSION_OPTIONS } from '../../utils/types';
+
+import { useDispatch, useSelector } from '../../services/store';
+
+import { getLastShiftsTeams } from '../../services/slices/shift/actions';
+import { selectLastShiftsTeams } from '../../services/slices/shift/slice';
+
+import { countProfessionsBySickLeave, getCount } from '../../utils/utils';
 
 export const SickInfo = () => {
-  // const workerList = countProfessionsByLocation(list);
-  const count = 1;
+  const dispatch = useDispatch();
+
+  const lastShiftsTeams = useSelector(selectLastShiftsTeams);
+  const professions = countProfessionsBySickLeave(lastShiftsTeams);
+  const total = getCount(professions);
+
+  useEffect(() => {
+    dispatch(getLastShiftsTeams());
+  }, []);
+
   return (
     <div className={styles.container}>
       <span className={styles.location}>БОЛЬНИЧНЫЙ ЛИСТ</span>
-      {count > 0 ? (
+      {total > 0 ? (
         <>
           <ul className={styles.wrapper__list}>
             <Border className={styles.border__bottom} />
-            {TEAM_PROFESSION_OPTIONS.map((item, index) => (
+            {professions.map((item, index) => (
               <li className={styles.wrapper} key={index}>
-                <span className={styles.text}>{item}</span>
-                <span className={styles.count}>-</span>
+                <span className={styles.text}>{item.profession}</span>
+                <span className={styles.count}>{item.count}</span>
               </li>
             ))}
             <Border className={styles.border__top} />
@@ -26,7 +40,7 @@ export const SickInfo = () => {
 
           <div className={styles.wrapper__footer}>
             <span>Всего:</span>
-            <span>3</span>
+            <span>{total}</span>
           </div>
         </>
       ) : (

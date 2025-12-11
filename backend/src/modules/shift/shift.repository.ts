@@ -172,8 +172,45 @@ export class ShiftRepository {
       order: {
         date: 'DESC',
       },
-      relations: ['usersShifts'],
-      take: 1, // нам нужна только последняя смена
+      relations: ['usersShifts', 'usersShifts.user'],
+      take: 1,
+      select: {
+        // Поля Shift
+        id: true,
+        date: true,
+        shiftNumber: true,
+        teamNumber: true,
+        startShift: true,
+        endShift: true,
+
+        // Поля UserShift
+        usersShifts: {
+          id: true,
+          workStatus: true,
+          workPlace: true,
+          shiftProfession: true,
+          workHours: true,
+
+          // Поля User (вложенные)
+          user: {
+            id: true,
+            positionCode: true,
+            lastName: true,
+            firstName: true,
+            patronymic: true,
+            profession: true,
+            grade: true,
+            personalNumber: true,
+            teamNumber: true,
+            currentTeamNumber: true,
+            workSchedule: true,
+            workshopCode: true,
+            role: true,
+            sortOrder: true,
+            // hashedPassword не указываем → не загружаем
+          },
+        },
+      },
     });
   }
 
@@ -205,10 +242,6 @@ export class ShiftRepository {
   }
 
   /*
-  async findAll(): Promise<Shift[]> {
-    return this.shiftRepository.find({});
-  }
-
   async update(shift: Shift, updateData: Partial<Shift>): Promise<Shift> {
     return this.shiftRepository.save({
       ...shift,

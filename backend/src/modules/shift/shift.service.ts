@@ -22,7 +22,7 @@ import { ResidueService } from '../residue/residue.service';
 
 import { CreateShiftDTO } from './dto/create-shift.dto';
 
-import { IShift, ISuccess } from '../../shared/interfaces/api.interface';
+import { IList, IShift, ISuccess } from '../../shared/interfaces/api.interface';
 import { compareShifts, getNextShift } from '../../shared/utils/utils';
 
 @Injectable()
@@ -213,9 +213,12 @@ export class ShiftService {
     }
   }
 
-  async getLastShiftsForTeams(req: Request, res: Response): Promise<Shift[]> {
+  async getLastShiftsTeams(
+    req: Request,
+    res: Response,
+  ): Promise<IList<IShift>> {
     await this.authService.validateAccessToken(req, res);
-    
+
     const teamNumbers: number[] = [1, 2, 3, 4];
     const lastShifts: Shift[] = [];
 
@@ -228,6 +231,9 @@ export class ShiftService {
       }
     }
 
-    return lastShifts;
+    return {
+      total: lastShifts.length,
+      items: lastShifts,
+    };
   }
 }

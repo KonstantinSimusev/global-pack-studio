@@ -4,15 +4,17 @@ import {
   createShift,
   getActiveShift,
   getFinishedShift,
+  getLastShiftsTeams,
   getLastTeamShift,
 } from './actions';
 
-import type { IShift } from '../../../utils/api.interface';
+import type { IList, IShift } from '../../../utils/api.interface';
 
 interface IShiftState {
   lastTeamShift: IShift | null;
   activeShift: IShift | null;
   finishedShift: IShift | null;
+  lastShiftsTeams: IShift[];
   isLoading: boolean;
   error: string | null;
 }
@@ -21,6 +23,7 @@ const initialState: IShiftState = {
   lastTeamShift: null,
   activeShift: null,
   finishedShift: null,
+  lastShiftsTeams: [],
   isLoading: false,
   error: null,
 };
@@ -43,6 +46,7 @@ export const shiftSlice = createSlice({
     selectFinishedShift: (state: IShiftState) => state.finishedShift,
     selectCurrentShiftId: (state: IShiftState) =>
       state.lastTeamShift ? state.lastTeamShift.id : null,
+    selectLastShiftsTeams: (state: IShiftState) => state.lastShiftsTeams,
     selectIsLoadingShift: (state: IShiftState) => state.isLoading,
     selectError: (state: IShiftState) => state.error,
   },
@@ -111,6 +115,23 @@ export const shiftSlice = createSlice({
       .addCase(getLastTeamShift.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message ?? 'Ошибка получения смены';
+      })
+      // Обработчик для getLastShiftsTeams
+      .addCase(getLastShiftsTeams.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(
+        getLastShiftsTeams.fulfilled,
+        (state, action: PayloadAction<IList<IShift>>) => {
+          state.lastShiftsTeams = action.payload.items;
+          state.isLoading = false;
+          state.error = null;
+        },
+      )
+      .addCase(getLastShiftsTeams.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message ?? 'Ошибка получения смен';
       });
   },
 });
@@ -121,6 +142,7 @@ export const {
   selectActiveShift,
   selectFinishedShift,
   selectCurrentShiftId,
+  selectLastShiftsTeams,
   selectIsLoadingShift,
   selectError,
 } = shiftSlice.selectors;
