@@ -3,22 +3,18 @@ import {
   Injectable,
   InternalServerErrorException,
   NotFoundException,
-  Param,
-  ParseUUIDPipe,
-  Req,
-  Res,
 } from '@nestjs/common';
 
 import { Request, Response } from 'express';
 
-import { AuthService } from '../auth/auth.service';
-
 import { Shift } from '../shift/entities/shift.entity';
 import { Residue } from './entities/residue.entity';
 
+import { AuthService } from '../auth/auth.service';
 import { ResidueRepository } from './residue.repository';
 
 import { UpdateResidueDTO } from './dto/update-residue.dto';
+
 import {
   IList,
   IResidue,
@@ -59,9 +55,9 @@ export class ResidueService {
   }
 
   async getResidues(
-    @Param('id', ParseUUIDPipe) id: string,
-    @Req() req: Request,
-    @Res({ passthrough: true }) res: Response,
+    id: string,
+    req: Request,
+    res: Response,
   ): Promise<IList<IResidue>> {
     try {
       await this.authService.validateAccessToken(req, res);
@@ -78,9 +74,9 @@ export class ResidueService {
   }
 
   async updateResidue(
-    @Body() dto: UpdateResidueDTO,
-    @Req() req: Request,
-    @Res({ passthrough: true }) res: Response,
+    dto: UpdateResidueDTO,
+    req: Request,
+    res: Response,
   ): Promise<ISuccess> {
     try {
       await this.authService.validateAccessToken(req, res);

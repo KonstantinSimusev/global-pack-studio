@@ -137,16 +137,6 @@ export const Sidebar = () => {
                 >
                   <Link to="/fix">Раскрепление</Link>
                 </li>
-
-                <li
-                  className={clsx(
-                    styles.link,
-                    location.pathname === '/residue' && styles.link__active,
-                  )}
-                  onClick={hanldeClick}
-                >
-                  <Link to="/residue">Остатки</Link>
-                </li>
               </>
             )}
 

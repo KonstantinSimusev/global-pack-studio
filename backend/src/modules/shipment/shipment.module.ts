@@ -3,9 +3,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { Shipment } from './entities/shipment.entity';
 
-import { ShipmentController } from './shipment.controller';
-import { ShipmentService } from './shipment.service';
 import { ShipmentRepository } from './shipment.repository';
+import { ShipmentService } from './shipment.service';
+import { ShipmentController } from './shipment.controller';
+
 import { AuthModule } from '../auth/auth.module';
 
 @Module({

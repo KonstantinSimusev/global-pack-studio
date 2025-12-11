@@ -206,10 +206,7 @@ export const WORK_PLACE_OPTIONS: TWorkPlace[] = [
 
 export type TWorkerLocation = '1 оч' | '2 оч' | '3 оч' | 'ЛУМ';
 
-export type TUnit = 'СТАН' | 'АНГЦ' | 'АНО' | 'АИ' | 'АНГЦ-3';
-export const UNITS = ['СТАН', 'АНГЦ', 'АНО', 'АИ', 'АНГЦ-3'];
-
 export type TShiftStatus = 'активная' | 'завершённая';
 
-export type TResidue = '1 ОЧ' | '2 ОЧ' | '3 ОЧ' | 'ВЛРТ';
-export const RESIDUES: TResidue[] = ['1 ОЧ', '2 ОЧ', '3 ОЧ', 'ВЛРТ'];
+// export type TResidue = '1 ОЧ' | '2 ОЧ' | '3 ОЧ' | 'ВЛРТ';
+// export const RESIDUES: TResidue[] = ['1 ОЧ', '2 ОЧ', '3 ОЧ', 'ВЛРТ'];

@@ -17,6 +17,7 @@ import { TShiftStatus } from '../../../utils/types';
 import { ShipmentChart } from '../../charts/shipment-chart/shipment-chart';
 import { PackChart } from '../../charts/pack-chart/pack-chart';
 import { FixChart } from '../../charts/fix-chart/fix-chart';
+import { ResidueChart } from '../../charts/residue-chart/residue-chart';
 
 export const HomeShift = () => {
   const { shiftId } = useParams();
@@ -63,10 +64,32 @@ export const HomeShift = () => {
             list={currentShift?.usersShifts}
             teamNumber={currentShift.teamNumber}
           />
-          <ProductionChart shiftId={shiftId} list={currentShift?.usersShifts} />
-          <PackChart shiftId={shiftId} list={currentShift?.usersShifts} />
-          <ShipmentChart shiftId={shiftId} list={currentShift?.usersShifts} />
-          <FixChart shiftId={shiftId} list={currentShift?.usersShifts} />
+
+          <ProductionChart
+            shiftId={shiftId}
+            list={currentShift?.usersShifts}
+            shiftStatus={currentStatus}
+          />
+
+          <PackChart
+            shiftId={shiftId}
+            list={currentShift?.usersShifts}
+            shiftStatus={currentStatus}
+          />
+
+          <ResidueChart shiftId={shiftId} shiftStatus={currentStatus} />
+
+          <ShipmentChart
+            shiftId={shiftId}
+            list={currentShift?.usersShifts}
+            shiftStatus={currentStatus}
+          />
+
+          <FixChart
+            shiftId={shiftId}
+            list={currentShift?.usersShifts}
+            shiftStatus={currentStatus}
+          />
         </>
       )}
     </Layout>

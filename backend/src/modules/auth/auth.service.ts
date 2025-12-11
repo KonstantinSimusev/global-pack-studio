@@ -5,8 +5,6 @@ import {
   Injectable,
   InternalServerErrorException,
   NotFoundException,
-  Req,
-  Res,
   UnauthorizedException,
 } from '@nestjs/common';
 
@@ -28,11 +26,7 @@ export class AuthService {
     private configService: ConfigService,
   ) {}
 
-  async login(
-    login: string,
-    password: string,
-    @Res({ passthrough: true }) res: Response,
-  ): Promise<IUser> {
+  async login(login: string, password: string, res: Response): Promise<IUser> {
     try {
       // Поиск пользователя
       const user = await this.userRepository.findByLogin(login);
@@ -94,10 +88,7 @@ export class AuthService {
     }
   }
 
-  async logout(
-    req: Request,
-    @Res({ passthrough: true }) res: Response,
-  ): Promise<ISuccess> {
+  async logout(req: Request, res: Response): Promise<ISuccess> {
     try {
       const savedAccessToken = await this.getAccessToken(req);
 
@@ -148,10 +139,7 @@ export class AuthService {
     }
   }
 
-  async validateAccessToken(
-    @Req() req: Request,
-    @Res({ passthrough: true }) res: Response,
-  ): Promise<IUser> {
+  async validateAccessToken(req: Request, res: Response): Promise<IUser> {
     let userId: string | undefined;
 
     try {

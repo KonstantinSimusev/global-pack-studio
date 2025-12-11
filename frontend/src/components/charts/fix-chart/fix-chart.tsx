@@ -18,16 +18,20 @@ import {
   getCount,
   getShipmentStats,
 } from '../../../utils/utils';
+import { TShiftStatus } from '../../../utils/types';
 
 interface IChartProps {
-  shiftId?: string;
+  shiftId: string;
   list: IUserShift[];
+  shiftStatus: string;
 }
 
-export const FixChart = ({ shiftId, list }: IChartProps) => {
+export const FixChart = ({ shiftId, list, shiftStatus }: IChartProps) => {
   const dispatch = useDispatch();
 
   const fixs = useSelector(selectFixs);
+
+  const finishedStatusShift: TShiftStatus = 'завершённая';
 
   const total = fixs
     .filter((item) => item.location === '2 ОЧЕРЕДЬ')
@@ -57,75 +61,83 @@ export const FixChart = ({ shiftId, list }: IChartProps) => {
   }, [shiftId]);
 
   return (
-    <div className={styles.container}>
-      {!shiftId ? (
-        <Error />
-      ) : (
-        <>
-          <div className={styles.wrapper__header}>
-            <span className={styles.location}>РАСКРЕПЛЕНИЕ</span>
-            <span className={styles.wrapper__status}>
-              данные на конец смены
-            </span>
-          </div>
-          <ul className={styles.chart}>
-            {sortedArray.map((item) => {
-              const percentage = Math.round((item.count / MAX_VALUE) * 100);
-              return (
-                <li key={item.id} className={styles.column}>
-                  <span
-                    style={{ height: `${percentage}px` }}
-                    className={styles.column__height}
-                  >
-                    <span className={styles.count}>
-                      {item.count > 0 ? item.count : ''}
-                    </span>
+    <>
+      {shiftStatus === finishedStatusShift && (
+        <div className={styles.container}>
+          {!shiftId ? (
+            <Error />
+          ) : (
+            <>
+              <div className={styles.wrapper__header}>
+                <span className={styles.location}>РАСКРЕПЛЕНИЕ</span>
+                <span className={styles.wrapper__status}>
+                  данные на конец смены
+                </span>
+              </div>
+              <ul className={styles.chart}>
+                {sortedArray.map((item) => {
+                  const percentage = Math.round((item.count / MAX_VALUE) * 100);
+                  return (
+                    <li key={item.id} className={styles.column}>
+                      <span
+                        style={{ height: `${percentage}px` }}
+                        className={styles.column__height}
+                      >
+                        <span className={styles.count}>
+                          {item.count > 0 ? item.count : ''}
+                        </span>
+                      </span>
+                      <Border />
+                      <span className={styles.title}>{item.railway}</span>
+                    </li>
+                  );
+                })}
+              </ul>
+
+              <div className={styles.wrapper__count}>
+                <div className={styles.wrapper__footer}>
+                  <span className={styles.total__size}>Тупики 6 + 7::</span>
+                  <span className={styles.total__size}>{total} ваг</span>
+                </div>
+
+                <div className={styles.wrapper__footer}>
+                  <span className={styles.total__size}>Итого за смену:</span>
+                  <span className={styles.total__size}>
+                    {getCount(fixs)} ваг
                   </span>
-                  <Border />
-                  <span className={styles.title}>{item.railway}</span>
-                </li>
-              );
-            })}
-          </ul>
+                </div>
+              </div>
 
-          <div className={styles.wrapper__count}>
-            <div className={styles.wrapper__footer}>
-              <span className={styles.total__size}>Тупик 6 + Тупик 7:</span>
-              <span className={styles.total__size}>{total} ваг</span>
-            </div>
-
-            <div className={styles.wrapper__footer}>
-              <span className={styles.total__size}>Итого за смену:</span>
-              <span className={styles.total__size}>{getCount(fixs)} ваг</span>
-            </div>
-          </div>
-
-          <div className={styles.worker__wrapper}>
-            <div className={styles.title__wrapper}>
-              <span className={styles.worker__title}>Раскрепление</span>
-              <span className={styles.worker__title}>Чел</span>
-            </div>
-            <Border />
-            <ul className={styles.worker__wrapper}>
-              {shipmentLocations.length > 0 ? (
-                shipmentLocations.map((item, index) => (
-                  <li className={styles.wrapper} key={index}>
-                    <span>{item.workplace}</span>
-                    <span className={styles.worker__count}>{item.count}</span>
-                  </li>
-                ))
-              ) : (
-                <span className={styles.empty}>Нет данных</span>
-              )}
-            </ul>
-            <Border />
-            <div className={styles.total__wrapper}>
-              <span>Всего:</span>
-              <span>{getCount(shipmentLocations)}</span>
-            </div>
-          </div>
-        </>
+              <div className={styles.worker__wrapper}>
+                <div className={styles.title__wrapper}>
+                  <span className={styles.worker__title}>Раскрепление</span>
+                  <span className={styles.worker__title}>Чел</span>
+                </div>
+                <Border />
+                <ul className={styles.worker__wrapper}>
+                  {shipmentLocations.length > 0 ? (
+                    shipmentLocations.map((item, index) => (
+                      <li className={styles.wrapper} key={index}>
+                        <span>{item.workplace}</span>
+                        <span className={styles.worker__count}>
+                          {item.count}
+                        </span>
+                      </li>
+                    ))
+                  ) : (
+                    <span className={styles.empty}>Нет данных</span>
+                  )}
+                </ul>
+                <Border />
+                <div className={styles.total__wrapper}>
+                  <span>Всего:</span>
+                  <span>{getCount(shipmentLocations)}</span>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
       )}
-    </div>
+    </>
   );
 };

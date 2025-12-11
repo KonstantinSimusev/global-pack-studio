@@ -21,7 +21,14 @@
 .wrapper__status {
   margin: 10px 0;
   font-size: 14px;
+}
+
+.status__start {
   color: #1e9146;
+}
+
+.status__end {
+  color: #007dff;
 }
 
 .chart {
@@ -54,7 +61,7 @@
 }
 
 .title {
-  font-size: 14px;
+  font-size: 12px;
   text-align: center;
   margin-top: 8px;
 }

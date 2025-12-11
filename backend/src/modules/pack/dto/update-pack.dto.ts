@@ -17,4 +17,9 @@ export class UpdatePackDTO {
   @Min(0)
   @Max(1000)
   count: number;
+
+  @IsString()
+  @IsNotEmpty()
+  @IsUUID()
+  shiftId: string;
 }

@@ -1,10 +1,11 @@
-import { Body, Controller, Get, Param, ParseUUIDPipe, Put, Req, Res } from '@nestjs/common';
+import { Body, Controller, Put, Req, Res } from '@nestjs/common';
 
 import { Request, Response } from 'express';
 
 import { ProductionService } from './production.service';
-import { ISuccess } from '../../shared/interfaces/api.interface';
+
 import { UpdateProductionDTO } from './dto/update-production.dto';
+import { ISuccess } from '../../shared/interfaces/api.interface';
 
 @Controller('productions')
 export class ProductionController {

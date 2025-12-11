@@ -5,13 +5,9 @@ import {
   Injectable,
   InternalServerErrorException,
   NotFoundException,
-  Req,
-  Res,
 } from '@nestjs/common';
 
 import { plainToInstance } from 'class-transformer';
-
-import { Response, Request } from 'express';
 
 import { User } from './entities/user.entity';
 import { CreateUserDTO } from './dto/create-user.dto';
@@ -72,17 +68,16 @@ export class UserService {
         message: 'Пользователи успешно созданы',
       };
     } catch (error) {
-      console.error(error)
+      console.error(error);
       throw new InternalServerErrorException(
         'Произошла ошибка при создании пользователей',
       );
     }
   }
 
-  async getUsers(
-    // @Req() req: Request,
-    // @Res({ passthrough: true }) res: Response,
-  ): Promise<IList<IUser>> {
+  async getUsers() // @Req() req: Request,
+  // @Res({ passthrough: true }) res: Response,
+  : Promise<IList<IUser>> {
     try {
       // await this.authService.validateAccessToken(req, res);
       const users = await this.userRepository.findAll();

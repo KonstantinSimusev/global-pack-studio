@@ -20,6 +20,7 @@ import { EmptyCard } from '../../ui/empty-card/empty-card';
 
 export const Home = () => {
   const dispatch = useDispatch();
+  
   const activeShift = useSelector(selectActiveShift);
   const finishedShift = useSelector(selectFinishedShift);
 
@@ -37,7 +38,8 @@ export const Home = () => {
         title={'Структурное подразделение'}
         text={'ЛПЦ-11 ПАО ММК'}
       />
-      {finishedShift && <ResidueChart shiftId={finishedShift.id ?? ''} />}
+      {finishedShift && <ResidueChart shiftId={finishedShift.id ?? ''} shiftStatus={finished} />}
+      {/* {activeShift && <ResidueChart shiftId={activeShift.id ?? ''} />} */}
       {!activeShift ? (
         <EmptyCard type={active} text={'Идет планирование...'} />
       ) : (

@@ -1,7 +1,6 @@
-import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
-
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 import { Production } from './entities/production.entity';
 
@@ -37,6 +36,9 @@ export class ProductionRepository {
         shift: {
           id: shiftId,
         },
+      },
+      order: {
+        sortOrder: 'ASC', // сортировка по возрастанию (1, 2, 3, ...)
       },
     });
   }

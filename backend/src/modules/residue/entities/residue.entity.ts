@@ -7,8 +7,6 @@ import {
   Min,
 } from 'class-validator';
 
-import { Shift } from '../../shift/entities/shift.entity';
-
 import {
   Entity,
   Column,
@@ -16,6 +14,8 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
+
+import { Shift } from '../../shift/entities/shift.entity';
 
 import { EArea, ELocation } from '../../../shared/enums/enums';
 

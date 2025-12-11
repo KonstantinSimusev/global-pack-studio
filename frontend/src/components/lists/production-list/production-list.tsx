@@ -8,7 +8,6 @@ import { selectProductions } from '../../../services/slices/production/slice';
 import { useEffect } from 'react';
 import { getProductions } from '../../../services/slices/production/actions';
 import { formatProductionUnit } from '../../../utils/utils';
-import { UNITS } from '../../../utils/types';
 
 interface IProductionProps {
   shiftId?: string;
@@ -17,12 +16,6 @@ interface IProductionProps {
 export const ProductionList = ({ shiftId }: IProductionProps) => {
   const dispatch = useDispatch();
   const productions = useSelector(selectProductions);
-
-  const sortedArray = productions
-    .filter((item) => item.unit !== undefined) // исключаем элементы без unit
-    .sort((a, b) => {
-      return UNITS.indexOf(a.unit!) - UNITS.indexOf(b.unit!);
-    });
 
   if (!shiftId) {
     return <Error />;
@@ -34,8 +27,8 @@ export const ProductionList = ({ shiftId }: IProductionProps) => {
 
   return (
     <ul className={styles.container}>
-      {sortedArray.length > 0 ? (
-        sortedArray.map((item) => (
+      {productions.length > 0 ? (
+        productions.map((item) => (
           <li key={item.id} className={styles.item}>
             <div className={styles.wrapper__header}>
               <h5 className={styles.location}>{item.location}</h5>

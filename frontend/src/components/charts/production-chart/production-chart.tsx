@@ -1,25 +1,56 @@
 import styles from './production-chart.module.css';
 
-import { selectProductions } from '../../../services/slices/production/slice';
-import { useDispatch, useSelector } from '../../../services/store';
-import { Error } from '../../ui/error/error';
-import { getCount } from '../../../utils/utils';
-import { useEffect } from 'react';
-import { getProductions } from '../../../services/slices/production/actions';
-import { Border } from '../../ui/border/border';
-import { UNITS } from '../../../utils/types';
-import { IUserShift } from '../../../utils/api.interface';
+import clsx from 'clsx';
 
-interface IProductionChartProps {
-  shiftId?: string;
-  list?: IUserShift[];
+import { useEffect } from 'react';
+
+import { Error } from '../../ui/error/error';
+import { Border } from '../../ui/border/border';
+
+import { useDispatch, useSelector } from '../../../services/store';
+
+import { selectProductions } from '../../../services/slices/production/slice';
+import { getProductions } from '../../../services/slices/production/actions';
+
+import { IUserShift } from '../../../utils/api.interface';
+import { TShiftStatus } from '../../../utils/types';
+
+import {
+  countProfessionsByAttendance,
+  filterAndSortProfessions,
+  filterWorkers,
+  getCount,
+  getPackerStats,
+} from '../../../utils/utils';
+
+interface IChartProps {
+  shiftId: string;
+  list: IUserShift[];
+  shiftStatus: string;
 }
 
-export const ProductionChart = ({ shiftId }: IProductionChartProps) => {
+export const ProductionChart = ({
+  shiftId,
+  list,
+  shiftStatus,
+}: IChartProps) => {
   const dispatch = useDispatch();
+
   const productions = useSelector(selectProductions);
 
-  const total = productions
+  const activeStatusShift: TShiftStatus = 'активная';
+
+  const workersShifts = filterWorkers(list);
+  const packerLocations = getPackerStats(workersShifts);
+  const attendanceProfessions = countProfessionsByAttendance(workersShifts);
+  const filterArrayByLum = filterAndSortProfessions(attendanceProfessions);
+
+  const currentShiftStatus =
+    shiftStatus === activeStatusShift
+      ? 'данные на начало смены'
+      : 'данные на конец смены';
+
+  const productionTotal = productions
     .filter((item) => item.location === '2 ОЧЕРЕДЬ')
     .reduce((sum, item) => sum + item.count, 0);
 
@@ -29,12 +60,6 @@ export const ProductionChart = ({ shiftId }: IProductionChartProps) => {
   };
 
   const MAX_VALUE = getMaxCount() + 50;
-
-  const sortedArray = productions
-    .filter((item) => item.unit !== undefined) // исключаем элементы без unit
-    .sort((a, b) => {
-      return UNITS.indexOf(a.unit!) - UNITS.indexOf(b.unit!);
-    });
 
   useEffect(() => {
     if (shiftId) {
@@ -50,12 +75,19 @@ export const ProductionChart = ({ shiftId }: IProductionChartProps) => {
         <>
           <div className={styles.wrapper__header}>
             <span className={styles.location}>ПРОИЗВОДСТВО</span>
-            <span className={styles.wrapper__status}>
-              данные на начало смены
+            <span
+              className={clsx(
+                styles.wrapper__status,
+                shiftStatus === activeStatusShift
+                  ? styles.status__start
+                  : styles.status__end,
+              )}
+            >
+              {currentShiftStatus}
             </span>
           </div>
           <ul className={styles.chart}>
-            {sortedArray.map((item) => {
+            {productions.map((item) => {
               const percentage = Math.round((item.count / MAX_VALUE) * 100);
               return (
                 <li key={item.id} className={styles.column}>
@@ -77,7 +109,7 @@ export const ProductionChart = ({ shiftId }: IProductionChartProps) => {
           <div className={styles.wrapper__count}>
             <div className={styles.wrapper__footer}>
               <span className={styles.total__size}>АНГЦ + АНО + АИ:</span>
-              <span className={styles.total__size}>{total} рул</span>
+              <span className={styles.total__size}>{productionTotal} рул</span>
             </div>
 
             <div className={styles.wrapper__footer}>
@@ -87,6 +119,64 @@ export const ProductionChart = ({ shiftId }: IProductionChartProps) => {
               </span>
             </div>
           </div>
+
+          {shiftStatus === activeStatusShift && (
+            <>
+              <div className={styles.worker__wrapper}>
+                <div className={styles.title__wrapper}>
+                  <span className={styles.worker__title}>Ручная упаковка</span>
+                  <span className={styles.worker__title}>Чел</span>
+                </div>
+                <Border />
+                <ul className={styles.worker__wrapper}>
+                  {packerLocations.length > 0 ? (
+                    packerLocations.map((item, index) => (
+                      <li className={styles.wrapper} key={index}>
+                        <span>{item.workplace}</span>
+                        <span className={styles.worker__count}>
+                          {item.count}
+                        </span>
+                      </li>
+                    ))
+                  ) : (
+                    <span className={styles.empty}>Нет данных</span>
+                  )}
+                </ul>
+                <Border />
+                <div className={styles.total__wrapper}>
+                  <span>Всего:</span>
+                  <span>{getCount(packerLocations)}</span>
+                </div>
+              </div>
+
+              <div className={styles.worker__wrapper}>
+                <div className={styles.title__wrapper}>
+                  <span className={styles.worker__title}>ЛУМ</span>
+                  <span className={styles.worker__title}>Чел</span>
+                </div>
+                <Border />
+                <ul className={styles.worker__wrapper}>
+                  {filterArrayByLum.length > 0 ? (
+                    filterArrayByLum.map((item, index) => (
+                      <li className={styles.wrapper} key={index}>
+                        <span>{item.profession}</span>
+                        <span className={styles.worker__count}>
+                          {item.count}
+                        </span>
+                      </li>
+                    ))
+                  ) : (
+                    <span className={styles.empty}>Нет данных</span>
+                  )}
+                </ul>
+                <Border />
+                <div className={styles.total__wrapper}>
+                  <span>Всего:</span>
+                  <span>{getCount(filterArrayByLum)}</span>
+                </div>
+              </div>
+            </>
+          )}
         </>
       )}
     </div>

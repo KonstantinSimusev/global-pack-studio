@@ -107,6 +107,7 @@ export const PackForm = () => {
         const payload = {
           id: selectedId,
           count: Number(formData.count),
+          shiftId: currentShiftId,
         };
 
         const response = await dispatch(updatePack(payload));

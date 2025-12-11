@@ -1,5 +1,7 @@
 import styles from './shipment-chart.module.css';
 
+import clsx from 'clsx';
+
 import { useEffect } from 'react';
 
 import { Error } from '../../ui/error/error';
@@ -9,22 +11,37 @@ import { useDispatch, useSelector } from '../../../services/store';
 import { selectShipments } from '../../../services/slices/shipment/slice';
 import { getShipments } from '../../../services/slices/shipment/actions';
 
-import { extractNumber, getCount } from '../../../utils/utils';
 import { IUserShift } from '../../../utils/api.interface';
+import { TShiftStatus } from '../../../utils/types';
 
-interface IProductionChartProps {
-  shiftId?: string;
-  list?: IUserShift[];
+import {
+  extractNumber,
+  filterWorkers,
+  getCount,
+  getShipmentStats,
+} from '../../../utils/utils';
+
+interface IChartProps {
+  shiftId: string;
+  list: IUserShift[];
+  shiftStatus: string;
 }
 
-export const ShipmentChart = ({ shiftId }: IProductionChartProps) => {
+export const ShipmentChart = ({ shiftId, list, shiftStatus }: IChartProps) => {
   const dispatch = useDispatch();
 
   const shipments = useSelector(selectShipments);
 
+  const activeStatusShift: TShiftStatus = 'активная';
+
   const total = shipments
     .filter((item) => item.location === '2 ОЧЕРЕДЬ')
     .reduce((sum, item) => sum + item.count, 0);
+
+  const currentShiftStatus =
+    shiftStatus === activeStatusShift
+      ? 'данные на начало смены'
+      : 'данные на конец смены';
 
   const getMaxCount = () => {
     if (shipments.length === 0) return 0; // или null, в зависимости от логики
@@ -40,6 +57,9 @@ export const ShipmentChart = ({ shiftId }: IProductionChartProps) => {
     return numA - numB;
   });
 
+  const workersShifts = filterWorkers(list);
+  const shipmentLocations = getShipmentStats(workersShifts);
+
   useEffect(() => {
     if (shiftId) {
       dispatch(getShipments(shiftId));
@@ -54,8 +74,15 @@ export const ShipmentChart = ({ shiftId }: IProductionChartProps) => {
         <>
           <div className={styles.wrapper__header}>
             <span className={styles.location}>ОТГРУЗКА</span>
-            <span className={styles.wrapper__status}>
-              данные на начало смены
+            <span
+              className={clsx(
+                styles.wrapper__status,
+                shiftStatus === activeStatusShift
+                  ? styles.status__start
+                  : styles.status__end,
+              )}
+            >
+              {currentShiftStatus}
             </span>
           </div>
           <ul className={styles.chart}>
@@ -80,8 +107,8 @@ export const ShipmentChart = ({ shiftId }: IProductionChartProps) => {
 
           <div className={styles.wrapper__count}>
             <div className={styles.wrapper__footer}>
-              <span className={styles.total__size}>Тупик 6 + Тупик 7:</span>
-              <span className={styles.total__sizel}>{total} ваг</span>
+              <span className={styles.total__size}>Тупики 6 + 7:</span>
+              <span className={styles.total__size}>{total} ваг</span>
             </div>
 
             <div className={styles.wrapper__footer}>
@@ -91,6 +118,37 @@ export const ShipmentChart = ({ shiftId }: IProductionChartProps) => {
               </span>
             </div>
           </div>
+
+          {shiftStatus === activeStatusShift && (
+            <>
+              <div className={styles.worker__wrapper}>
+                <div className={styles.title__wrapper}>
+                  <span className={styles.worker__title}>Раскрепление</span>
+                  <span className={styles.worker__title}>Чел</span>
+                </div>
+                <Border />
+                <ul className={styles.worker__wrapper}>
+                  {shipmentLocations.length > 0 ? (
+                    shipmentLocations.map((item, index) => (
+                      <li className={styles.wrapper} key={index}>
+                        <span>{item.workplace}</span>
+                        <span className={styles.worker__count}>
+                          {item.count}
+                        </span>
+                      </li>
+                    ))
+                  ) : (
+                    <span className={styles.empty}>Нет данных</span>
+                  )}
+                </ul>
+                <Border />
+                <div className={styles.total__wrapper}>
+                  <span>Всего:</span>
+                  <span>{getCount(shipmentLocations)}</span>
+                </div>
+              </div>
+            </>
+          )}
         </>
       )}
     </div>

@@ -1,28 +1,24 @@
 import {
-  Body,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
-  Param,
-  ParseUUIDPipe,
-  Req,
-  Res,
 } from '@nestjs/common';
 
 import { Request, Response } from 'express';
 
-import { ShipmentRepository } from './shipment.repository';
-
 import { Shift } from '../shift/entities/shift.entity';
 import { Shipment } from './entities/shipment.entity';
+
+import { AuthService } from '../auth/auth.service';
+import { ShipmentRepository } from './shipment.repository';
+
+import { UpdateShipmentDTO } from './dto/update-shipment.dto';
 
 import {
   IList,
   IShipment,
   ISuccess,
 } from '../../shared/interfaces/api.interface';
-import { AuthService } from '../auth/auth.service';
-import { UpdateShipmentDTO } from './dto/update-shipment.dto';
 
 import { shipments } from '../../shared/utils/utils';
 
@@ -58,9 +54,9 @@ export class ShipmentService {
   }
 
   async getShipments(
-    @Param('id', ParseUUIDPipe) id: string,
-    @Req() req: Request,
-    @Res({ passthrough: true }) res: Response,
+    id: string,
+    req: Request,
+    res: Response,
   ): Promise<IList<IShipment>> {
     try {
       await this.authService.validateAccessToken(req, res);
@@ -78,9 +74,9 @@ export class ShipmentService {
   }
 
   async updateShipment(
-    @Body() dto: UpdateShipmentDTO,
-    @Req() req: Request,
-    @Res({ passthrough: true }) res: Response,
+    dto: UpdateShipmentDTO,
+    req: Request,
+    res: Response,
   ): Promise<ISuccess> {
     try {
       await this.authService.validateAccessToken(req, res);

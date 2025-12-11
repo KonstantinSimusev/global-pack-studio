@@ -1,8 +1,5 @@
 import {
   IsString,
-  IsNumber,
-  Min,
-  Max,
   IsNotEmpty,
   IsUUID,
 } from 'class-validator';

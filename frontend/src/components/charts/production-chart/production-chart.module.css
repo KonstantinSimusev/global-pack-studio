@@ -21,7 +21,14 @@
 .wrapper__status {
   margin: 10px 0;
   font-size: 14px;
+}
+
+.status__start {
   color: #1e9146;
+}
+
+.status__end {
+  color: #007dff;
 }
 
 .chart {
@@ -76,7 +83,7 @@
   font-size: 16px;
 }
 
-.packer__wrapper {
+.worker__wrapper {
   display: flex;
   flex-direction: column;
   font-size: 14px;
@@ -89,7 +96,7 @@
   margin-right: 10px;
 }
 
-.packer__title {
+.worker__title {
   opacity: 0.6;
 }
 
@@ -99,23 +106,14 @@
   margin: 0 16px;
 }
 
-.wrapper__profession {
-  display: flex;
-  justify-content: space-between;
-}
-
-.margin {
-  margin: 4px 0;
+.worker__count {
+  min-width: 10px;
+  text-align: end;
 }
 
 .empty {
   font-size: 14px;
   margin-left: 10px;
-}
-
-.packer__count {
-  min-width: 10px;
-  text-align: end;
 }
 
 .total__wrapper {

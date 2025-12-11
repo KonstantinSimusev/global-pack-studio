@@ -127,6 +127,7 @@ export const ProductionForm = () => {
         const payload = {
           id: selectedId,
           count: Number(formData.count),
+          shiftId: currentShiftId,
         };
 
         const response = await dispatch(updateProduction(payload));

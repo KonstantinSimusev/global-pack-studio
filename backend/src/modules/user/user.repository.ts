@@ -1,9 +1,9 @@
+import { Injectable } from '@nestjs/common';
 import { Not, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { Injectable } from '@nestjs/common';
-
 import { User } from './entities/user.entity';
+
 import { EProfession } from '../../shared/enums/enums';
 
 @Injectable()

@@ -1,7 +1,6 @@
-import { Repository } from 'typeorm';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-
-import { Injectable } from '@nestjs/common';
+import { Repository } from 'typeorm';
 
 import { Residue } from './entities/residue.entity';
 

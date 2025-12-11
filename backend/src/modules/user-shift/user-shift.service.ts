@@ -1,29 +1,24 @@
 import {
-  BadRequestException,
   Body,
   ConflictException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
-  Param,
-  ParseIntPipe,
-  ParseUUIDPipe,
-  Req,
-  Res,
 } from '@nestjs/common';
 
 import { Response, Request } from 'express';
+
+import { User } from '../user/entities/user.entity';
+import { Shift } from '../shift/entities/shift.entity';
+import { UserShift } from './entities/user-shift.entity';
 
 import { AuthService } from '../auth/auth.service';
 import { UserRepository } from '../user/user.repository';
 import { ShiftRepository } from '../shift/shift.repository';
 import { UserShiftRepository } from './user-shift.repository';
 
-import { Shift } from '../shift/entities/shift.entity';
-import { UserShift } from './entities/user-shift.entity';
-import { User } from '../user/entities/user.entity';
-
 import { AddUserShiftDTO } from './dto/add-user-shift.dto';
+import { UpdateUserShiftDTO } from './dto/update-user-shift.dto';
 
 import {
   IList,
@@ -32,7 +27,6 @@ import {
 } from '../../shared/interfaces/api.interface';
 
 import { EProfession, ETeamProfession } from '../../shared/enums/enums';
-import { UpdateUserShiftDTO } from './dto/update-user-shift.dto';
 
 @Injectable()
 export class UserShiftService {
@@ -44,9 +38,9 @@ export class UserShiftService {
   ) {}
 
   async creatUserShift(
-    @Body() dto: AddUserShiftDTO,
-    @Req() req: Request,
-    @Res({ passthrough: true }) res: Response,
+    dto: AddUserShiftDTO,
+    req: Request,
+    res: Response,
   ): Promise<IUserShift> {
     try {
       await this.authService.validateAccessToken(req, res);
@@ -119,32 +113,10 @@ export class UserShiftService {
     }
   }
 
-  // async getUserShiftById(
-  //   @Param('id', ParseUUIDPipe) id: string,
-  //   @Req() req: Request,
-  //   @Res({ passthrough: true }) res: Response,
-  // ): Promise<IUserShift> {
-  //   try {
-  //     await this.authService.validateAccessToken(req, res);
-
-  //     const userShift = await this.userShiftRepository.findById(id);
-
-  //     if (!userShift) {
-  //       throw new NotFoundException('Смена не найдена');
-  //     }
-
-  //     return userShift;
-  //   } catch (error) {
-  //     throw new InternalServerErrorException(
-  //       'Ошибка при получении списка смен',
-  //     );
-  //   }
-  // }
-
   async getUsersShifts(
-    @Param('shiftId', ParseUUIDPipe) shiftId: string,
-    @Req() req: Request,
-    @Res({ passthrough: true }) res: Response,
+    shiftId: string,
+    req: Request,
+    res: Response,
   ): Promise<IList<IUserShift>> {
     try {
       await this.authService.validateAccessToken(req, res);
@@ -164,9 +136,9 @@ export class UserShiftService {
   }
 
   async updateUserShift(
-    @Body() dto: UpdateUserShiftDTO,
-    @Req() req: Request,
-    @Res({ passthrough: true }) res: Response,
+    dto: UpdateUserShiftDTO,
+    req: Request,
+    res: Response,
   ): Promise<ISuccess> {
     try {
       await this.authService.validateAccessToken(req, res);
@@ -197,9 +169,9 @@ export class UserShiftService {
   }
 
   async deleteUserShift(
-    @Param('id', ParseUUIDPipe) id: string,
-    @Req() req: Request,
-    @Res({ passthrough: true }) res: Response,
+    id: string,
+    req: Request,
+    res: Response,
   ): Promise<ISuccess> {
     try {
       await this.authService.validateAccessToken(req, res);

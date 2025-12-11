@@ -1,7 +1,5 @@
 import { IsNumber, IsPositive, IsString, IsUUID, Max, Min } from 'class-validator';
 
-import { Shift } from '../../shift/entities/shift.entity';
-
 import {
   Entity,
   Column,
@@ -9,6 +7,8 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
+
+import { Shift } from '../../shift/entities/shift.entity';
 
 import { ELocation, EUnit } from '../../../shared/enums/enums';
 

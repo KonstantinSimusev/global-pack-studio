@@ -6,6 +6,7 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
+
 import { EProfession, ERole } from '../../../shared/enums/enums';
 
 export class UpdateUserDTO {

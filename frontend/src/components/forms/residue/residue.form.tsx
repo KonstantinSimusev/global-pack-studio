@@ -114,6 +114,7 @@ export const ResidueForm = () => {
         const payload = {
           id: selectedId,
           count: Number(formData.count),
+          shiftId: currentShiftId,
         };
 
         const response = await dispatch(updateResidue(payload));

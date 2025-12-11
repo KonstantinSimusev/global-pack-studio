@@ -1,7 +1,6 @@
-import { Not, Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
-
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 import { UserShift } from './entities/user-shift.entity';
 

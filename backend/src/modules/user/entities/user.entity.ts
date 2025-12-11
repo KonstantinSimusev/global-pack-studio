@@ -2,6 +2,7 @@ import { IsNumber, IsPositive, Max, Min } from 'class-validator';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 import { UserShift } from '../../user-shift/entities/user-shift.entity';
+
 import { EProfession, ERole } from '../../../shared/enums/enums';
 
 @Entity({

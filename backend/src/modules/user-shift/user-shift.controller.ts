@@ -1,28 +1,14 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  ParseIntPipe,
-  ParseUUIDPipe,
-  Post,
-  Put,
-  Req,
-  Res,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Post, Put, Req, Res } from '@nestjs/common';
 
 import { Response, Request } from 'express';
 
 import { UserShiftService } from './user-shift.service';
-import {
-  IList,
-  ISuccess,
-  IUserShift,
-} from '../../shared/interfaces/api.interface';
+
 import { AddUserShiftDTO } from './dto/add-user-shift.dto';
-import { DeleteUserShiftDTO } from './dto/delete-user-shift.dto';
 import { UpdateUserShiftDTO } from './dto/update-user-shift.dto';
+import { DeleteUserShiftDTO } from './dto/delete-user-shift.dto';
+
+import { ISuccess, IUserShift } from '../../shared/interfaces/api.interface';
 
 @Controller('users-shifts')
 export class UserShiftController {

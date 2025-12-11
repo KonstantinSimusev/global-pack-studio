@@ -1,25 +1,20 @@
 import {
-  Body,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
-  Param,
-  ParseUUIDPipe,
-  Req,
-  Res,
 } from '@nestjs/common';
 
 import { Request, Response } from 'express';
 
-import { FixRepository } from './fix.repository';
-
 import { Shift } from '../shift/entities/shift.entity';
 import { Fix } from './entities/fix.entity';
 
-import { IFix, IList, ISuccess } from '../../shared/interfaces/api.interface';
 import { AuthService } from '../auth/auth.service';
+import { FixRepository } from './fix.repository';
+
 import { UpdateFixDTO } from './dto/update-fix.dto';
 
+import { IFix, IList, ISuccess } from '../../shared/interfaces/api.interface';
 import { fixs } from '../../shared/utils/utils';
 
 @Injectable()
@@ -55,11 +50,7 @@ export class FixService {
     }
   }
 
-  async getFixs(
-    @Param('id', ParseUUIDPipe) id: string,
-    @Req() req: Request,
-    @Res({ passthrough: true }) res: Response,
-  ): Promise<IList<IFix>> {
+  async getFixs(id: string, req: Request, res: Response): Promise<IList<IFix>> {
     try {
       await this.authService.validateAccessToken(req, res);
 
@@ -77,9 +68,9 @@ export class FixService {
   }
 
   async updateFix(
-    @Body() dto: UpdateFixDTO,
-    @Req() req: Request,
-    @Res({ passthrough: true }) res: Response,
+    dto: UpdateFixDTO,
+    req: Request,
+    res: Response,
   ): Promise<ISuccess> {
     try {
       await this.authService.validateAccessToken(req, res);

@@ -18,6 +18,12 @@ export const PackList = ({ shiftId }: IListProps) => {
   const dispatch = useDispatch();
   const packs = useSelector(selectPacks);
 
+  const sortedData = [...packs].sort((a, b) => {
+    const locA = a.location ?? '';
+    const locB = b.location ?? '';
+    return locA.localeCompare(locB);
+  });
+
   if (!shiftId) {
     return <Error />;
   }
@@ -28,8 +34,8 @@ export const PackList = ({ shiftId }: IListProps) => {
 
   return (
     <ul className={styles.container}>
-      {packs.length > 0 ? (
-        packs.map((item) => (
+      {sortedData.length > 0 ? (
+        sortedData.map((item) => (
           <li key={item.id} className={styles.item}>
             <div className={styles.wrapper__header}>
               <h5 className={styles.location}>{item.location}</h5>
@@ -41,14 +47,8 @@ export const PackList = ({ shiftId }: IListProps) => {
               />
             </div>
 
-            <InfoBlock
-              title={'Участок в цехе'}
-              text={`${item.area}`}
-            />
-            <InfoBlock
-              title={'Упаковка за смену'}
-              text={`${item.count} рул`}
-            />
+            <InfoBlock title={'Участок в цехе'} text={`${item.area}`} />
+            <InfoBlock title={'Упаковка за смену'} text={`${item.count} рул`} />
           </li>
         ))
       ) : (

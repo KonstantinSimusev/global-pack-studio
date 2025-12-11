@@ -23,7 +23,9 @@ export const UserShiftList = ({ shiftId }: IUserShiftProps) => {
   const shift = useSelector(selectCurrentShift);
 
   const workersShifts = dataBaseUsersShifts.filter(
-    (userShift) => userShift.user?.profession !== 'Мастер участка',
+    (userShift) =>
+      userShift.user?.profession !== 'Мастер участка' &&
+      userShift.user?.role !== 'MASTER',
   );
 
   if (!shiftId) {

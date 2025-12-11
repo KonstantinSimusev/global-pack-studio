@@ -38,7 +38,7 @@ export const TeamProfessionList = ({ type, list, teamNumber }: IListProps) => {
   const bookUsers = workersShifts.filter(
     (userSift) => userSift.user?.teamNumber === teamNumber,
   );
-
+  
   const masterUserShift = filterMaster(list);
 
   // Формируем полное ФИО мастера

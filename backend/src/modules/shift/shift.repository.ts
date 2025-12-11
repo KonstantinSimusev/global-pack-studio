@@ -1,5 +1,5 @@
-import { Repository, LessThanOrEqual, MoreThan, LessThan } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Repository, LessThanOrEqual, MoreThan, LessThan } from 'typeorm';
 
 import { Injectable } from '@nestjs/common';
 
@@ -172,7 +172,35 @@ export class ShiftRepository {
       order: {
         date: 'DESC',
       },
+      relations: ['usersShifts'],
       take: 1, // нам нужна только последняя смена
+    });
+  }
+
+  async findCurrentShiftById(id: string): Promise<Shift> {
+    return this.shiftRepository.findOne({
+      where: { id },
+      relations: ['productions', 'packs', 'residues'],
+    });
+  }
+
+  async findPreviousShift(currentShift: Shift): Promise<Shift[]> {
+    return this.shiftRepository.find({
+      where: [
+        {
+          date: LessThan(currentShift.date), // дата строго раньше
+        },
+        {
+          date: currentShift.date,
+          shiftNumber: LessThan(currentShift.shiftNumber), // та же дата, но номер меньше
+        },
+      ],
+      order: {
+        date: 'DESC',
+        shiftNumber: 'DESC',
+      },
+      relations: ['residues'],
+      take: 1,
     });
   }
 

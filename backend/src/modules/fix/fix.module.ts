@@ -3,9 +3,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { Fix } from './entities/fix.entity';
 
-import { FixController } from './fix.controller';
-import { FixService } from './fix.service';
 import { FixRepository } from './fix.repository';
+import { FixService } from './fix.service';
+import { FixController } from './fix.controller';
+
 import { AuthModule } from '../auth/auth.module';
 
 @Module({

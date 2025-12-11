@@ -213,12 +213,6 @@ export const residues = [
     sortOrder: 3,
     count: 0,
   },
-  {
-    location: ELocation.LINE_2,
-    area: EArea.VLRT,
-    sortOrder: 4,
-    count: 0,
-  },
 ];
 
 export const shifts = [

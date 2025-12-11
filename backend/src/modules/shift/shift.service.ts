@@ -1,33 +1,29 @@
 import {
-  BadRequestException,
   ConflictException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
-  Req,
-  Res,
 } from '@nestjs/common';
 
 import { Response, Request } from 'express';
 
-import { AuthService } from '../auth/auth.service';
-
 import { Shift } from './entities/shift.entity';
 
-import { ShiftRepository } from './shift.repository';
+import { AuthService } from '../auth/auth.service';
+
 import { UserRepository } from '../user/user.repository';
+import { ShiftRepository } from './shift.repository';
 import { UserShiftService } from '../user-shift/user-shift.service';
-
-import { CreateShiftDTO } from './dto/create-shift.dto';
-
-import { IShift, ISuccess } from '../../shared/interfaces/api.interface';
-import { compareShifts, getNextShift } from '../../shared/utils/utils';
-
 import { ProductionService } from '../production/production.service';
 import { ShipmentService } from '../shipment/shipment.service';
 import { PackService } from '../pack/pack.service';
 import { FixService } from '../fix/fix.service';
 import { ResidueService } from '../residue/residue.service';
+
+import { CreateShiftDTO } from './dto/create-shift.dto';
+
+import { IShift, ISuccess } from '../../shared/interfaces/api.interface';
+import { compareShifts, getNextShift } from '../../shared/utils/utils';
 
 @Injectable()
 export class ShiftService {
@@ -45,8 +41,8 @@ export class ShiftService {
 
   async createShift(
     dto: CreateShiftDTO,
-    @Req() req: Request,
-    @Res({ passthrough: true }) res: Response,
+    req: Request,
+    res: Response,
   ): Promise<ISuccess> {
     try {
       // Проверяем токен
@@ -133,16 +129,6 @@ export class ShiftService {
         message: 'Смена успешно создана',
       };
     } catch (error) {
-
-      console.error('=== ОШИБКА В createShift ===');
-  console.error('Сообщение:', error.message);
-  console.error('Тип ошибки:', error.name);
-  console.error('Стек:', error.stack);
-  console.error('DTO:', JSON.stringify(dto, null, 2));
-  console.error('IP:', req.ip);
-  console.error('Путь:', req.path);
-  console.error('===========================');
-
       if (error instanceof ConflictException) {
         throw error;
       }
@@ -151,10 +137,7 @@ export class ShiftService {
     }
   }
 
-  async getActiveShift(
-    @Req() req: Request,
-    @Res({ passthrough: true }) res: Response,
-  ): Promise<IShift> {
+  async getActiveShift(req: Request, res: Response): Promise<IShift> {
     try {
       await this.authService.validateAccessToken(req, res);
 
@@ -176,10 +159,7 @@ export class ShiftService {
     }
   }
 
-  async getFinishedShift(
-    @Req() req: Request,
-    @Res({ passthrough: true }) res: Response,
-  ): Promise<IShift> {
+  async getFinishedShift(req: Request, res: Response): Promise<IShift> {
     try {
       await this.authService.validateAccessToken(req, res);
 
@@ -201,39 +181,7 @@ export class ShiftService {
     }
   }
 
-  // async deleteShift(
-  //   id: string,
-  //   @Req() req: Request,
-  //   @Res({ passthrough: true }) res: Response,
-  // ): Promise<ISuccess> {
-  //   try {
-  //     // Проверяем токен
-  //     await this.authService.validateAccessToken(req, res);
-
-  //     if (!id) {
-  //       throw new BadRequestException('ID смены обязателен для удаления');
-  //     }
-
-  //     const shift = await this.shiftRepository.findById(id);
-
-  //     if (!shift) {
-  //       throw new NotFoundException('Смена не найдена');
-  //     }
-
-  //     await this.shiftRepository.delete(id);
-
-  //     return {
-  //       message: 'Смена успешно удалена',
-  //     };
-  //   } catch {
-  //     throw new InternalServerErrorException('Ошибка при удалении смены');
-  //   }
-  // }
-
-  async getLastTeamShift(
-    @Req() req: Request,
-    @Res({ passthrough: true }) res: Response,
-  ): Promise<IShift> {
+  async getLastTeamShift(req: Request, res: Response): Promise<IShift> {
     try {
       const { currentTeamNumber } = await this.authService.validateAccessToken(
         req,
@@ -265,48 +213,21 @@ export class ShiftService {
     }
   }
 
-  /*
-  async getShifts(): Promise<IList<IShift>> {
-    try {
-      const shifts = await this.shiftRepository.findAll();
+  async getLastShiftsForTeams(req: Request, res: Response): Promise<Shift[]> {
+    await this.authService.validateAccessToken(req, res);
+    
+    const teamNumbers: number[] = [1, 2, 3, 4];
+    const lastShifts: Shift[] = [];
 
-      return {
-        total: shifts.length,
-        items: shifts,
-      };
-    } catch (error) {
-      throw new InternalServerErrorException(
-        'Произошла ошибка при получении списка пользователей',
-      );
-    }
-  }
+    for (const teamNumber of teamNumbers) {
+      const lastShift =
+        await this.shiftRepository.findLastTeamShift(teamNumber);
 
-  async getShiftById(id: string): Promise<IShift> {
-    try {
-      const shift = await this.shiftRepository.findById(id);
-
-      if (!shift) {
-        throw new NotFoundException('Смена не найдена');
+      if (lastShift.length > 0) {
+        lastShifts.push(lastShift[0]);
       }
-
-      return shift;
-    } catch (error) {
-      throw new InternalServerErrorException('Ошибка при получении смены');
     }
+
+    return lastShifts;
   }
-
-  async updateShift(id: string, updateData: Partial<IShift>): Promise<IShift> {
-    try {
-      const shift = await this.shiftRepository.findById(id);
-
-      if (!shift) {
-        throw new NotFoundException('Смена не найдена');
-      }
-
-      return await this.shiftRepository.update(shift, updateData);
-    } catch (error) {
-      throw new InternalServerErrorException('Ошибка при обновлении смены');
-    }
-  }
-  */
 }
