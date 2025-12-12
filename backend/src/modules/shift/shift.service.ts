@@ -61,20 +61,20 @@ export class ShiftService {
         // Модифицируем дату для смены 1
         localDate.setDate(localDate.getDate() + 1);
 
-        // Смена 1: 19:30 сегодня → 07:30 завтра
+        // Смена 1: 14:30 сегодня → 02:30 завтра
         startShift = new Date(localDate);
-        startShift.setHours(19, 30, 0, 0); // 19:30 текущего дня
+        startShift.setHours(14, 30, 0, 0); // 19:30 текущего дня
 
         endShift = new Date(localDate);
         endShift.setDate(endShift.getDate() + 1); // +1 день
-        endShift.setHours(7, 30, 0, 0); // 07:30 следующего дня
+        endShift.setHours(2, 30, 0, 0); // 02:30 следующего дня
       } else {
-        // Смена 2: 07:30 → 19:30 в тот же день
+        // Смена 2: 02:30 → 14:30 в тот же день
         startShift = new Date(localDate);
-        startShift.setHours(7, 30, 0, 0);
+        startShift.setHours(2, 30, 0, 0);
 
         endShift = new Date(localDate);
-        endShift.setHours(19, 30, 0, 0);
+        endShift.setHours(14, 30, 0, 0);
       }
 
       // Создаем объект для проверки

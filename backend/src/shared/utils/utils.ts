@@ -238,6 +238,7 @@ export const shifts = [
   },
 ];
 
+/*
 export function getShifts(date: Date, shiftNumber: number, teamNumber: number) {
   const start = new Date(date);
   const now = new Date();
@@ -298,3 +299,4 @@ export function getShifts(date: Date, shiftNumber: number, teamNumber: number) {
 
   return shifts;
 }
+*/
