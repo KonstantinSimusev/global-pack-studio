@@ -248,7 +248,7 @@ export function getShifts(date: Date, shiftNumber: number, teamNumber: number) {
   let targetDate = new Date(start);
 
   // Нормализуем targetDate до 00:00:00.000 UTC
-  targetDate.setUTCHours(0, 0, 0, 0);
+  // targetDate.setUTCHours(0, 0, 0, 0);
 
   while (true) {
     let shiftStart: Date;

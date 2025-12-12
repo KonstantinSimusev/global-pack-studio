@@ -49,37 +49,37 @@ export class ShiftService {
       await this.authService.validateAccessToken(req, res);
 
       // Модифицируем дату для смены 1
-      let userDate = new Date(dto.date);
+      let localDate = new Date(dto.date);
 
-      const targetDate = new Date();
-      targetDate.setUTCHours(0, 0, 0, 0); // Обнуляем до 00:00:00.000 UTC
+      // const targetDate = new Date();
+      // targetDate.setUTCHours(0, 0, 0, 0); // Обнуляем до 00:00:00.000 UTC
 
       let startShift: Date;
       let endShift: Date;
 
       if (dto.shiftNumber === 1) {
         // Модифицируем дату для смены 1
-        userDate.setUTCDate(userDate.getUTCDate() + 1);
+        localDate.setDate(localDate.getDate() + 1);
 
         // Смена 1: 19:30 сегодня → 07:30 завтра
-        startShift = new Date(targetDate);
-        startShift.setUTCHours(19, 30, 0, 0); // 19:30 текущего дня
+        startShift = new Date(localDate);
+        startShift.setHours(19, 30, 0, 0); // 19:30 текущего дня
 
-        endShift = new Date(targetDate);
-        endShift.setUTCDate(endShift.getUTCDate() + 1); // +1 день
-        endShift.setUTCHours(7, 30, 0, 0); // 07:30 следующего дня
+        endShift = new Date(localDate);
+        endShift.setDate(endShift.getDate() + 1); // +1 день
+        endShift.setHours(7, 30, 0, 0); // 07:30 следующего дня
       } else {
         // Смена 2: 07:30 → 19:30 в тот же день
-        startShift = new Date(targetDate);
-        startShift.setUTCHours(7, 30, 0, 0);
+        startShift = new Date(localDate);
+        startShift.setHours(7, 30, 0, 0);
 
-        endShift = new Date(targetDate);
-        endShift.setUTCHours(19, 30, 0, 0);
+        endShift = new Date(localDate);
+        endShift.setHours(19, 30, 0, 0);
       }
 
       // Создаем объект для проверки
       const newShift = new Shift();
-      newShift.date = userDate;
+      newShift.date = localDate;
       newShift.shiftNumber = dto.shiftNumber;
       newShift.teamNumber = dto.teamNumber;
       newShift.startShift = startShift;

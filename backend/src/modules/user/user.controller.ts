@@ -9,7 +9,6 @@ import {
 } from '@nestjs/common';
 
 import { UserService } from './user.service';
-import { AuthService } from '../auth/auth.service';
 
 import { CreateUserDTO } from './dto/create-user.dto';
 import { UpdateUserDTO } from './dto/update-user.dto';
@@ -20,7 +19,6 @@ import { IList, IUser, ISuccess } from '../../shared/interfaces/api.interface';
 export class UserController {
   constructor(
     private readonly userService: UserService,
-    private readonly authService: AuthService,
   ) {}
 
   @Post()
