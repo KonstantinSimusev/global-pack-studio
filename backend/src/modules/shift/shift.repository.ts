@@ -40,8 +40,10 @@ export class ShiftRepository {
   }
 
   async findActiveShift(): Promise<Shift> {
-    const nowUTC = new Date();
-    nowUTC.setMinutes(nowUTC.getMinutes() - nowUTC.getTimezoneOffset());
+    // const nowUTC = new Date();
+    // nowUTC.setMinutes(nowUTC.getMinutes() - nowUTC.getTimezoneOffset());
+
+    const nowUTC = new Date(new Date().toISOString());
 
     return this.shiftRepository.findOne({
       where: {
@@ -103,8 +105,10 @@ export class ShiftRepository {
   }
 
   async findFinishedShift(): Promise<Shift> {
-    const nowUTC = new Date();
-    nowUTC.setMinutes(nowUTC.getMinutes() - nowUTC.getTimezoneOffset());
+    // const nowUTC = new Date();
+    // nowUTC.setMinutes(nowUTC.getMinutes() - nowUTC.getTimezoneOffset());
+
+    const nowUTC = new Date(new Date().toISOString());
 
     return this.shiftRepository.findOne({
       where: {

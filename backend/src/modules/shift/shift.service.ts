@@ -51,31 +51,36 @@ export class ShiftService {
       // Модифицируем дату для смены 1
       let localDate = new Date(dto.date);
 
-      // const targetDate = new Date();
-      // targetDate.setUTCHours(0, 0, 0, 0); // Обнуляем до 00:00:00.000 UTC
-
       let startShift: Date;
       let endShift: Date;
 
       if (dto.shiftNumber === 1) {
-        // Модифицируем дату для смены 1
-        localDate.setDate(localDate.getDate() + 1);
+        // Смена 1: 19:30 текущего дня → 07:30 следующего дня (локальное время)
 
-        // Смена 1: 14:30 сегодня → 02:30 завтра
-        startShift = new Date(localDate);
-        startShift.setHours(14, 30, 0, 0); // 19:30 текущего дня
+        // Шаг 1. Сдвигаем дату на +1 день (как в текущей логике)
+        const shiftedDate = new Date(localDate);
+        shiftedDate.setDate(shiftedDate.getDate() + 1);
 
-        endShift = new Date(localDate);
-        endShift.setDate(endShift.getDate() + 1); // +1 день
-        endShift.setHours(2, 30, 0, 0); // 02:30 следующего дня
+        // Шаг 2. Задаем время: 19:30 текущего дня (после сдвига)
+        startShift = new Date(shiftedDate);
+        startShift.setHours(19, 30, 0, 0); // 19:30 локального времени
+
+        // Шаг 3. Конец смены: +1 день от startShift, 07:30
+        endShift = new Date(startShift);
+        endShift.setDate(endShift.getDate() + 1);
+        endShift.setHours(7, 30, 0, 0); // 07:30 следующего дня
       } else {
-        // Смена 2: 02:30 → 14:30 в тот же день
+        // Смена 2: 07:30 → 19:30 в тот же день
         startShift = new Date(localDate);
-        startShift.setHours(2, 30, 0, 0);
+        startShift.setHours(7, 30, 0, 0);
 
         endShift = new Date(localDate);
-        endShift.setHours(14, 30, 0, 0);
+        endShift.setHours(19, 30, 0, 0);
       }
+
+      // Конвертация в UTC (обязательно!)
+      startShift = new Date(startShift.toISOString());
+      endShift = new Date(endShift.toISOString());
 
       // Создаем объект для проверки
       const newShift = new Shift();
