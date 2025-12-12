@@ -63,18 +63,18 @@ export class ShiftService {
 
         // Смена 1: 19:30 сегодня → 07:30 завтра
         startShift = new Date(targetDate);
-        startShift.setUTCHours(20, 0, 0, 0); // 19:30 текущего дня
+        startShift.setUTCHours(19, 30, 0, 0); // 19:30 текущего дня
 
         endShift = new Date(targetDate);
         endShift.setUTCDate(endShift.getUTCDate() + 1); // +1 день
-        endShift.setUTCHours(8, 0, 0, 0); // 07:30 следующего дня
+        endShift.setUTCHours(7, 30, 0, 0); // 07:30 следующего дня
       } else {
         // Смена 2: 07:30 → 19:30 в тот же день
         startShift = new Date(targetDate);
-        startShift.setUTCHours(8, 0, 0, 0);
+        startShift.setUTCHours(7, 30, 0, 0);
 
         endShift = new Date(targetDate);
-        endShift.setUTCHours(20, 0, 0, 0);
+        endShift.setUTCHours(19, 30, 0, 0);
       }
 
       // Создаем объект для проверки
