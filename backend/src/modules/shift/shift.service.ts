@@ -81,8 +81,8 @@ export class ShiftService {
       }
 
       // Конвертация в UTC
-      startShift = new Date(startShift.toISOString());
-      endShift = new Date(endShift.toISOString());
+      // startShift = new Date(startShift.toISOString());
+      // endShift = new Date(endShift.toISOString());
 
       // Создаем объект для проверки
       const newShift = new Shift();

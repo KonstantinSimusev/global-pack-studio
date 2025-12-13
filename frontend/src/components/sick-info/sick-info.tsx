@@ -28,7 +28,6 @@ export const SickInfo = () => {
       {total > 0 ? (
         <>
           <ul className={styles.wrapper__list}>
-            {/* <span className={styles.opacity}>Болничный лист</span> */}
             <Border />
             {professions.map((item, index) => (
               <li className={styles.wrapper} key={index}>
