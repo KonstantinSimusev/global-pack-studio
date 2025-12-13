@@ -58,12 +58,12 @@ export class ShiftService {
       if (dto.shiftNumber === 1) {
         // Шаг 1. Начало смены: 19:30 того же дня
         startShift = new Date(localDate);
-        startShift.setHours(14, 30, 0, 0);
+        startShift.setHours(19, 30, 0, 0);
 
         // Шаг 2. Конец смены: +1 день от startShift, 07:30
         endShift = new Date(startShift);
         endShift.setDate(endShift.getDate() + 1);
-        endShift.setHours(2, 30, 0, 0);
+        endShift.setHours(7, 30, 0, 0);
 
         // Для смены 1 localDate + 1 день
         finalDate = new Date(localDate);
@@ -72,10 +72,10 @@ export class ShiftService {
       } else {
         // Смена 2: 07:30 → 19:30 в тот же день
         startShift = new Date(localDate);
-        startShift.setHours(2, 30, 0, 0);
+        startShift.setHours(7, 30, 0, 0);
 
         endShift = new Date(localDate);
-        endShift.setHours(14, 30, 0, 0);
+        endShift.setHours(19, 30, 0, 0);
 
         finalDate = localDate;
       }
