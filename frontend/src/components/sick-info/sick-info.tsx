@@ -28,23 +28,23 @@ export const SickInfo = () => {
       {total > 0 ? (
         <>
           <ul className={styles.wrapper__list}>
-            <Border className={styles.border__bottom} />
+            {/* <span className={styles.opacity}>Болничный лист</span> */}
+            <Border />
             {professions.map((item, index) => (
               <li className={styles.wrapper} key={index}>
                 <span className={styles.text}>{item.profession}</span>
                 <span className={styles.count}>{item.count}</span>
               </li>
             ))}
-            <Border className={styles.border__top} />
+            <Border />
+            <div className={styles.total__employees}>
+              <span>Всего:</span>
+              <span className={styles.total}>{total}</span>
+            </div>
           </ul>
-
-          <div className={styles.wrapper__footer}>
-            <span>Всего:</span>
-            <span>{total}</span>
-          </div>
         </>
       ) : (
-        <span className={styles.no__sick}>Все здоровые</span>
+        <span className={styles.no__sick}>Все здоровые...</span>
       )}
     </div>
   );

@@ -48,22 +48,27 @@ export class ShiftService {
       // Проверяем токен
       await this.authService.validateAccessToken(req, res);
 
-      let localDate = new Date(dto.date); // 2025-12-12T00:00:00 (локальное)
+      // Локальное время от пользователя
+      let localDate = new Date(dto.date);
 
       let startShift: Date;
       let endShift: Date;
+      let finalDate: Date;
 
       if (dto.shiftNumber === 1) {
-        // Смена 1: 19:30 12.12.2025 → 07:30 13.12.2025 (локальное время)
-
-        // Шаг 1. Начало смены: 19:30 того же дня (12.12.2025)
+        // Шаг 1. Начало смены: 19:30 того же дня
         startShift = new Date(localDate);
-        startShift.setHours(19, 30, 0, 0); // 2025-12-12T19:30:00 (локальное)
+        startShift.setHours(19, 30, 0, 0);
 
         // Шаг 2. Конец смены: +1 день от startShift, 07:30
         endShift = new Date(startShift);
-        endShift.setDate(endShift.getDate() + 1); // 2025-12-13T19:30:00
-        endShift.setHours(7, 30, 0, 0); // 2025-12-13T07:30:00 (локальное)
+        endShift.setDate(endShift.getDate() + 1);
+        endShift.setHours(7, 30, 0, 0);
+
+        // Для смены 1 localDate + 1 день
+        finalDate = new Date(localDate);
+        finalDate.setDate(localDate.getDate() + 1);
+        console.log('Дата смены 1: ', finalDate);
       } else {
         // Смена 2: 07:30 → 19:30 в тот же день
         startShift = new Date(localDate);
@@ -71,6 +76,8 @@ export class ShiftService {
 
         endShift = new Date(localDate);
         endShift.setHours(19, 30, 0, 0);
+
+        finalDate = localDate;
       }
 
       // Конвертация в UTC
@@ -79,16 +86,15 @@ export class ShiftService {
 
       // Создаем объект для проверки
       const newShift = new Shift();
-      newShift.date = localDate;
+      newShift.date = finalDate;
       newShift.shiftNumber = dto.shiftNumber;
       newShift.teamNumber = dto.teamNumber;
       newShift.startShift = startShift;
       newShift.endShift = endShift;
 
-      console.log(newShift);
-
       const nextShift = getNextShift(dto.teamNumber);
       const equal = compareShifts(nextShift, newShift);
+
       if (!equal) {
         throw new ConflictException('Нарушение графика');
       }
