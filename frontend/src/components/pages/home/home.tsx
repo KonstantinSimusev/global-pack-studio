@@ -6,7 +6,7 @@ import { Layout } from '../../ui/layout/layout';
 import { InfoBlock } from '../../ui/info-block/info-block';
 import { EmptyCard } from '../../ui/empty-card/empty-card';
 import { ShiftCard } from '../../ui/shift-card/shift-card';
-import { SickInfo } from '../../sick-info/sick-info';
+// import { SickInfo } from '../../sick-info/sick-info';
 import { ResidueChart } from '../../charts/residue-chart/residue-chart';
 
 import { useDispatch, useSelector } from '../../../services/store';
@@ -71,7 +71,7 @@ export const Home = () => {
           type={finished}
         />
       )}
-      <SickInfo />
+      {/* <SickInfo /> */}
     </Layout>
   );
 };
