@@ -47,7 +47,7 @@ export const Home = () => {
       {finishedShift && (
         <ResidueChart shiftId={finishedShift.id ?? ''} shiftStatus={finished} />
       )}
-      {activeShift && <ResidueChart shiftId={activeShift.id ?? ''} />}
+      {/* {activeShift && <ResidueChart shiftId={activeShift.id ?? ''} />} */}
       {!activeShift ? (
         <EmptyCard type={active} text={'Идет планирование...'} />
       ) : (
@@ -71,7 +71,7 @@ export const Home = () => {
           type={finished}
         />
       )}
-      {/* <SickInfo /> */}
+      <SickInfo />
     </Layout>
   );
 };
